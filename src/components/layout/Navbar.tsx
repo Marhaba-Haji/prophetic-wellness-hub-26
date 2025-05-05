@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Heart, Mosque } from "lucide-react";
+import { Menu, X, Heart, Church } from "lucide-react";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,7 +21,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center" onClick={closeMenu}>
-              <Mosque className="h-8 w-8 text-brand-green mr-2" />
+              <Church className="h-8 w-8 text-brand-green mr-2" />
               <div>
                 <span className="text-brand-green font-bold text-xl">Hijama Healing</span>
                 <span className="text-brand-gold text-xs block">Islamic Medical Therapy</span>
