@@ -13,6 +13,7 @@ import Contact from "./pages/Contact";
 import BookingAppointment from "./pages/BookingAppointment";
 import BookingSuccess from "./pages/BookingSuccess";
 import NotFound from "./pages/NotFound";
+import ServiceDetail from "./pages/ServiceDetail";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<ServicesPage />} />
+          <Route path="/service/:serviceId" element={<ServiceDetail />} />
           <Route path="/benefits" element={<BenefitsPage />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/contact" element={<Contact />} />

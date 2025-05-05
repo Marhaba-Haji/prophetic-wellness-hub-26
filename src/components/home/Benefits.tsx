@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Heart, Shield, BookOpen, Pill } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const generalBenefits = [
   {
@@ -94,7 +95,7 @@ const Benefits = () => {
     const scrollContainer = scrollRef.current;
     let scrollInterval: NodeJS.Timeout | null = null;
     
-    // Start auto-scrolling with faster speed (20ms instead of 30ms)
+    // Start auto-scrolling with faster speed (15ms instead of 20ms)
     if (autoScrollActive && scrollContainer) {
       scrollInterval = setInterval(() => {
         if (scrollContainer) {
@@ -106,7 +107,7 @@ const Benefits = () => {
             scrollContainer.scrollLeft = 0;
           }
         }
-      }, 20);
+      }, 15);
     }
     
     return () => {
@@ -136,6 +137,10 @@ const Benefits = () => {
   const handleMouseUp = () => {
     setScrolling(false);
     setTimeout(() => setAutoScrollActive(true), 4000); // Resume auto-scroll after 4 seconds of inactivity
+  };
+
+  const toggleAutoScroll = () => {
+    setAutoScrollActive(!autoScrollActive);
   };
 
   return (
@@ -177,6 +182,43 @@ const Benefits = () => {
             </div>
             <div className="absolute right-0 top-0 bottom-0 z-10 w-12 bg-gradient-to-l from-gray-50 to-transparent pointer-events-none"></div>
           </div>
+          
+          <div className="flex justify-center mt-6 space-x-4">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="border-brand-green text-brand-green hover:bg-brand-green hover:text-white"
+              onClick={toggleAutoScroll}
+            >
+              {autoScrollActive ? 'Pause Scroll' : 'Resume Scroll'}
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="border-brand-green text-brand-green hover:bg-brand-green hover:text-white"
+              onClick={() => {
+                if (scrollRef.current) {
+                  scrollRef.current.scrollLeft -= 300;
+                }
+              }}
+            >
+              &lt; Scroll Left
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="border-brand-green text-brand-green hover:bg-brand-green hover:text-white"
+              onClick={() => {
+                if (scrollRef.current) {
+                  scrollRef.current.scrollLeft += 300;
+                }
+              }}
+            >
+              Scroll Right &gt;
+            </Button>
+          </div>
         </div>
         
         <div className="mt-20">
@@ -189,17 +231,19 @@ const Benefits = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {womenBenefits.map((benefit, index) => (
-              <Card key={index} className="medical-card border border-gray-100 hover:border-brand-gold transition-all duration-300">
-                <CardContent className="p-6 text-center">
-                  <div className="service-icon text-brand-green mx-auto mb-4">{benefit.icon}</div>
-                  <h3 className="text-xl font-bold text-brand-green mb-2">{benefit.title}</h3>
-                  <div className="h-0.5 w-12 bg-brand-gold mx-auto mb-3"></div>
-                  <p className="text-gray-700">{benefit.description}</p>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-6xl">
+              {womenBenefits.map((benefit, index) => (
+                <Card key={index} className="medical-card border border-gray-100 hover:border-brand-gold transition-all duration-300">
+                  <CardContent className="p-6 text-center">
+                    <div className="service-icon text-brand-green mx-auto mb-4">{benefit.icon}</div>
+                    <h3 className="text-xl font-bold text-brand-green mb-2">{benefit.title}</h3>
+                    <div className="h-0.5 w-12 bg-brand-gold mx-auto mb-3"></div>
+                    <p className="text-gray-700">{benefit.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </div>

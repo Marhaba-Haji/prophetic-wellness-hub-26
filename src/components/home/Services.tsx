@@ -7,16 +7,19 @@ import { BookOpen, HeartPulse, BriefcaseMedical } from 'lucide-react';
 
 const services = [
   {
+    id: "dry-cupping",
     icon: <HeartPulse className="h-12 w-12" />,
     title: "Dry Cupping",
     description: "Non-invasive therapy that uses suction to improve blood flow and relieve muscle tension."
   },
   {
+    id: "wet-cupping",
     icon: <BookOpen className="h-12 w-12" />,
     title: "Wet Cupping",
     description: "Traditional Hijama therapy that involves creating small incisions for detoxification and healing."
   },
   {
+    id: "sports-massage",
     icon: <BriefcaseMedical className="h-12 w-12" />,
     title: "Sports Injury Massage",
     description: "Specialized massage techniques to treat and prevent sports-related injuries and improve performance."
@@ -45,9 +48,11 @@ const Services = () => {
                 <h3 className="text-xl font-bold text-brand-green mb-3">{service.title}</h3>
                 <div className="h-0.5 w-12 bg-brand-gold mx-auto mb-4"></div>
                 <p className="text-gray-700 mb-6">{service.description}</p>
-                <Button variant="outline" className="text-brand-green border-brand-green hover:bg-brand-green hover:text-white rounded-full transition-all">
-                  Learn More
-                </Button>
+                <Link to={`/service/${service.id}`}>
+                  <Button variant="outline" className="text-brand-green border-brand-green hover:bg-brand-green hover:text-white rounded-full transition-all">
+                    Learn More
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           ))}

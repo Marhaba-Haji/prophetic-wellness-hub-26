@@ -7,6 +7,7 @@ import Services from '@/components/home/Services';
 import Testimonials from '@/components/home/Testimonials';
 import BlogPreview from '@/components/home/BlogPreview';
 import CTA from '@/components/home/CTA';
+import CuppingInfo from '@/components/home/CuppingInfo';
 
 const Index = () => {
   return (
@@ -14,6 +15,7 @@ const Index = () => {
       <Hero />
       <Benefits />
       <Services />
+      <CuppingInfo />
       <Testimonials />
       <BlogPreview />
       <CTA />
