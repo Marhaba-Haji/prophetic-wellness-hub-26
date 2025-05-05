@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Heart, Calendar, Church } from 'lucide-react';
+import { Heart, Calendar, BookOpen } from 'lucide-react';
 
 const Hero = () => {
   return (
@@ -11,7 +11,7 @@ const Hero = () => {
         <div className="max-w-3xl mx-auto text-center">
           <div className="mb-6 inline-block">
             <div className="h-20 w-20 mx-auto rounded-full bg-brand-green p-5">
-              <Church className="h-full w-full text-white" />
+              <BookOpen className="h-full w-full text-white" />
             </div>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand-green mb-6 leading-tight animate-fade-in">

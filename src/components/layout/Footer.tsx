@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { Church, MapPin, Phone, Mail, Clock, Facebook, Instagram } from "lucide-react";
+import { BookOpen, MapPin, Phone, Mail, Clock, Facebook, Instagram } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center mb-4">
-              <Church className="h-8 w-8 text-brand-gold mr-2" />
+              <BookOpen className="h-8 w-8 text-brand-gold mr-2" />
               <h3 className="text-xl font-bold">Hijama Healing</h3>
             </div>
             <p className="mb-6 text-gray-200 leading-relaxed">
