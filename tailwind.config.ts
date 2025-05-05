@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,22 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Islamic theme colors
+				'brand-green': {
+					DEFAULT: '#1E6F5C',
+					light: '#29BB89',
+					dark: '#0F5443'
+				},
+				'brand-gold': {
+					DEFAULT: '#D4AF37',
+					light: '#F1C93B',
+					dark: '#AA8C2C'
+				},
+				'medical-blue': {
+					DEFAULT: '#3B82F6',
+					light: '#93C5FD',
+					dark: '#1D4ED8'
 				}
 			},
 			borderRadius: {
@@ -84,11 +101,27 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out'
+			},
+			backgroundImage: {
+				'islamic-pattern': "url('/islamic-pattern.png')",
+				'medical-symbols': "url('/medical-symbols.png')",
+				'gold-gradient': 'linear-gradient(to right, #D4AF37, #F1C93B, #D4AF37)'
 			}
 		}
 	},
