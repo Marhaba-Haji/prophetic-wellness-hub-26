@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Heart, Calendar, BookOpen } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   return (
@@ -23,12 +24,16 @@ const Hero = () => {
             and overall wellness in a professional, hygienic environment.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button className="gold-gradient text-white text-lg px-8 py-6 hover:opacity-90 transition-opacity rounded-full">
-              <Heart className="h-5 w-5 mr-2" /> Book Appointment
-            </Button>
-            <Button variant="outline" className="text-lg px-8 py-6 border-brand-green text-brand-green hover:bg-brand-green hover:text-white rounded-full">
-              <Calendar className="h-5 w-5 mr-2" /> View Services
-            </Button>
+            <Link to="/booking-appointment">
+              <Button className="gold-gradient text-white text-lg px-8 py-6 hover:opacity-90 transition-opacity rounded-full">
+                <Heart className="h-5 w-5 mr-2" /> Book Appointment
+              </Button>
+            </Link>
+            <Link to="/services">
+              <Button variant="outline" className="text-lg px-8 py-6 border-brand-green text-brand-green hover:bg-brand-green hover:text-white rounded-full">
+                <Calendar className="h-5 w-5 mr-2" /> View Services
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

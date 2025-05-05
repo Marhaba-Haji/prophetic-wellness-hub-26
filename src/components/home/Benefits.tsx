@@ -66,6 +66,21 @@ const womenBenefits = [
     icon: <Heart className="h-10 w-10" />,
     title: "Pregnancy Support",
     description: "When performed by specialists, can help with pregnancy-related discomforts."
+  },
+  {
+    icon: <Shield className="h-10 w-10" />,
+    title: "PCOS Management",
+    description: "May help alleviate symptoms of Polycystic Ovary Syndrome through hormone regulation."
+  },
+  {
+    icon: <Pill className="h-10 w-10" />,
+    title: "PCOD Relief",
+    description: "Can assist in managing Polycystic Ovarian Disease symptoms through improved circulation."
+  },
+  {
+    icon: <Heart className="h-10 w-10" />,
+    title: "Thyroid Support",
+    description: "May help regulate thyroid function and alleviate symptoms of thyroid disorders."
   }
 ];
 
@@ -79,7 +94,7 @@ const Benefits = () => {
     const scrollContainer = scrollRef.current;
     let scrollInterval: NodeJS.Timeout | null = null;
     
-    // Start auto-scrolling
+    // Start auto-scrolling with faster speed (20ms instead of 30ms)
     if (autoScrollActive && scrollContainer) {
       scrollInterval = setInterval(() => {
         if (scrollContainer) {
@@ -91,7 +106,7 @@ const Benefits = () => {
             scrollContainer.scrollLeft = 0;
           }
         }
-      }, 30);
+      }, 20);
     }
     
     return () => {
