@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -26,7 +26,8 @@ const servicesData = {
       "The skin under the cup may redden due to the blood vessels expanding",
       "The cups are then removed, and you may experience immediate relief"
     ],
-    price: "£40 per session"
+    price: "₹3,000 per session", 
+    priceNumber: 3000
   },
   "wet-cupping": {
     icon: <BookOpen className="h-16 w-16" />,
@@ -47,7 +48,8 @@ const servicesData = {
       "The cups are reapplied to draw out a small amount of blood",
       "After removal, the area is cleaned and dressed appropriately"
     ],
-    price: "£60 per session"
+    price: "₹4,500 per session",
+    priceNumber: 4500
   },
   "sports-massage": {
     icon: <BriefcaseMedical className="h-16 w-16" />,
@@ -68,7 +70,8 @@ const servicesData = {
       "Post-massage advice on stretches and exercises",
       "Recommendations for follow-up treatments and prevention strategies"
     ],
-    price: "£50 per session"
+    price: "₹3,500 per session",
+    priceNumber: 3500
   },
   "deep-tissue-massage": {
     icon: <Flame className="h-16 w-16" />,
@@ -89,7 +92,8 @@ const servicesData = {
       "Focus on areas of tension using various deep tissue techniques",
       "Post-massage hydration and self-care recommendations"
     ],
-    price: "£55 per session"
+    price: "₹4,000 per session",
+    priceNumber: 4000
   },
   "leech-therapy": {
     icon: <DropletIcon className="h-16 w-16" />,
@@ -110,7 +114,8 @@ const servicesData = {
       "Monitoring during the treatment (typically 20-45 minutes)",
       "Post-treatment care instructions and follow-up"
     ],
-    price: "£70 per session"
+    price: "₹5,000 per session",
+    priceNumber: 5000
   },
   "steam-bath": {
     icon: <CheckCircle className="h-16 w-16" />,
@@ -131,7 +136,8 @@ const servicesData = {
       "Typical session duration of 15-30 minutes",
       "Post-steam cool down and hydration"
     ],
-    price: "£35 per session"
+    price: "₹2,500 per session",
+    priceNumber: 2500
   },
   "diet-plans": {
     icon: <Utensils className="h-16 w-16" />,
@@ -152,13 +158,19 @@ const servicesData = {
       "Guidance on food preparation and healthy eating habits",
       "Regular follow-ups to adjust and optimize your plan"
     ],
-    price: "£75 for initial consultation and plan"
+    price: "₹5,500 for initial consultation and plan",
+    priceNumber: 5500
   }
 };
 
 const ServiceDetail = () => {
   const { serviceId } = useParams<{ serviceId: string }>();
   const service = serviceId ? servicesData[serviceId as keyof typeof servicesData] : null;
+  const location = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [serviceId]);
   
   if (!service) {
     return (
@@ -179,21 +191,23 @@ const ServiceDetail = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-16">
-        <Link to="/services" className="inline-flex items-center text-brand-green mb-8">
+        <Link to="/services" className="inline-flex items-center text-brand-green mb-8 hover:text-brand-gold transition-colors">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Services
         </Link>
         
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <div className="service-icon text-brand-green mx-auto mb-6 p-6">{service.icon}</div>
+            <div className="bg-brand-green/10 p-8 rounded-full inline-block mb-6">
+              <div className="text-brand-green">{service.icon}</div>
+            </div>
             <h1 className="text-3xl md:text-4xl font-bold text-brand-green mb-4">{service.title}</h1>
-            <div className="h-0.5 w-24 bg-brand-gold mx-auto mb-6"></div>
+            <div className="h-1 w-24 bg-brand-gold mx-auto mb-6"></div>
             <p className="text-lg text-gray-700">{service.longDescription}</p>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
-            <Card>
+            <Card className="border-t-4 border-t-brand-green hover:shadow-lg transition-shadow">
               <CardContent className="p-8">
                 <h2 className="text-2xl font-bold text-brand-green mb-6">Benefits</h2>
                 <ul className="space-y-3">
@@ -207,7 +221,7 @@ const ServiceDetail = () => {
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="border-t-4 border-t-brand-green hover:shadow-lg transition-shadow">
               <CardContent className="p-8">
                 <h2 className="text-2xl font-bold text-brand-green mb-6">Treatment Process</h2>
                 <ol className="space-y-3">
@@ -224,11 +238,12 @@ const ServiceDetail = () => {
           
           <div className="bg-brand-green bg-opacity-10 p-8 rounded-lg text-center mb-12">
             <h2 className="text-2xl font-bold text-brand-green mb-2">Pricing</h2>
-            <p className="text-xl font-medium">{service.price}</p>
+            <p className="text-xl font-medium mb-1">{service.price}</p>
+            <p className="text-gray-600 italic">*Starting price per session</p>
           </div>
           
           <div className="text-center">
-            <Link to="/booking-appointment">
+            <Link to="/booking-appointment" state={{ selectedService: service.title, price: service.priceNumber }}>
               <Button className="gold-gradient text-white text-lg px-8 py-6 hover:opacity-90 transition-opacity rounded-full">
                 Book This Treatment
               </Button>

@@ -33,7 +33,7 @@ const Services = () => {
         <div className="text-center mb-14">
           <span className="text-brand-gold uppercase tracking-wider font-medium">Our Treatments</span>
           <h2 className="text-3xl md:text-4xl font-bold text-brand-green mb-4 mt-2">Our Services</h2>
-          <div className="h-0.5 w-24 bg-brand-gold mx-auto mb-4"></div>
+          <div className="h-1 w-24 bg-brand-gold mx-auto mb-4"></div>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto">
             We offer a range of professional hijama and complementary therapies to address various health concerns.
           </p>
@@ -41,25 +41,23 @@ const Services = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="group overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-t-4 border-t-brand-green">
-              <CardContent className="p-0">
+            <Link to={`/service/${service.id}`} key={index} className="group">
+              <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border-t-4 border-t-brand-green group">
                 <div className="bg-gradient-to-r from-brand-green-light/10 to-brand-green/10 p-6 text-center">
-                  <div className="service-icon bg-white p-4 rounded-full inline-block mb-6 shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all">
+                  <div className="bg-white p-4 rounded-full inline-block mb-6 shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all">
                     <div className="text-brand-green">{service.icon}</div>
                   </div>
                   <h3 className="text-2xl font-bold text-brand-green mb-3">{service.title}</h3>
-                  <div className="h-0.5 w-16 bg-brand-gold mx-auto mb-4 group-hover:w-24 transition-all"></div>
+                  <div className="h-1 w-16 bg-brand-gold mx-auto mb-4 group-hover:w-24 transition-all"></div>
                 </div>
-                <div className="p-6 text-center">
+                <CardContent className="p-6 text-center">
                   <p className="text-gray-700 mb-6">{service.description}</p>
-                  <Link to={`/service/${service.id}`} className="inline-block">
-                    <Button variant="outline" className="text-brand-green border-brand-green hover:bg-brand-green hover:text-white rounded-full transition-all px-8 py-2">
-                      Learn More
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
+                  <Button variant="outline" className="rounded-full border-brand-green text-brand-green px-6 py-2 hover:bg-brand-green hover:text-white transition-colors group-hover:bg-brand-green group-hover:text-white">
+                    Learn More
+                  </Button>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
         
