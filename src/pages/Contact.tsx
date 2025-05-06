@@ -2,6 +2,8 @@
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
+import ContactMap from '@/components/ContactMap';
+import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 
 const Contact = () => {
   return (
@@ -76,41 +78,49 @@ const Contact = () => {
           <div>
             <h2 className="text-2xl font-semibold text-brand-green mb-4">Contact Information</h2>
             
-            <div className="space-y-6">
-              <div>
-                <h3 className="font-semibold text-lg mb-1">Address</h3>
-                <p className="text-gray-700">
-                  123 Healing Street<br />
-                  Wellness City, WC 12345
-                </p>
+            <div className="space-y-6 mb-6">
+              <div className="flex items-start">
+                <MapPin className="h-5 w-5 text-brand-gold mr-2 mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="font-semibold text-lg">Address</h3>
+                  <p className="text-gray-700">
+                    Paramount Avenue, 63/1, 3rd floor,<br />
+                    Mosque Road Cross, Frazer Town,<br />
+                    Bangalore 560005
+                  </p>
+                </div>
               </div>
               
-              <div>
-                <h3 className="font-semibold text-lg mb-1">Phone</h3>
-                <p className="text-gray-700">(123) 456-7890</p>
+              <div className="flex items-start">
+                <Phone className="h-5 w-5 text-brand-gold mr-2 mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="font-semibold text-lg">Phone</h3>
+                  <p className="text-gray-700">+91 9480389296</p>
+                </div>
               </div>
               
-              <div>
-                <h3 className="font-semibold text-lg mb-1">Email</h3>
-                <p className="text-gray-700">info@hijamahealing.com</p>
+              <div className="flex items-start">
+                <Mail className="h-5 w-5 text-brand-gold mr-2 mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="font-semibold text-lg">Email</h3>
+                  <p className="text-gray-700">info@hijamahealing.com</p>
+                </div>
               </div>
               
-              <div>
-                <h3 className="font-semibold text-lg mb-1">Hours</h3>
-                <p className="text-gray-700">
-                  Monday - Friday: 9:00 AM - 6:00 PM<br />
-                  Saturday: 10:00 AM - 4:00 PM<br />
-                  Sunday: Closed
-                </p>
+              <div className="flex items-start">
+                <Clock className="h-5 w-5 text-brand-gold mr-2 mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="font-semibold text-lg">Hours</h3>
+                  <p className="text-gray-700">
+                    Monday - Thursday: 9:00 AM - 8:00 PM<br />
+                    Saturday - Sunday: 9:00 AM - 8:00 PM<br />
+                    Friday: Closed
+                  </p>
+                </div>
               </div>
             </div>
             
-            <div className="mt-8 h-64 bg-gray-200 rounded-md">
-              {/* Map placeholder */}
-              <div className="flex items-center justify-center h-full">
-                <p className="text-gray-500">Interactive map will be displayed here</p>
-              </div>
-            </div>
+            <ContactMap />
           </div>
         </div>
       </div>

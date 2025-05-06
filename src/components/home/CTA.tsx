@@ -21,7 +21,7 @@ const CTA = () => {
           <div className="flex flex-wrap justify-center gap-4">
             <Link to="/booking-appointment">
               <Button className="gold-gradient text-white text-lg px-8 py-6 hover:opacity-90 transition-opacity rounded-full">
-                <Calendar className="h-5 w-5 mr-2" /> Book Your Appointment
+                <Calendar className="h-5 w-5 mr-2" /> Book An Appointment
               </Button>
             </Link>
           </div>

@@ -17,10 +17,10 @@ const Footer = () => {
               Experience the healing power of traditional Islamic medicine with our professional hijama therapy services.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white transition-colors duration-200">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white transition-colors duration-200">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white transition-colors duration-200">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white transition-colors duration-200">
                 <Instagram className="h-5 w-5" />
               </a>
             </div>
@@ -78,34 +78,34 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link to="/service/dry-cupping" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Dry Cupping
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link to="/service/wet-cupping" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Wet Cupping
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link to="/service/sports-massage" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Sports Injury Massage
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link to="/service/oil-massage" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Deep Tissue Oil Massage
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link to="/service/steam-bath" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Steam Bath Therapy
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -118,11 +118,11 @@ const Footer = () => {
             <address className="not-italic text-gray-200 space-y-4">
               <p className="flex items-start">
                 <MapPin className="h-5 w-5 text-brand-gold mr-2 mt-1 flex-shrink-0" />
-                <span>123 Healing Street<br />Wellness City, WC 12345</span>
+                <span>Paramount Avenue, 63/1, 3rd floor,<br />Mosque Road Cross, Frazer Town,<br />Bangalore 560005</span>
               </p>
               <p className="flex items-center">
                 <Phone className="h-5 w-5 text-brand-gold mr-2 flex-shrink-0" />
-                <span>(123) 456-7890</span>
+                <span>+91 9480389296</span>
               </p>
               <p className="flex items-center">
                 <Mail className="h-5 w-5 text-brand-gold mr-2 flex-shrink-0" />
@@ -131,9 +131,9 @@ const Footer = () => {
               <p className="flex items-start">
                 <Clock className="h-5 w-5 text-brand-gold mr-2 mt-1 flex-shrink-0" />
                 <span>
-                  Monday - Friday: 9:00 AM - 6:00 PM<br />
-                  Saturday: 10:00 AM - 4:00 PM<br />
-                  Sunday: Closed
+                  Monday - Thursday: 9:00 AM - 8:00 PM<br />
+                  Saturday - Sunday: 9:00 AM - 8:00 PM<br />
+                  Friday: Closed
                 </span>
               </p>
             </address>

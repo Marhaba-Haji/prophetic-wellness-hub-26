@@ -180,9 +180,9 @@ const CuppingInfo = () => {
         </div>
         
         <div className="text-center">
-          <Link to="/service/wet-cupping">
+          <Link to="/booking-appointment">
             <Button className="gold-gradient text-white hover:opacity-90 transition-opacity px-8 py-6 rounded-full shadow-lg">
-              Learn More About Cupping Treatments
+              Book An Appointment
             </Button>
           </Link>
         </div>
