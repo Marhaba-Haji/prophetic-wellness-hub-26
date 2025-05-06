@@ -1,96 +1,151 @@
 
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Youtube } from 'lucide-react';
+import { Youtube, History, BookOpen, Award, Droplet } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const CuppingInfo = () => {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-gradient-to-b from-white to-brand-green/5">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
-          <span className="text-brand-gold uppercase tracking-wider font-medium">Understanding Hijama</span>
-          <h2 className="text-3xl md:text-4xl font-bold text-brand-green mb-4 mt-2">What is Cupping Therapy?</h2>
-          <div className="h-0.5 w-24 bg-brand-gold mx-auto mb-4"></div>
+        <div className="text-center mb-16">
+          <span className="text-brand-gold uppercase tracking-wider font-medium bg-brand-gold/10 px-4 py-1 rounded-full">Understanding Hijama</span>
+          <h2 className="text-3xl md:text-5xl font-bold text-brand-green mb-6 mt-3">What is Cupping Therapy?</h2>
+          <div className="h-1 w-32 bg-brand-gold mx-auto mb-8"></div>
+          <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+            An ancient healing practice that draws stagnant blood and toxins from the body while 
+            stimulating circulation and promoting natural healing.
+          </p>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <ScrollArea className="h-[400px] rounded-md border p-6">
-              <div className="pr-4">
-                <h3 className="text-xl font-bold text-brand-green mb-4">Historical Origins</h3>
-                <p className="mb-4">
-                  Cupping therapy (Hijama) has a rich history spanning thousands of years across different civilizations. It was practiced in ancient Chinese, Egyptian, and Greek medicine as early as 1550 BCE.
-                </p>
-                <p className="mb-6">
-                  In Islamic tradition, Hijama gained prominence through the teachings of Prophet Muhammad (PBUH), who recommended it as a beneficial treatment. The word "Hijama" comes from the Arabic word "hajm" meaning "sucking" or "drawing out".
-                </p>
-                
-                <h3 className="text-xl font-bold text-brand-green mb-4">Islamic Significance</h3>
-                <p className="mb-6">
-                  Prophet Muhammad (PBUH) is reported to have said: "Indeed the best of remedies you have is hijama (cupping)." It has been documented in several hadith collections that the Prophet (PBUH) himself underwent cupping therapy and recommended specific days for its practice, particularly the 17th, 19th, and 21st days of the Islamic lunar month.
-                </p>
-                
-                <h3 className="text-xl font-bold text-brand-green mb-4">Chinese Medicine Connection</h3>
-                <p className="mb-6">
-                  In traditional Chinese medicine, cupping has been practiced for over 2,000 years. It is believed to balance yin and yang energies within the body and to promote the flow of "qi" (life energy) through meridian pathways. Chinese practitioners typically use fire cupping methods and often combine it with acupuncture.
-                </p>
-                
-                <h3 className="text-xl font-bold text-brand-green mb-4">Modern Practice</h3>
-                <p>
-                  Today, cupping therapy has gained worldwide recognition, with many variations practiced across different cultures. Modern scientific research continues to explore its benefits for pain management, blood circulation, inflammation reduction, and immune system stimulation.
-                </p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-16">
+          {/* Left Side - Historical Information with Cards */}
+          <div className="space-y-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="bg-brand-green rounded-full p-2">
+                <History className="h-6 w-6 text-white" />
               </div>
-            </ScrollArea>
+              <h3 className="text-2xl font-bold text-brand-green">Rich Historical Heritage</h3>
+            </div>
+            
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow border-t-4 border-t-brand-green">
+              <CardContent className="p-6">
+                <h4 className="text-xl font-semibold text-brand-green mb-4 flex items-center">
+                  <BookOpen className="h-5 w-5 mr-2 text-brand-gold" />
+                  Historical Origins
+                </h4>
+                <p className="mb-4">
+                  Cupping therapy (Hijama) has a rich history spanning thousands of years across different civilizations. 
+                  It was practiced in ancient Chinese, Egyptian, and Greek medicine as early as 1550 BCE.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow border-t-4 border-t-brand-gold">
+              <CardContent className="p-6">
+                <h4 className="text-xl font-semibold text-brand-green mb-4 flex items-center">
+                  <Award className="h-5 w-5 mr-2 text-brand-gold" />
+                  Islamic Significance
+                </h4>
+                <p className="mb-4">
+                  In Islamic tradition, Hijama gained prominence through the teachings of Prophet Muhammad (PBUH), 
+                  who recommended it as a beneficial treatment. The word "Hijama" comes from the Arabic word "hajm" 
+                  meaning "sucking" or "drawing out".
+                </p>
+                <p className="text-gray-700 italic border-l-4 border-brand-gold pl-4 py-1 bg-brand-gold/5">
+                  "Indeed the best of remedies you have is hijama (cupping)." — Prophet Muhammad (PBUH)
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow border-t-4 border-t-brand-green">
+              <CardContent className="p-6">
+                <h4 className="text-xl font-semibold text-brand-green mb-4 flex items-center">
+                  <Droplet className="h-5 w-5 mr-2 text-brand-gold" />
+                  Chinese Medicine Connection
+                </h4>
+                <p>
+                  In traditional Chinese medicine, cupping has been practiced for over 2,000 years. 
+                  It is believed to balance yin and yang energies within the body and to promote 
+                  the flow of "qi" (life energy) through meridian pathways.
+                </p>
+              </CardContent>
+            </Card>
           </div>
           
+          {/* Right Side - How Hijama Works + Video */}
           <div>
-            <h3 className="text-xl font-bold text-brand-green mb-4">How Hijama Works</h3>
-            <p className="mb-6">
-              Hijama therapy works through a systematic process that draws stagnant blood and toxins from the body while stimulating circulation and promoting healing.
+            <div className="flex items-center gap-3 mb-6">
+              <div className="bg-brand-gold rounded-full p-2">
+                <Award className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-brand-green">How Hijama Works</h3>
+            </div>
+            
+            <p className="mb-6 text-lg">
+              Hijama therapy works through a systematic process that draws stagnant blood and toxins 
+              from the body while stimulating circulation and promoting healing.
             </p>
             
             <div className="grid grid-cols-1 gap-4 mb-8">
-              <div className="border border-gray-200 rounded-md p-4">
-                <h4 className="font-bold mb-2">1. Assessment</h4>
-                <p>A trained practitioner examines your condition and determines appropriate cupping points based on your specific health concerns.</p>
-              </div>
-              
-              <div className="border border-gray-200 rounded-md p-4">
-                <h4 className="font-bold mb-2">2. Preparation</h4>
-                <p>The treatment area is cleaned and sterilized. For wet cupping, small, superficial incisions are made on the skin.</p>
-              </div>
-              
-              <div className="border border-gray-200 rounded-md p-4">
-                <h4 className="font-bold mb-2">3. Cup Application</h4>
-                <p>Special cups are placed on the skin, and suction is created either by heat or a pump. The cups remain in place for 5-15 minutes.</p>
-              </div>
-              
-              <div className="border border-gray-200 rounded-md p-4">
-                <h4 className="font-bold mb-2">4. Blood Extraction (Wet Cupping)</h4>
-                <p>For wet cupping, the cups are removed, and blood is drawn from the small incisions, removing toxins and stagnant blood.</p>
-              </div>
-              
-              <div className="border border-gray-200 rounded-md p-4">
-                <h4 className="font-bold mb-2">5. Post-Treatment Care</h4>
-                <p>The area is cleaned and dressed. Patients are advised on aftercare and may be given dietary recommendations.</p>
-              </div>
+              {[
+                {
+                  step: "1. Assessment",
+                  desc: "A trained practitioner examines your condition and determines appropriate cupping points based on your specific health concerns."
+                },
+                {
+                  step: "2. Preparation",
+                  desc: "The treatment area is cleaned and sterilized. For wet cupping, small, superficial incisions are made on the skin."
+                },
+                {
+                  step: "3. Cup Application",
+                  desc: "Special cups are placed on the skin, and suction is created either by heat or a pump. The cups remain in place for 5-15 minutes."
+                },
+                {
+                  step: "4. Blood Extraction (Wet Cupping)",
+                  desc: "For wet cupping, the cups are removed, and blood is drawn from the small incisions, removing toxins and stagnant blood."
+                },
+                {
+                  step: "5. Post-Treatment Care",
+                  desc: "The area is cleaned and dressed. Patients are advised on aftercare and may be given dietary recommendations."
+                }
+              ].map((item, index) => (
+                <div key={index} className="flex items-start p-4 rounded-lg bg-white shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="bg-brand-green text-white rounded-full h-8 w-8 flex items-center justify-center mr-4 flex-shrink-0">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-brand-green">{item.step}</h4>
+                    <p className="text-gray-700">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
             
-            <div className="relative aspect-video rounded-lg overflow-hidden shadow-lg">
-              <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                <Youtube className="h-16 w-16 text-white" />
-                <span className="absolute inset-0" aria-label="Hijama Cupping Therapy Demonstration Video"></span>
-              </div>
+            <div className="relative rounded-xl overflow-hidden shadow-xl">
               <iframe 
-                className="w-full h-full"
+                className="w-full aspect-video"
                 src="https://www.youtube.com/embed/GJTlG5z_tQs" 
                 title="Understanding Hijama (Cupping) Therapy" 
                 frameBorder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                 allowFullScreen
               ></iframe>
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                <h4 className="text-white font-medium">Understanding Hijama (Cupping) Therapy</h4>
+              </div>
             </div>
           </div>
+        </div>
+        
+        <div className="text-center">
+          <Link to="/service/wet-cupping">
+            <Button className="gold-gradient text-white hover:opacity-90 transition-opacity px-8 py-6 rounded-full shadow-lg">
+              Learn More About Cupping Treatments
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
