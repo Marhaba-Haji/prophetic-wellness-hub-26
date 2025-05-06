@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { BookOpen, HeartPulse, BriefcaseMedical } from 'lucide-react';
+import { HeartPulse, BookOpen, BriefcaseMedical } from 'lucide-react';
 
 const services = [
   {
@@ -41,18 +41,23 @@ const Services = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="medical-card border border-gray-100 hover:border-brand-gold overflow-hidden transition-all duration-300">
-              <div className="h-2 bg-brand-green"></div>
-              <CardContent className="p-8 text-center">
-                <div className="service-icon text-brand-green mx-auto mb-6">{service.icon}</div>
-                <h3 className="text-xl font-bold text-brand-green mb-3">{service.title}</h3>
-                <div className="h-0.5 w-12 bg-brand-gold mx-auto mb-4"></div>
-                <p className="text-gray-700 mb-6">{service.description}</p>
-                <Link to={`/service/${service.id}`}>
-                  <Button variant="outline" className="text-brand-green border-brand-green hover:bg-brand-green hover:text-white rounded-full transition-all">
-                    Learn More
-                  </Button>
-                </Link>
+            <Card key={index} className="group overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-t-4 border-t-brand-green">
+              <CardContent className="p-0">
+                <div className="bg-gradient-to-r from-brand-green-light/10 to-brand-green/10 p-6 text-center">
+                  <div className="service-icon bg-white p-4 rounded-full inline-block mb-6 shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all">
+                    <div className="text-brand-green">{service.icon}</div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-brand-green mb-3">{service.title}</h3>
+                  <div className="h-0.5 w-16 bg-brand-gold mx-auto mb-4 group-hover:w-24 transition-all"></div>
+                </div>
+                <div className="p-6 text-center">
+                  <p className="text-gray-700 mb-6">{service.description}</p>
+                  <Link to={`/service/${service.id}`} className="inline-block">
+                    <Button variant="outline" className="text-brand-green border-brand-green hover:bg-brand-green hover:text-white rounded-full transition-all px-8 py-2">
+                      Learn More
+                    </Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -60,7 +65,7 @@ const Services = () => {
         
         <div className="text-center mt-12">
           <Link to="/services">
-            <Button className="gold-gradient text-white hover:opacity-90 transition-opacity rounded-full px-8">
+            <Button className="gold-gradient text-white hover:opacity-90 transition-opacity rounded-full px-8 py-6 text-lg font-medium shadow-md hover:shadow-lg">
               View All Services
             </Button>
           </Link>

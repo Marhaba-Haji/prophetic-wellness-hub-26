@@ -1,8 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Heart, Shield, BookOpen, Pill } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Heart, Shield, BookOpen, Pill, ArrowLeft, ArrowRight } from 'lucide-react';
 
 const generalBenefits = [
   {
@@ -95,7 +94,7 @@ const Benefits = () => {
     const scrollContainer = scrollRef.current;
     let scrollInterval: NodeJS.Timeout | null = null;
     
-    // Start auto-scrolling with faster speed (15ms instead of 20ms)
+    // Start auto-scrolling with even faster speed (12.75ms instead of 15ms - 15% faster)
     if (autoScrollActive && scrollContainer) {
       scrollInterval = setInterval(() => {
         if (scrollContainer) {
@@ -107,7 +106,7 @@ const Benefits = () => {
             scrollContainer.scrollLeft = 0;
           }
         }
-      }, 15);
+      }, 12.75);
     }
     
     return () => {
@@ -139,8 +138,20 @@ const Benefits = () => {
     setTimeout(() => setAutoScrollActive(true), 4000); // Resume auto-scroll after 4 seconds of inactivity
   };
 
-  const toggleAutoScroll = () => {
-    setAutoScrollActive(!autoScrollActive);
+  const handleScrollLeft = () => {
+    if (scrollRef.current) {
+      setAutoScrollActive(false);
+      scrollRef.current.scrollLeft -= 300;
+      setTimeout(() => setAutoScrollActive(true), 4000);
+    }
+  };
+
+  const handleScrollRight = () => {
+    if (scrollRef.current) {
+      setAutoScrollActive(false);
+      scrollRef.current.scrollLeft += 300;
+      setTimeout(() => setAutoScrollActive(true), 4000);
+    }
   };
 
   return (
@@ -157,6 +168,13 @@ const Benefits = () => {
         
         <div className="mb-12">
           <div className="relative">
+            <button 
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white p-2 rounded-full shadow-md text-brand-green hover:text-brand-green-light hover:scale-110 transition-all"
+              onClick={handleScrollLeft}
+            >
+              <ArrowLeft className="h-6 w-6" />
+            </button>
+            
             <div className="absolute left-0 top-0 bottom-0 z-10 w-12 bg-gradient-to-r from-gray-50 to-transparent pointer-events-none"></div>
             <div 
               ref={scrollRef}
@@ -180,50 +198,20 @@ const Benefits = () => {
                 ))}
               </div>
             </div>
+            
+            <button 
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white p-2 rounded-full shadow-md text-brand-green hover:text-brand-green-light hover:scale-110 transition-all"
+              onClick={handleScrollRight}
+            >
+              <ArrowRight className="h-6 w-6" />
+            </button>
             <div className="absolute right-0 top-0 bottom-0 z-10 w-12 bg-gradient-to-l from-gray-50 to-transparent pointer-events-none"></div>
-          </div>
-          
-          <div className="flex justify-center mt-6 space-x-4">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="border-brand-green text-brand-green hover:bg-brand-green hover:text-white"
-              onClick={toggleAutoScroll}
-            >
-              {autoScrollActive ? 'Pause Scroll' : 'Resume Scroll'}
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="border-brand-green text-brand-green hover:bg-brand-green hover:text-white"
-              onClick={() => {
-                if (scrollRef.current) {
-                  scrollRef.current.scrollLeft -= 300;
-                }
-              }}
-            >
-              &lt; Scroll Left
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="border-brand-green text-brand-green hover:bg-brand-green hover:text-white"
-              onClick={() => {
-                if (scrollRef.current) {
-                  scrollRef.current.scrollLeft += 300;
-                }
-              }}
-            >
-              Scroll Right &gt;
-            </Button>
           </div>
         </div>
         
         <div className="mt-20">
           <div className="text-center mb-14">
-            <span className="text-brand-gold uppercase tracking-wider font-medium">Special Focus</span>
+            <span className="text-brand-gold uppercase tracking-wider font-medium">Women's Health</span>
             <h2 className="text-3xl md:text-4xl font-bold text-brand-green mb-4 mt-2">Benefits for Women</h2>
             <div className="h-0.5 w-24 bg-brand-gold mx-auto mb-4"></div>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto">
@@ -232,7 +220,7 @@ const Benefits = () => {
           </div>
           
           <div className="flex justify-center">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-6xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-6xl mx-auto">
               {womenBenefits.map((benefit, index) => (
                 <Card key={index} className="medical-card border border-gray-100 hover:border-brand-gold transition-all duration-300">
                   <CardContent className="p-6 text-center">
