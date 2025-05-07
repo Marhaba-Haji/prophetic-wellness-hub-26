@@ -10,9 +10,15 @@ To access the admin panel of the Hijama Healing website, you need to:
 
 After logging in successfully, you'll be redirected to the admin dashboard where you can manage appointments and contact form submissions.
 
+## Troubleshooting Login Issues
+
+If you're unable to log in:
+1. Make sure you're using the correct email and password (they are case-sensitive)
+2. Check that the admin user has been properly created in the Supabase database 
+3. Verify that the admin user exists in both the auth.users table and the public.admins table
+
 ## Security Note
 
 For security purposes, please change the default password after your first login by:
 1. Using Supabase Authentication management to update the user password
 2. Or implementing a password change feature in the admin dashboard
-
