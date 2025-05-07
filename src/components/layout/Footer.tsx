@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { BookOpen, MapPin, Phone, Mail, Clock, Facebook, Instagram } from "lucide-react";
+import AdminFooterLink from "./AdminFooterLink";
 
 const Footer = () => {
   return (
@@ -141,9 +142,12 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-white/20 mt-12 pt-6">
-          <p className="text-center text-gray-200">
-            &copy; {new Date().getFullYear()} Hijama Healing. All rights reserved.
-          </p>
+          <div className="flex justify-between items-center">
+            <p className="text-gray-200">
+              &copy; {new Date().getFullYear()} Hijama Healing. All rights reserved.
+            </p>
+            <AdminFooterLink />
+          </div>
         </div>
       </div>
     </footer>
