@@ -14,7 +14,8 @@ const ContactMap = () => {
     // Initialize map
     mapboxgl.accessToken = mapboxToken;
     
-    const bangaloreCoordinates = [77.6107, 13.0031]; // Bangalore coordinates
+    // Define coordinates as tuples with exactly two elements [lng, lat]
+    const bangaloreCoordinates: [number, number] = [77.6107, 13.0031]; // Bangalore coordinates
     
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -24,7 +25,7 @@ const ContactMap = () => {
     });
 
     // Add marker at Frazer Town
-    const frazerTownCoordinates = [77.6128, 13.0061]; // Approximate coordinates for Frazer Town
+    const frazerTownCoordinates: [number, number] = [77.6128, 13.0061]; // Approximate coordinates for Frazer Town
     
     new mapboxgl.Marker({ color: '#1E6F5C' })
       .setLngLat(frazerTownCoordinates)
