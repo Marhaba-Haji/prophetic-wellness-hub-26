@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { CalendarDays, Clock, User, Mail, Phone, MessageSquare } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/components/ui/sonner';
 
 const services = [
   "Dry Cupping",
@@ -28,14 +30,14 @@ const BookingAppointment = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { toast: uiToast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validate form
     if (!fullName || !email || !phone || !date || !time || !service) {
-      toast({
+      uiToast({
         title: "Missing Information",
         description: "Please fill in all the required fields.",
         variant: "destructive",
@@ -45,13 +47,25 @@ const BookingAppointment = () => {
     
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast({
-        title: "Booking Successful!",
-        description: `Your appointment has been booked for ${date} at ${time}. We'll send a confirmation to your email shortly.`,
-      });
+    try {
+      // Insert appointment into Supabase
+      const { error } = await supabase
+        .from('appointments')
+        .insert([
+          { 
+            full_name: fullName,
+            email,
+            phone,
+            date,
+            time,
+            service,
+            notes
+          }
+        ]);
+
+      if (error) throw error;
+
+      toast.success("Booking request received! We'll contact you to confirm shortly.");
       
       // Reset form
       setFullName('');
@@ -64,7 +78,12 @@ const BookingAppointment = () => {
       
       // Redirect after successful booking
       navigate('/booking-success');
-    }, 1500);
+    } catch (error) {
+      console.error('Error submitting appointment:', error);
+      toast.error("Failed to book appointment. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const availableTimes = [

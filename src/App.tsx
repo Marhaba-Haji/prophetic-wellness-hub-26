@@ -15,6 +15,8 @@ import BookingAppointment from "./pages/BookingAppointment";
 import BookingSuccess from "./pages/BookingSuccess";
 import NotFound from "./pages/NotFound";
 import ServiceDetail from "./pages/ServiceDetail";
+import AdminAuth from "./pages/AdminAuth";
+import AdminDashboard from "./pages/admin/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +37,8 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/booking-appointment" element={<BookingAppointment />} />
           <Route path="/booking-success" element={<BookingSuccess />} />
+          <Route path="/admin" element={<AdminAuth />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
