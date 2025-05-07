@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -21,29 +22,31 @@ import AdminDashboard from "./pages/admin/Dashboard";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/service/:serviceId" element={<ServiceDetail />} />
-          <Route path="/benefits" element={<BenefitsPage />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:blogSlug" element={<BlogDetail />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/booking-appointment" element={<BookingAppointment />} />
-          <Route path="/booking-success" element={<BookingSuccess />} />
-          <Route path="/admin" element={<AdminAuth />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/service/:serviceId" element={<ServiceDetail />} />
+            <Route path="/benefits" element={<BenefitsPage />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:blogSlug" element={<BlogDetail />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/booking-appointment" element={<BookingAppointment />} />
+            <Route path="/booking-success" element={<BookingSuccess />} />
+            <Route path="/admin" element={<AdminAuth />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </TooltipProvider>
       </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+    </QueryClientProvider>
+  </React.StrictMode>
 );
 
 export default App;
