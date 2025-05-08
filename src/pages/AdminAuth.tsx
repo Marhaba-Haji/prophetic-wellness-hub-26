@@ -14,6 +14,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Json } from '@/integrations/supabase/types';
 
 // Login form schema
 const loginSchema = z.object({
@@ -40,6 +41,16 @@ interface AdminRegistrationResponse {
   success: boolean;
   user_id?: string;
   error?: string;
+}
+
+// Type guard to check if the response matches our expected interface
+function isAdminRegistrationResponse(data: any): data is AdminRegistrationResponse {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'success' in data &&
+    typeof data.success === 'boolean'
+  );
 }
 
 const AdminAuth = () => {
@@ -147,19 +158,18 @@ const AdminAuth = () => {
 
       if (error) throw error;
       
-      // Safely check and convert the response to our interface type
-      if (data && typeof data === 'object' && 'success' in data) {
-        const response = data as AdminRegistrationResponse;
-        
-        if (response.success === true) {
+      // Use type guard to safely check response format
+      if (isAdminRegistrationResponse(data)) {
+        if (data.success === true) {
           toast.success('Admin account created successfully! You can now login.');
           setActiveTab('login');
           loginForm.reset({ email: values.email, password: '' });
           registerForm.reset();
         } else {
-          throw new Error(response.error || 'Failed to register admin account');
+          throw new Error(data.error || 'Failed to register admin account');
         }
       } else {
+        console.error('Unexpected response format:', data);
         throw new Error('Unexpected response format from server');
       }
     } catch (error: any) {
