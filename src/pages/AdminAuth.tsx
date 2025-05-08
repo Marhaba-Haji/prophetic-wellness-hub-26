@@ -35,6 +35,13 @@ const registerSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
+// Interface for the response from register_admin_endpoint
+interface AdminRegistrationResponse {
+  success: boolean;
+  user_id?: string;
+  error?: string;
+}
+
 const AdminAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('login');
@@ -140,18 +147,16 @@ const AdminAuth = () => {
 
       if (error) throw error;
       
-      // Properly handle the JSON response from register_admin_endpoint
-      if (data && typeof data === 'object') {
-        if (data.success === true) {
-          toast.success('Admin account created successfully! You can now login.');
-          setActiveTab('login');
-          loginForm.reset({ email: values.email, password: '' });
-          registerForm.reset();
-        } else {
-          throw new Error(data.error?.toString() || 'Failed to register admin account');
-        }
+      // Cast the response to our typed interface
+      const response = data as AdminRegistrationResponse;
+      
+      if (response.success === true) {
+        toast.success('Admin account created successfully! You can now login.');
+        setActiveTab('login');
+        loginForm.reset({ email: values.email, password: '' });
+        registerForm.reset();
       } else {
-        throw new Error('Unexpected response format');
+        throw new Error(response.error || 'Failed to register admin account');
       }
     } catch (error: any) {
       console.error('Registration error:', error);
