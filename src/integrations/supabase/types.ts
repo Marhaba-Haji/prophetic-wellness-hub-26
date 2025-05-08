@@ -102,6 +102,14 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      register_admin: {
+        Args: { email: string; password: string; name?: string }
+        Returns: string
+      }
+      register_admin_endpoint: {
+        Args: { email: string; password: string; name?: string }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never
