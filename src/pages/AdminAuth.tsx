@@ -147,16 +147,20 @@ const AdminAuth = () => {
 
       if (error) throw error;
       
-      // Cast the response to our typed interface
-      const response = data as AdminRegistrationResponse;
-      
-      if (response.success === true) {
-        toast.success('Admin account created successfully! You can now login.');
-        setActiveTab('login');
-        loginForm.reset({ email: values.email, password: '' });
-        registerForm.reset();
+      // Safely check and convert the response to our interface type
+      if (data && typeof data === 'object' && 'success' in data) {
+        const response = data as AdminRegistrationResponse;
+        
+        if (response.success === true) {
+          toast.success('Admin account created successfully! You can now login.');
+          setActiveTab('login');
+          loginForm.reset({ email: values.email, password: '' });
+          registerForm.reset();
+        } else {
+          throw new Error(response.error || 'Failed to register admin account');
+        }
       } else {
-        throw new Error(response.error || 'Failed to register admin account');
+        throw new Error('Unexpected response format from server');
       }
     } catch (error: any) {
       console.error('Registration error:', error);
