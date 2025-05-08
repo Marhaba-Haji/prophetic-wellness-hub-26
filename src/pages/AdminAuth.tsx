@@ -140,14 +140,19 @@ const AdminAuth = () => {
 
       if (error) throw error;
       
-      if (!data.success) {
-        throw new Error(data.error || 'Failed to register admin account');
+      // Properly handle the JSON response from register_admin_endpoint
+      if (data && typeof data === 'object') {
+        if (data.success === true) {
+          toast.success('Admin account created successfully! You can now login.');
+          setActiveTab('login');
+          loginForm.reset({ email: values.email, password: '' });
+          registerForm.reset();
+        } else {
+          throw new Error(data.error?.toString() || 'Failed to register admin account');
+        }
+      } else {
+        throw new Error('Unexpected response format');
       }
-      
-      toast.success('Admin account created successfully! You can now login.');
-      setActiveTab('login');
-      loginForm.reset({ email: values.email, password: '' });
-      registerForm.reset();
     } catch (error: any) {
       console.error('Registration error:', error);
       toast.error(error.message || 'Failed to register admin account');
