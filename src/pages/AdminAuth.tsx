@@ -117,7 +117,7 @@ const AdminAuth = () => {
       
       if (error) throw error;
       
-      if (data.user) {
+      if (data?.user) {
         // Check if the user is in the admins table
         const { data: adminData, error: adminError } = await supabase
           .from('admins')

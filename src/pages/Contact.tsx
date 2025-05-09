@@ -4,6 +4,7 @@ import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import ContactMap from '@/components/ContactMap';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import ContactForm from '@/components/ContactForm';
 
 const Contact = () => {
   return (
@@ -18,61 +19,7 @@ const Contact = () => {
               We'd love to hear from you. Fill out the form and we'll get back to you as soon as possible.
             </p>
             
-            <form className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-green"
-                  placeholder="Your name"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-green"
-                  placeholder="Your email"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-green"
-                  placeholder="Your phone number"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-green"
-                  placeholder="How can we help you?"
-                ></textarea>
-              </div>
-              
-              <div>
-                <Button className="w-full gold-gradient text-white hover:opacity-90 transition-opacity">
-                  Send Message
-                </Button>
-              </div>
-            </form>
+            <ContactForm />
           </div>
           
           <div>

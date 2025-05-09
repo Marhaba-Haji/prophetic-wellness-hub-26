@@ -9,13 +9,107 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      admins: {
+        Row: {
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      appointments: {
+        Row: {
+          created_at: string
+          date: string
+          email: string
+          full_name: string
+          id: string
+          notes: string | null
+          phone: string
+          service: string
+          status: string
+          time: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          email: string
+          full_name: string
+          id?: string
+          notes?: string | null
+          phone: string
+          service: string
+          status?: string
+          time: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          email?: string
+          full_name?: string
+          id?: string
+          notes?: string | null
+          phone?: string
+          service?: string
+          status?: string
+          time?: string
+        }
+        Relationships: []
+      }
+      contact_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          subject: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          subject: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          subject?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      register_admin: {
+        Args: { email: string; password: string; name?: string }
+        Returns: string
+      }
+      register_admin_endpoint: {
+        Args: { email: string; password: string; name?: string }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never
