@@ -156,6 +156,8 @@ const AdminAuth = () => {
           name: values.name
         });
 
+      console.log("Registration response:", data, error);
+
       if (error) throw error;
       
       // Use type guard to safely check response format
