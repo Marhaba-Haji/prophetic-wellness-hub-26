@@ -8,6 +8,7 @@ import { CalendarDays, Clock, User, Mail, Phone, MessageSquare } from 'lucide-re
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/sonner';
+import { Appointment } from '@/types/supabase-types';
 
 const services = [
   "Dry Cupping",
@@ -51,7 +52,7 @@ const BookingAppointment = () => {
       // Insert appointment into Supabase
       const { error } = await supabase
         .from('appointments')
-        .insert([
+        .insert<Partial<Appointment>[]>([
           { 
             full_name: fullName,
             email,

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,19 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/sonner';
 import { format } from 'date-fns';
-
-type Appointment = {
-  id: string;
-  full_name: string;
-  email: string;
-  phone: string;
-  service: string;
-  date: string;
-  time: string;
-  notes: string | null;
-  status: string;
-  created_at: string;
-};
+import { Appointment } from '@/types/supabase-types';
 
 const AdminAppointments = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -40,7 +27,7 @@ const AdminAppointments = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from('appointments')
-        .select('*')
+        .select<string, Appointment>('*')
         .order('date', { ascending: false })
         .order('time', { ascending: true });
       
@@ -59,7 +46,7 @@ const AdminAppointments = () => {
     try {
       const { error } = await supabase
         .from('appointments')
-        .update({ status })
+        .update<Partial<Appointment>>({ status })
         .eq('id', id);
       
       if (error) throw error;

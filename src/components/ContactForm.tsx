@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
+import { ContactSubmission } from "@/types/supabase-types";
 
 const ContactForm = () => {
   const [name, setName] = useState('');
@@ -19,7 +20,7 @@ const ContactForm = () => {
       // Insert data into Supabase
       const { error } = await supabase
         .from('contact_submissions')
-        .insert([
+        .insert<Partial<ContactSubmission>[]>([
           { name, email, subject, message }
         ]);
 

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,15 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/sonner';
 import { format } from 'date-fns';
-
-type ContactSubmission = {
-  id: string;
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-  created_at: string;
-};
+import { ContactSubmission } from '@/types/supabase-types';
 
 const AdminContacts = () => {
   const [contacts, setContacts] = useState<ContactSubmission[]>([]);
@@ -37,7 +28,7 @@ const AdminContacts = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from('contact_submissions')
-        .select('*')
+        .select<string, ContactSubmission>('*')
         .order('created_at', { ascending: false });
       
       if (error) throw error;

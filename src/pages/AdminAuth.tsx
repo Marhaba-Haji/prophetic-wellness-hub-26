@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Json } from '@/integrations/supabase/types';
+import { Admin } from '@/types/supabase-types';
 
 // Login form schema
 const loginSchema = z.object({
@@ -88,7 +89,7 @@ const AdminAuth = () => {
           // Check if the user is in the admins table
           const { data: adminData, error } = await supabase
             .from('admins')
-            .select('*')
+            .select<string, Admin>('*')
             .eq('user_id', session.user.id)
             .single();
           
@@ -121,7 +122,7 @@ const AdminAuth = () => {
         // Check if the user is in the admins table
         const { data: adminData, error: adminError } = await supabase
           .from('admins')
-          .select('*')
+          .select<string, Admin>('*')
           .eq('user_id', data.user.id)
           .single();
         
@@ -150,7 +151,7 @@ const AdminAuth = () => {
     try {
       // Call the register_admin_endpoint function
       const { data, error } = await supabase
-        .rpc('register_admin_endpoint', {
+        .rpc<AdminRegistrationResponse>('register_admin_endpoint', {
           email: values.email,
           password: values.password,
           name: values.name
@@ -160,8 +161,7 @@ const AdminAuth = () => {
 
       if (error) throw error;
       
-      // Use type guard to safely check response format
-      if (isAdminRegistrationResponse(data)) {
+      if (data && isAdminRegistrationResponse(data)) {
         if (data.success === true) {
           toast.success('Admin account created successfully! You can now login.');
           setActiveTab('login');

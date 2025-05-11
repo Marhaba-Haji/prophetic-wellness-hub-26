@@ -8,6 +8,7 @@ import { toast } from '@/components/ui/sonner';
 import AdminAppointments from '@/components/admin/AdminAppointments';
 import AdminContacts from '@/components/admin/AdminContacts';
 import { Users, MessageSquare, LogOut } from 'lucide-react';
+import { Admin } from '@/types/supabase-types';
 
 const AdminDashboard = () => {
   const [user, setUser] = useState<any>(null);
@@ -29,7 +30,7 @@ const AdminDashboard = () => {
         // Check if user is in admins table
         const { data: adminData, error: adminError } = await supabase
           .from('admins')
-          .select('*')
+          .select<string, Admin>('*')
           .eq('user_id', session.user.id)
           .single();
         
