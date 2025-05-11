@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -13,7 +14,6 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Json } from '@/integrations/supabase/types';
 import { Admin } from '@/types/supabase-types';
 
 // Login form schema
@@ -148,31 +148,38 @@ const AdminAuth = () => {
     setIsLoading(true);
     
     try {
-      // Call the register_admin_endpoint function
-      const { data, error } = await supabase
-        .rpc('register_admin_endpoint', {
-          email: values.email,
-          password: values.password,
+      // First, sign up the user using Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: values.email,
+        password: values.password,
+        options: {
+          data: {
+            name: values.name
+          }
+        }
+      });
+      
+      if (authError) throw authError;
+      if (!authData.user) throw new Error("Failed to create user account");
+      
+      // Now add the user to the admins table
+      const { data: adminData, error: adminError } = await supabase
+        .from('admins')
+        .insert({
+          user_id: authData.user.id,
           name: values.name
         });
-
-      console.log("Registration response:", data, error);
-
-      if (error) throw error;
       
-      if (data && isAdminRegistrationResponse(data)) {
-        if (data.success === true) {
-          toast.success('Admin account created successfully! You can now login.');
-          setActiveTab('login');
-          loginForm.reset({ email: values.email, password: '' });
-          registerForm.reset();
-        } else {
-          throw new Error(data.error || 'Failed to register admin account');
-        }
-      } else {
-        console.error('Unexpected response format:', data);
-        throw new Error('Unexpected response format from server');
+      if (adminError) {
+        // If admin creation fails, try to clean up the auth user
+        await supabase.auth.signOut();
+        throw adminError;
       }
+      
+      toast.success('Admin account created successfully! You can now login.');
+      setActiveTab('login');
+      loginForm.reset({ email: values.email, password: '' });
+      registerForm.reset();
     } catch (error: any) {
       console.error('Registration error:', error);
       toast.error(error.message || 'Failed to register admin account');
