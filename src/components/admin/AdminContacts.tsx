@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/sonner';
 import { format } from 'date-fns';
 import { ContactSubmission } from '@/types/supabase-types';
+import { Eye } from 'lucide-react';
 
 const AdminContacts = () => {
   const [contacts, setContacts] = useState<ContactSubmission[]>([]);
@@ -74,25 +76,35 @@ const AdminContacts = () => {
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Subject</TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableHead className="text-center">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {contacts.map((contact) => (
                     <TableRow key={contact.id}>
                       <TableCell>
-                        {format(new Date(contact.created_at), 'MMM dd, yyyy HH:mm')}
+                        {format(new Date(contact.created_at), 'MMM dd, yyyy')}
+                        <div className="text-xs text-gray-500">
+                          {format(new Date(contact.created_at), 'HH:mm')}
+                        </div>
                       </TableCell>
-                      <TableCell>{contact.name}</TableCell>
-                      <TableCell>{contact.email}</TableCell>
-                      <TableCell>{contact.subject}</TableCell>
                       <TableCell>
+                        <div className="font-medium">{contact.name}</div>
+                      </TableCell>
+                      <TableCell className="text-sm">{contact.email}</TableCell>
+                      <TableCell>
+                        <div className="max-w-[200px] truncate font-medium">
+                          {contact.subject}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-center">
                         <Button 
                           size="sm" 
                           variant="outline"
+                          className="flex items-center gap-1"
                           onClick={() => setSelectedContact(contact)}
                         >
-                          View Message
+                          <Eye className="h-3 w-3" /> View Message
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -118,11 +130,11 @@ const AdminContacts = () => {
               </Button>
             </div>
             <div className="mb-4">
-              <p className="text-sm text-gray-500">
-                From: {selectedContact.name} ({selectedContact.email})
+              <p className="text-sm text-gray-500 mb-1">
+                <span className="font-medium">From:</span> {selectedContact.name} ({selectedContact.email})
               </p>
               <p className="text-sm text-gray-500">
-                Sent: {format(new Date(selectedContact.created_at), 'MMMM dd, yyyy HH:mm')}
+                <span className="font-medium">Sent:</span> {format(new Date(selectedContact.created_at), 'MMMM dd, yyyy HH:mm')}
               </p>
             </div>
             <div className="bg-gray-50 p-4 rounded-md">
