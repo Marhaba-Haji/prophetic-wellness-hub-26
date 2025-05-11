@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { Calendar } from 'lucide-react';
 
 const blogPosts = [
   {
@@ -55,7 +56,10 @@ const BlogPreview = () => {
                 </div>
               </Link>
               <CardContent className="p-6">
-                <div className="text-sm text-gray-500 mb-2">{post.date}</div>
+                <div className="flex items-center text-sm text-gray-500 mb-2">
+                  <Calendar className="h-3.5 w-3.5 mr-1" />
+                  <span>{post.date}</span>
+                </div>
                 <Link to={`/blog/${post.slug}`}>
                   <h3 className="text-xl font-bold text-brand-green mb-2 hover:text-brand-green-light transition-colors">{post.title}</h3>
                 </Link>
