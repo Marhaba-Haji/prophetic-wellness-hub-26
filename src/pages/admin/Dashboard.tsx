@@ -7,7 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/components/ui/sonner';
 import AdminAppointments from '@/components/admin/AdminAppointments';
 import AdminContacts from '@/components/admin/AdminContacts';
-import { Users, MessageSquare, LogOut } from 'lucide-react';
+import AdminBlogs from '@/components/admin/AdminBlogs';
+import { Users, MessageSquare, LogOut, BookOpen } from 'lucide-react';
 import { Admin } from '@/types/supabase-types';
 
 const AdminDashboard = () => {
@@ -104,12 +105,18 @@ const AdminDashboard = () => {
             <TabsTrigger value="contacts" className="flex items-center gap-2">
               <MessageSquare className="h-4 w-4" /> Contact Messages
             </TabsTrigger>
+            <TabsTrigger value="blogs" className="flex items-center gap-2">
+              <BookOpen className="h-4 w-4" /> Blog Management
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="appointments">
             <AdminAppointments />
           </TabsContent>
           <TabsContent value="contacts">
             <AdminContacts />
+          </TabsContent>
+          <TabsContent value="blogs">
+            <AdminBlogs />
           </TabsContent>
         </Tabs>
       </main>

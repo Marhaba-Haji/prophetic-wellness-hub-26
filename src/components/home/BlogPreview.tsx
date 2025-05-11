@@ -78,7 +78,7 @@ const BlogPreview = () => {
         
         <div className="text-center mt-10">
           <Link to="/blog">
-            <Button className="border-brand-green text-brand-green hover:bg-brand-green hover:text-white">
+            <Button className="bg-white text-brand-green border border-brand-green shadow-md hover:shadow-lg hover:bg-gray-50">
               View All Articles
             </Button>
           </Link>
