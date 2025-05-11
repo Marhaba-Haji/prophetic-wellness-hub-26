@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -151,7 +150,7 @@ const AdminAuth = () => {
     try {
       // Call the register_admin_endpoint function
       const { data, error } = await supabase
-        .rpc<AdminRegistrationResponse>('register_admin_endpoint', {
+        .rpc('register_admin_endpoint', {
           email: values.email,
           password: values.password,
           name: values.name

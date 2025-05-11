@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
@@ -52,17 +51,15 @@ const BookingAppointment = () => {
       // Insert appointment into Supabase
       const { error } = await supabase
         .from('appointments')
-        .insert<Partial<Appointment>[]>([
-          { 
-            full_name: fullName,
-            email,
-            phone,
-            date,
-            time,
-            service,
-            notes
-          }
-        ]);
+        .insert({
+          full_name: fullName,
+          email,
+          phone,
+          date,
+          time,
+          service,
+          notes
+        });
 
       if (error) throw error;
 

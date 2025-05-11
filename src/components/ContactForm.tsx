@@ -20,9 +20,12 @@ const ContactForm = () => {
       // Insert data into Supabase
       const { error } = await supabase
         .from('contact_submissions')
-        .insert<Partial<ContactSubmission>[]>([
-          { name, email, subject, message }
-        ]);
+        .insert({
+          name, 
+          email, 
+          subject, 
+          message
+        });
 
       if (error) throw error;
 
