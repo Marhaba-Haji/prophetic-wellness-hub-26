@@ -112,7 +112,8 @@ const AdminAppointments = () => {
                     <TableHead>Date & Time</TableHead>
                     <TableHead>Client</TableHead>
                     <TableHead>Service</TableHead>
-                    <TableHead>Contact</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Phone</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-center">Actions</TableHead>
                   </TableRow>
@@ -140,10 +141,8 @@ const AdminAppointments = () => {
                         )}
                       </TableCell>
                       <TableCell className="font-medium">{appointment.service}</TableCell>
-                      <TableCell>
-                        <div className="text-sm">{appointment.email}</div>
-                        <div className="text-sm font-medium">{appointment.phone}</div>
-                      </TableCell>
+                      <TableCell className="text-sm">{appointment.email}</TableCell>
+                      <TableCell className="text-sm font-medium">{appointment.phone}</TableCell>
                       <TableCell>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeClass(appointment.status)}`}>
                           {appointment.status}

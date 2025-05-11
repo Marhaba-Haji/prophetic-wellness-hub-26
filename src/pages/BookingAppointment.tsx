@@ -1,9 +1,10 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { CalendarDays, Clock, User, Mail, Phone, MessageSquare } from 'lucide-react';
+import { CalendarDays, Clock, User, Mail, Phone, MessageSquare, MapPin } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/sonner';
@@ -283,21 +284,29 @@ const BookingAppointment = () => {
                 <div className="space-y-4 text-sm">
                   <div>
                     <h4 className="font-semibold mb-1">Opening Hours</h4>
-                    <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
-                    <p>Saturday: 10:00 AM - 4:00 PM</p>
-                    <p>Sunday: Closed</p>
+                    <p>Monday - Thursday: 9:00 AM - 8:00 PM</p>
+                    <p>Saturday - Sunday: 9:00 AM - 8:00 PM</p>
+                    <p>Friday: Closed</p>
                   </div>
                   
                   <div className="pt-2 border-t border-gray-100">
                     <h4 className="font-semibold mb-1">Location</h4>
-                    <p>123 Healing Street</p>
-                    <p>Wellness City, WC 12345</p>
+                    <p className="flex items-start">
+                      <MapPin className="h-4 w-4 text-brand-green mr-2 mt-1 flex-shrink-0" />
+                      <span>Paramount Avenue, 63/1, 3rd floor,<br />Mosque Road Cross, Frazer Town,<br />Bangalore 560005</span>
+                    </p>
                   </div>
                   
                   <div className="pt-2 border-t border-gray-100">
                     <h4 className="font-semibold mb-1">Contact</h4>
-                    <p>Phone: (123) 456-7890</p>
-                    <p>Email: info@hijamahealing.com</p>
+                    <p className="flex items-center">
+                      <Phone className="h-4 w-4 text-brand-green mr-2 flex-shrink-0" />
+                      <span>+91 9480389296</span>
+                    </p>
+                    <p className="flex items-center">
+                      <Mail className="h-4 w-4 text-brand-green mr-2 flex-shrink-0" />
+                      <span>info@hijamahealing.com</span>
+                    </p>
                   </div>
                   
                   <div className="pt-2 border-t border-gray-100">
