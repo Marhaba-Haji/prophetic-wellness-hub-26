@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,26 +13,12 @@ import { Bold, Italic, Link as LinkIcon, Code, Image, Video, Save, Eye, Trash2 }
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { nanoid } from 'nanoid';
+import { BlogPost } from '@/types/supabase-types';
 
 interface BlogEditorProps {
   editMode?: boolean;
   blogData?: BlogPost;
   onSave?: () => void;
-}
-
-interface BlogPost {
-  id?: string;
-  title: string;
-  meta_description: string;
-  slug: string;
-  featured_image?: string;
-  featured_image_alt?: string;
-  content: string;
-  author: string;
-  tags: string[];
-  published: boolean;
-  published_date?: string; 
-  schema_markup?: string;
 }
 
 const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps) => {
@@ -44,7 +29,7 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
   const [previewMode, setPreviewMode] = useState(false);
   const [imageUploading, setImageUploading] = useState(false);
   
-  const [blog, setBlog] = useState<BlogPost>(blogData || {
+  const [blog, setBlog] = useState<Partial<BlogPost>>(blogData || {
     title: '',
     meta_description: '',
     slug: '',
@@ -82,10 +67,10 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
   const handleTagAdd = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && tagInput.trim() !== '') {
       e.preventDefault();
-      if (!blog.tags.includes(tagInput.trim())) {
+      if (!blog.tags?.includes(tagInput.trim())) {
         setBlog(prev => ({
           ...prev,
-          tags: [...prev.tags, tagInput.trim()]
+          tags: [...(prev.tags || []), tagInput.trim()]
         }));
       }
       setTagInput('');
@@ -95,7 +80,7 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
   const handleTagRemove = (tagToRemove: string) => {
     setBlog(prev => ({
       ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove)
+      tags: prev.tags?.filter(tag => tag !== tagToRemove) || []
     }));
   };
   
@@ -171,8 +156,15 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
       };
       
       const { data, error } = editMode 
-        ? await supabase.from('blogs').update(blogData).eq('id', blog.id).select()
-        : await supabase.from('blogs').insert(blogData).select();
+        ? await supabase
+            .from('blogs' as any)
+            .update(blogData)
+            .eq('id', blog.id)
+            .select()
+        : await supabase
+            .from('blogs' as any)
+            .insert(blogData)
+            .select();
       
       if (error) throw error;
       
@@ -204,7 +196,10 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
     
     try {
       setIsLoading(true);
-      const { error } = await supabase.from('blogs').delete().eq('id', blog.id);
+      const { error } = await supabase
+        .from('blogs' as any)
+        .delete()
+        .eq('id', blog.id);
       
       if (error) throw error;
       

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,16 +8,7 @@ import { Eye, Edit, Trash2, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
-
-interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  author: string;
-  published: boolean;
-  published_date: string | null;
-  created_at: string;
-}
+import { BlogPost } from '@/types/supabase-types';
 
 const AdminBlogs = () => {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
@@ -32,13 +22,14 @@ const AdminBlogs = () => {
   const fetchBlogs = async () => {
     try {
       setLoading(true);
+      // Using any here as a temporary workaround for the type issue
       const { data, error } = await supabase
-        .from('blogs')
+        .from('blogs' as any)
         .select('*')
         .order('created_at', { ascending: false });
         
       if (error) throw error;
-      setBlogs(data || []);
+      setBlogs(data as BlogPost[] || []);
     } catch (error) {
       console.error('Error fetching blogs:', error);
       toast.error('Failed to fetch blogs');
@@ -51,7 +42,7 @@ const AdminBlogs = () => {
     try {
       setSelectedBlog(id);
       const { error } = await supabase
-        .from('blogs')
+        .from('blogs' as any)
         .update({ 
           published: !currentStatus,
           published_date: !currentStatus ? new Date().toISOString() : null
@@ -82,7 +73,10 @@ const AdminBlogs = () => {
     
     try {
       setSelectedBlog(id);
-      const { error } = await supabase.from('blogs').delete().eq('id', id);
+      const { error } = await supabase
+        .from('blogs' as any)
+        .delete()
+        .eq('id', id);
       
       if (error) throw error;
       
@@ -96,7 +90,7 @@ const AdminBlogs = () => {
     }
   };
   
-  const formatDate = (dateString: string | null) => {
+  const formatDate = (dateString: string | null | undefined) => {
     if (!dateString) return 'N/A';
     try {
       return format(new Date(dateString), 'MMM dd, yyyy');

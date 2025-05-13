@@ -4,11 +4,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import AdminBlogEditor from '@/components/admin/AdminBlogEditor';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/sonner';
+import { BlogPost } from '@/types/supabase-types';
 
 const BlogEditor = () => {
   const { blogId } = useParams();
   const navigate = useNavigate();
-  const [blogData, setBlogData] = useState(null);
+  const [blogData, setBlogData] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(false);
   const isEditMode = !!blogId;
 
@@ -33,7 +34,7 @@ const BlogEditor = () => {
       try {
         setLoading(true);
         const { data, error } = await supabase
-          .from('blogs')
+          .from('blogs' as any)
           .select('*')
           .eq('id', blogId)
           .single();
@@ -44,7 +45,7 @@ const BlogEditor = () => {
           return;
         }
 
-        setBlogData(data);
+        setBlogData(data as BlogPost);
       } catch (error) {
         console.error('Error fetching blog data:', error);
         toast.error('Failed to fetch blog data');
@@ -75,7 +76,7 @@ const BlogEditor = () => {
       <div className="container mx-auto">
         <AdminBlogEditor 
           editMode={isEditMode} 
-          blogData={blogData} 
+          blogData={blogData as BlogPost} 
           onSave={() => navigate('/admin/dashboard')}
         />
       </div>
