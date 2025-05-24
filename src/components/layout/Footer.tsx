@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { BookOpen, MapPin, Phone, Mail, Clock, Facebook, Instagram } from "lucide-react";
@@ -146,7 +145,17 @@ const Footer = () => {
             <p className="text-gray-200">
               &copy; {new Date().getFullYear()} Hijama Healing. All rights reserved.
             </p>
-            <AdminFooterLink />
+            <div className="flex items-center space-x-4">
+              <AdminFooterLink />
+              <a 
+                href="https://facelyft.in" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-gray-400 hover:text-gray-300 text-sm flex items-center"
+              >
+                Powered by <span className="text-brand-gold ml-1">FaceLyft.in</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

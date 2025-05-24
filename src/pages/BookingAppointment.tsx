@@ -1,14 +1,14 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { CalendarDays, Clock, User, Mail, Phone, MessageSquare, MapPin } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, handleSupabaseError, retryOperation } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/sonner';
 import { Appointment } from '@/types/supabase-types';
+import { z } from 'zod';
 
 const services = [
   "Dry Cupping",
@@ -20,6 +20,24 @@ const services = [
   "Personalized Diet Plans"
 ];
 
+// Validation schema
+const appointmentSchema = z.object({
+  full_name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  phone: z.string().regex(/^\+?[\d\s-]{10,}$/, 'Invalid phone number'),
+  date: z.string().refine((date) => {
+    const selectedDate = new Date(date);
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const maxDate = new Date();
+    maxDate.setMonth(maxDate.getMonth() + 3);
+    return selectedDate >= tomorrow && selectedDate <= maxDate;
+  }, 'Date must be between tomorrow and 3 months from now'),
+  time: z.string().min(1, 'Please select a time'),
+  service: z.string().min(1, 'Please select a service'),
+  notes: z.string().optional()
+});
+
 const BookingAppointment = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -29,40 +47,91 @@ const BookingAppointment = () => {
   const [service, setService] = useState('');
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
+  const [availableSlots, setAvailableSlots] = useState<string[]>([]);
   
   const navigate = useNavigate();
   const { toast: uiToast } = useToast();
 
+  // Check appointment availability
+  const checkAvailability = async (selectedDate: string) => {
+    setIsCheckingAvailability(true);
+    try {
+      const { data: existingAppointments, error } = await supabase
+        .from('appointments')
+        .select('time')
+        .eq('date', selectedDate)
+        .eq('status', 'confirmed');
+
+      if (error) throw error;
+
+      const bookedTimes = new Set(existingAppointments?.map(apt => apt.time));
+      const available = availableTimes.filter(time => !bookedTimes.has(time));
+      setAvailableSlots(available);
+    } catch (error) {
+      console.error('Error checking availability:', error);
+      toast.error('Failed to check availability. Please try again.');
+    } finally {
+      setIsCheckingAvailability(false);
+    }
+  };
+
+  // Update available times when date changes
+  useEffect(() => {
+    if (date) {
+      checkAvailability(date);
+    }
+  }, [date]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate form
-    if (!fullName || !email || !phone || !date || !time || !service) {
-      uiToast({
-        title: "Missing Information",
-        description: "Please fill in all the required fields.",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    setIsSubmitting(true);
-    
     try {
-      // Insert appointment into Supabase
-      const { error } = await supabase
+      // Validate input
+      const appointmentData = {
+        full_name: fullName,
+        email,
+        phone,
+        date,
+        time,
+        service,
+        notes
+      };
+      
+      const validatedData = appointmentSchema.parse(appointmentData);
+      
+      setIsSubmitting(true);
+      
+      // Check for conflicts
+      const { data: conflicts, error: conflictError } = await supabase
         .from('appointments')
-        .insert({
-          full_name: fullName,
-          email,
-          phone,
-          date,
-          time,
-          service,
-          notes
-        });
-
-      if (error) throw error;
+        .select('id')
+        .eq('date', date)
+        .eq('time', time)
+        .eq('status', 'confirmed')
+        .single();
+        
+      if (conflictError && conflictError.code !== 'PGRST116') {
+        throw conflictError;
+      }
+      
+      if (conflicts) {
+        toast.error('This time slot is no longer available. Please select another time.');
+        return;
+      }
+      
+      // Insert appointment with retry
+      await retryOperation(async () => {
+        const { error } = await supabase
+          .from('appointments')
+          .insert({
+            ...validatedData,
+            status: 'pending',
+            created_at: new Date().toISOString()
+          });
+          
+        if (error) throw error;
+      });
 
       toast.success("Booking request received! We'll contact you to confirm shortly.");
       
@@ -78,8 +147,13 @@ const BookingAppointment = () => {
       // Redirect after successful booking
       navigate('/booking-success');
     } catch (error) {
-      console.error('Error submitting appointment:', error);
-      toast.error("Failed to book appointment. Please try again later.");
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0];
+        toast.error(firstError.message);
+      } else {
+        const errorMessage = handleSupabaseError(error);
+        toast.error(errorMessage);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -233,9 +307,10 @@ const BookingAppointment = () => {
                           onChange={(e) => setTime(e.target.value)}
                           className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-green"
                           required
+                          disabled={isCheckingAvailability}
                         >
                           <option value="">Select a time</option>
-                          {availableTimes.map((timeOption) => (
+                          {availableSlots.map((timeOption) => (
                             <option key={timeOption} value={timeOption}>
                               {timeOption}
                             </option>

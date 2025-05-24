@@ -103,22 +103,30 @@ FormLabel.displayName = "FormLabel"
 
 const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
-  React.ComponentPropsWithoutRef<typeof Slot>
->(({ ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof Slot> & { isLoading?: boolean }
+>(({ isLoading, ...props }, ref) => {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
 
   return (
-    <Slot
-      ref={ref}
-      id={formItemId}
-      aria-describedby={
-        !error
-          ? `${formDescriptionId}`
-          : `${formDescriptionId} ${formMessageId}`
-      }
-      aria-invalid={!!error}
-      {...props}
-    />
+    <div className="relative">
+      <Slot
+        ref={ref}
+        id={formItemId}
+        aria-describedby={
+          !error
+            ? `${formDescriptionId}`
+            : `${formDescriptionId} ${formMessageId}`
+        }
+        aria-invalid={!!error}
+        disabled={isLoading}
+        {...props}
+      />
+      {isLoading && (
+        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        </div>
+      )}
+    </div>
   )
 })
 FormControl.displayName = "FormControl"
