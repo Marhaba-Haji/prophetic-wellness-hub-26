@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -29,10 +30,11 @@ const AdminBlogs = () => {
         .order('created_at', { ascending: false });
         
       if (error) throw error;
-      setBlogs(data as BlogPost[] || []);
+      setBlogs((data || []) as BlogPost[]);
     } catch (error) {
       console.error('Error fetching blogs:', error);
       toast.error('Failed to fetch blogs');
+      setBlogs([]);
     } finally {
       setLoading(false);
     }
