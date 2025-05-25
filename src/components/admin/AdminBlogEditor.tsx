@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -139,20 +140,45 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
     try {
       setIsLoading(true);
       
-      if (!blog.title) {
+      // Validate required fields
+      if (!blog.title?.trim()) {
         toast.error('Title is required');
         return;
       }
       
-      if (!blog.slug) {
+      if (!blog.slug?.trim()) {
         toast.error('URL slug is required');
         return;
       }
       
+      if (!blog.author?.trim()) {
+        toast.error('Author is required');
+        return;
+      }
+      
+      if (!blog.content?.trim()) {
+        toast.error('Content is required');
+        return;
+      }
+      
+      if (!blog.meta_description?.trim()) {
+        toast.error('Meta description is required');
+        return;
+      }
+      
+      // Prepare the blog data with all required fields
       const blogData = {
-        ...blog,
+        title: blog.title.trim(),
+        meta_description: blog.meta_description.trim(),
+        slug: blog.slug.trim(),
+        content: blog.content.trim(),
+        author: blog.author.trim(),
+        featured_image: blog.featured_image || null,
+        featured_image_alt: blog.featured_image_alt || null,
+        tags: blog.tags || [],
+        schema_markup: blog.schema_markup || null,
         published: publish,
-        published_date: publish ? new Date().toISOString() : blog.published_date
+        published_date: publish ? new Date().toISOString() : blog.published_date || null
       };
       
       const { data, error } = editMode 
@@ -246,7 +272,7 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
                 <Input 
                   id="title" 
                   name="title" 
-                  value={blog.title} 
+                  value={blog.title || ''} 
                   onChange={handleChange} 
                   placeholder="Blog Title" 
                 />
@@ -257,7 +283,7 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
                 <Input 
                   id="author" 
                   name="author" 
-                  value={blog.author} 
+                  value={blog.author || ''} 
                   onChange={handleChange} 
                   placeholder="Author Name" 
                 />
@@ -295,7 +321,7 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
                 <div className="h-96 border rounded-md">
                   <ReactQuill 
                     theme="snow" 
-                    value={blog.content} 
+                    value={blog.content || ''} 
                     onChange={handleContentChange} 
                     modules={modules}
                     className="h-80" 
@@ -318,7 +344,7 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
                   <Input 
                     id="slug" 
                     name="slug" 
-                    value={blog.slug} 
+                    value={blog.slug || ''} 
                     onChange={handleChange} 
                     placeholder="url-slug" 
                   />
@@ -331,7 +357,7 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
                 <Textarea 
                   id="meta_description" 
                   name="meta_description" 
-                  value={blog.meta_description} 
+                  value={blog.meta_description || ''} 
                   onChange={handleChange} 
                   placeholder="Meta description for SEO" 
                   className="h-20"
@@ -343,7 +369,7 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
                 <Textarea 
                   id="schema_markup" 
                   name="schema_markup" 
-                  value={blog.schema_markup} 
+                  value={blog.schema_markup || ''} 
                   onChange={handleChange} 
                   placeholder="Paste your article schema markup here" 
                   className="h-40 font-mono"
@@ -359,7 +385,7 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
                     <div className="relative w-full max-w-md">
                       <img 
                         src={blog.featured_image} 
-                        alt={blog.featured_image_alt || blog.title} 
+                        alt={blog.featured_image_alt || blog.title || 'Featured image'} 
                         className="w-full h-48 object-cover rounded-md border" 
                       />
                     </div>
@@ -382,7 +408,7 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
                 <Input 
                   id="featured_image_alt" 
                   name="featured_image_alt" 
-                  value={blog.featured_image_alt} 
+                  value={blog.featured_image_alt || ''} 
                   onChange={handleChange} 
                   placeholder="Alt text for featured image" 
                 />

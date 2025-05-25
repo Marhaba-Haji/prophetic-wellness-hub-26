@@ -18,6 +18,7 @@ import NotFound from "./pages/NotFound";
 import ServiceDetail from "./pages/ServiceDetail";
 import AdminAuth from "./pages/AdminAuth";
 import AdminDashboard from "./pages/admin/Dashboard";
+import BlogEditor from "./pages/admin/BlogEditor";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,8 @@ const App = () => (
             <Route path="/booking-success" element={<BookingSuccess />} />
             <Route path="/admin" element={<AdminAuth />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/blog/new" element={<BlogEditor />} />
+            <Route path="/admin/blog/edit/:blogId" element={<BlogEditor />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </TooltipProvider>
