@@ -23,33 +23,31 @@ import BlogEditor from "./pages/admin/BlogEditor";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/service/:serviceId" element={<ServiceDetail />} />
-            <Route path="/benefits" element={<BenefitsPage />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:blogSlug" element={<BlogDetail />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/booking-appointment" element={<BookingAppointment />} />
-            <Route path="/booking-success" element={<BookingSuccess />} />
-            <Route path="/admin" element={<AdminAuth />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/blog/new" element={<BlogEditor />} />
-            <Route path="/admin/blog/edit/:blogId" element={<BlogEditor />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </TooltipProvider>
-      </BrowserRouter>
-    </QueryClientProvider>
-  </React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <BrowserRouter>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/service/:serviceId" element={<ServiceDetail />} />
+          <Route path="/benefits" element={<BenefitsPage />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:blogSlug" element={<BlogDetail />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/booking-appointment" element={<BookingAppointment />} />
+          <Route path="/booking-success" element={<BookingSuccess />} />
+          <Route path="/admin" element={<AdminAuth />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/blog/new" element={<BlogEditor />} />
+          <Route path="/admin/blog/edit/:blogId" element={<BlogEditor />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </TooltipProvider>
+    </BrowserRouter>
+  </QueryClientProvider>
 );
 
 export default App;
