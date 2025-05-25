@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -118,22 +117,27 @@ const AdminAuth = () => {
       if (error) throw error;
       
       if (data?.user) {
-        // Check if the user is in the admins table
-        const { data: adminData, error: adminError } = await supabase
-          .from('admins')
-          .select<string, Admin>('*')
-          .eq('user_id', data.user.id)
-          .single();
+        // Check if the user is a super admin first
+        const isSuperAdmin = data.user.user_metadata?.is_super_admin === true;
         
-        if (adminError || !adminData) {
-          // Not an admin
-          await supabase.auth.signOut();
-          toast.error("You don't have admin privileges.");
-          return;
+        if (!isSuperAdmin) {
+          // If not super admin, check if they're in the admins table
+          const { data: adminData, error: adminError } = await supabase
+            .from('admins')
+            .select<string, Admin>('*')
+            .eq('user_id', data.user.id)
+            .single();
+          
+          if (adminError || !adminData) {
+            // Not an admin
+            await supabase.auth.signOut();
+            toast.error("You don't have admin privileges.");
+            return;
+          }
         }
         
-        // User is admin, redirect to admin dashboard
-        toast.success('Welcome back, Admin!');
+        // User is either super admin or regular admin, redirect to admin dashboard
+        toast.success(isSuperAdmin ? 'Welcome back, Super Admin!' : 'Welcome back, Admin!');
         navigate('/admin/dashboard');
       }
     } catch (error: any) {

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -28,21 +27,26 @@ const AdminDashboard = () => {
           return;
         }
         
-        // Check if user is in admins table
-        const { data: adminData, error: adminError } = await supabase
-          .from('admins')
-          .select<string, Admin>('*')
-          .eq('user_id', session.user.id)
-          .single();
+        // Check if user is a super admin first
+        const isSuperAdmin = session.user.user_metadata?.is_super_admin === true;
         
-        if (adminError || !adminData) {
-          // Not an admin, sign out and redirect
-          await supabase.auth.signOut();
-          navigate('/admin');
-          return;
+        if (!isSuperAdmin) {
+          // If not super admin, check if they're in the admins table
+          const { data: adminData, error: adminError } = await supabase
+            .from('admins')
+            .select<string, Admin>('*')
+            .eq('user_id', session.user.id)
+            .single();
+          
+          if (adminError || !adminData) {
+            // Not an admin, sign out and redirect
+            await supabase.auth.signOut();
+            navigate('/admin');
+            return;
+          }
         }
         
-        // User is authenticated and is an admin
+        // User is either super admin or regular admin
         setUser(session.user);
       } catch (error) {
         console.error('Auth check error:', error);
