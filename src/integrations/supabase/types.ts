@@ -9,7 +9,141 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      admins: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      appointments: {
+        Row: {
+          created_at: string | null
+          date: string
+          email: string
+          full_name: string
+          id: string
+          notes: string | null
+          phone: string
+          service: string
+          status: string | null
+          time: string
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          email: string
+          full_name: string
+          id?: string
+          notes?: string | null
+          phone: string
+          service: string
+          status?: string | null
+          time: string
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          email?: string
+          full_name?: string
+          id?: string
+          notes?: string | null
+          phone?: string
+          service?: string
+          status?: string | null
+          time?: string
+        }
+        Relationships: []
+      }
+      blogs: {
+        Row: {
+          author: string
+          content: string
+          created_at: string | null
+          featured_image: string | null
+          featured_image_alt: string | null
+          id: string
+          meta_description: string
+          published: boolean | null
+          published_date: string | null
+          schema_markup: string | null
+          slug: string
+          tags: string[] | null
+          title: string
+        }
+        Insert: {
+          author: string
+          content: string
+          created_at?: string | null
+          featured_image?: string | null
+          featured_image_alt?: string | null
+          id?: string
+          meta_description: string
+          published?: boolean | null
+          published_date?: string | null
+          schema_markup?: string | null
+          slug: string
+          tags?: string[] | null
+          title: string
+        }
+        Update: {
+          author?: string
+          content?: string
+          created_at?: string | null
+          featured_image?: string | null
+          featured_image_alt?: string | null
+          id?: string
+          meta_description?: string
+          published?: boolean | null
+          published_date?: string | null
+          schema_markup?: string | null
+          slug?: string
+          tags?: string[] | null
+          title?: string
+        }
+        Relationships: []
+      }
+      contact_submissions: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          message: string
+          name: string
+          subject: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          message: string
+          name: string
+          subject: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          subject?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
