@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -23,14 +22,13 @@ const AdminBlogs = () => {
   const fetchBlogs = async () => {
     try {
       setLoading(true);
-      // Using any here as a temporary workaround for the type issue
       const { data, error } = await supabase
-        .from('blogs' as any)
+        .from('blogs')
         .select('*')
         .order('created_at', { ascending: false });
         
       if (error) throw error;
-      setBlogs((data || []) as BlogPost[]);
+      setBlogs(data as BlogPost[] || []);
     } catch (error) {
       console.error('Error fetching blogs:', error);
       toast.error('Failed to fetch blogs');
@@ -44,7 +42,7 @@ const AdminBlogs = () => {
     try {
       setSelectedBlog(id);
       const { error } = await supabase
-        .from('blogs' as any)
+        .from('blogs')
         .update({ 
           published: !currentStatus,
           published_date: !currentStatus ? new Date().toISOString() : null
@@ -76,7 +74,7 @@ const AdminBlogs = () => {
     try {
       setSelectedBlog(id);
       const { error } = await supabase
-        .from('blogs' as any)
+        .from('blogs')
         .delete()
         .eq('id', id);
       

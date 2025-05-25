@@ -120,14 +120,19 @@ const BookingAppointment = () => {
         return;
       }
       
-      // Insert appointment with retry
+      // Insert appointment with retry - using the correct data structure
       await retryOperation(async () => {
         const { error } = await supabase
           .from('appointments')
           .insert({
-            ...validatedData,
-            status: 'pending',
-            created_at: new Date().toISOString()
+            full_name: validatedData.full_name,
+            email: validatedData.email,
+            phone: validatedData.phone,
+            date: validatedData.date,
+            time: validatedData.time,
+            service: validatedData.service,
+            notes: validatedData.notes || null,
+            status: 'pending'
           });
           
         if (error) throw error;
@@ -159,12 +164,6 @@ const BookingAppointment = () => {
     }
   };
 
-  const availableTimes = [
-    "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
-    "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM",
-    "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM"
-  ];
-  
   // Calculate min date (tomorrow)
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);

@@ -157,12 +157,12 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
       
       const { data, error } = editMode 
         ? await supabase
-            .from('blogs' as any)
+            .from('blogs')
             .update(blogData)
             .eq('id', blog.id)
             .select()
         : await supabase
-            .from('blogs' as any)
+            .from('blogs')
             .insert(blogData)
             .select();
       
@@ -197,7 +197,7 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
     try {
       setIsLoading(true);
       const { error } = await supabase
-        .from('blogs' as any)
+        .from('blogs')
         .delete()
         .eq('id', blog.id);
       
@@ -266,7 +266,7 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
               <div className="space-y-2">
                 <Label htmlFor="tags">Tags (Press Enter to add)</Label>
                 <div className="flex flex-wrap gap-2 mb-2">
-                  {blog.tags.map((tag, index) => (
+                  {blog.tags?.map((tag, index) => (
                     <div 
                       key={index} 
                       className="bg-brand-green/10 text-brand-green px-2 py-1 rounded-full flex items-center"

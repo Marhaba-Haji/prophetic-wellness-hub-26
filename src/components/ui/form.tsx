@@ -118,7 +118,6 @@ const FormControl = React.forwardRef<
             : `${formDescriptionId} ${formMessageId}`
         }
         aria-invalid={!!error}
-        disabled={isLoading}
         {...props}
       />
       {isLoading && (

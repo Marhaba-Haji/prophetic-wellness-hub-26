@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import AdminBlogEditor from '@/components/admin/AdminBlogEditor';
@@ -34,7 +33,7 @@ const BlogEditor = () => {
       try {
         setLoading(true);
         const { data, error } = await supabase
-          .from('blogs' as any)
+          .from('blogs')
           .select('*')
           .eq('id', blogId)
           .single();
