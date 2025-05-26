@@ -1,5 +1,4 @@
-
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -7,12 +6,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from '@/components/ui/sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { Toggle } from '@/components/ui/toggle';
 import { useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Bold, Italic, Link as LinkIcon, Code, Image, Video, Save, Eye, Trash2, Search, Hash, Globe, Calendar, User, FileText, Settings } from 'lucide-react';
+import { Bold, Italic, Code, Image, Save, Eye, Trash2, Search, Hash, Globe, FileText, Settings } from 'lucide-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { nanoid } from 'nanoid';
@@ -91,7 +89,6 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
   
   const handleContentChange = (content: string) => {
     setBlog(prev => ({ ...prev, content }));
-    // Calculate reading time (average 200 words per minute)
     const wordCount = content.replace(/<[^>]*>/g, '').split(/\s+/).length;
     const readingTime = Math.ceil(wordCount / 200);
     setBlog(prev => ({ ...prev, reading_time: readingTime }));
@@ -215,7 +212,6 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
         return;
       }
       
-      // Only include fields that exist in the current database schema
       const blogData = {
         title: blog.title,
         meta_description: blog.meta_description,
