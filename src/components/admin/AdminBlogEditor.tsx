@@ -215,11 +215,19 @@ const AdminBlogEditor = ({ editMode = false, blogData, onSave }: BlogEditorProps
         return;
       }
       
+      // Only include fields that exist in the current database schema
       const blogData = {
-        ...blog,
+        title: blog.title,
+        meta_description: blog.meta_description,
+        slug: blog.slug,
+        featured_image: blog.featured_image || null,
+        featured_image_alt: blog.featured_image_alt || null,
+        content: blog.content,
+        author: blog.author,
+        tags: blog.tags || [],
         published: publish,
         published_date: publish ? new Date().toISOString() : blog.published_date || null,
-        status: publish ? 'published' : blog.status || 'draft'
+        schema_markup: blog.schema_markup || null
       };
       
       const { data, error } = editMode 
