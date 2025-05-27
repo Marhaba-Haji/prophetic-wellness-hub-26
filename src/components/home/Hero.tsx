@@ -1,22 +1,15 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Heart, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
 const Hero = () => {
-  return (
-    <section className="relative py-24 overflow-hidden islamic-pattern-bg">
+  return <section className="relative py-24 overflow-hidden islamic-pattern-bg">
       <div className="absolute inset-0 bg-gradient-to-r from-white/90 to-white/80"></div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
           <div className="mb-6 inline-block">
             <div className="h-20 w-20 mx-auto rounded-full bg-white p-3 shadow-lg">
-              <img 
-                src="/lovable-uploads/a2f81c2e-c7fd-41be-bcee-e95c0e4202e5.png" 
-                alt="RevivoHeal Logo" 
-                className="h-full w-full object-contain"
-              />
+              <img alt="RevivoHeal Logo" className="h-full w-full object-contain" src="https://i.ibb.co/Mksk2rrK/revivoheal-favicon.png" />
             </div>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand-green mb-6 leading-tight animate-fade-in">
@@ -46,8 +39,6 @@ const Hero = () => {
           <path fill="#ffffff" fillOpacity="1" d="M0,96L60,106.7C120,117,240,139,360,133.3C480,128,600,96,720,90.7C840,85,960,107,1080,112C1200,117,1320,107,1380,101.3L1440,96L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
         </svg>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;

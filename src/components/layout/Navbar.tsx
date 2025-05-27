@@ -18,7 +18,7 @@ const Navbar = () => {
               <img alt="RevivoHeal Logo" className="h-10 w-10 mr-3" src="https://i.ibb.co/Mksk2rrK/revivoheal-favicon.png" />
               <div>
                 <span className="text-brand-green font-bold text-xl">RevivoHeal</span>
-                <span className="text-brand-gold text-xs block">Centre for Pain Relief & Healing</span>
+                <span className="text-brand-gold text-xs block">Pain Relief &amp; Healing</span>
               </div>
             </Link>
           </div>
