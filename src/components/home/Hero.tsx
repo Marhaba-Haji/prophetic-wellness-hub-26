@@ -13,7 +13,7 @@ const Hero = () => {
             </div>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand-green mb-6 leading-tight animate-fade-in">
-            Experience the Healing Power of <span className="text-brand-gold">Prophetic Medicine</span>
+            Experience the Healing Power of <span className="text-brand-gold">Traditional Medicine</span>
           </h1>
           <div className="h-0.5 w-24 bg-brand-gold mx-auto mb-6"></div>
           <p className="text-lg md:text-xl text-gray-700 mb-8">Cupping &amp; massage therapy for pain relief, improved circulation, and overall wellness in a professional, hygienic environment.</p>
