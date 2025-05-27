@@ -9,7 +9,7 @@ const Hero = () => {
         <div className="max-w-3xl mx-auto text-center">
           <div className="mb-6 inline-block">
             <div className="h-20 w-20 mx-auto rounded-full bg-white p-3 shadow-lg">
-              <img alt="RevivoHeal Logo" className="h-full w-full object-contain" src="https://i.ibb.co/Mksk2rrK/revivoheal-favicon.png" />
+              <img alt="RevivoHeal Logo" className="h-full w-full object-contain" src="https://i.ibb.co/zhP9ZM9z/revivo-heal-logo.png" />
             </div>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand-green mb-6 leading-tight animate-fade-in">
