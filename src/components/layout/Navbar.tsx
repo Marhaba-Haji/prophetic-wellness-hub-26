@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Heart, BookOpen } from "lucide-react";
+import { Menu, X, Heart } from "lucide-react";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,10 +21,14 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center" onClick={closeMenu}>
-              <BookOpen className="h-8 w-8 text-brand-green mr-2" />
+              <img 
+                src="/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png" 
+                alt="RevivoHeal Logo" 
+                className="h-10 w-10 mr-3"
+              />
               <div>
-                <span className="text-brand-green font-bold text-xl">Hijama Healing</span>
-                <span className="text-brand-gold text-xs block">Islamic Medical Therapy</span>
+                <span className="text-brand-green font-bold text-xl">RevivoHeal</span>
+                <span className="text-brand-gold text-xs block">Centre for Pain Relief & Healing</span>
               </div>
             </Link>
           </div>
