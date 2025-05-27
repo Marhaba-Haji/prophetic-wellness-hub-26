@@ -15,7 +15,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center" onClick={closeMenu}>
-              <img alt="RevivoHeal Logo" className="h-10 w-10 mr-3" src="https://i.ibb.co/Mksk2rrK/revivoheal-favicon.png" />
+              <img alt="RevivoHeal Logo" className="h-10 w-10 mr-3" src="https://i.ibb.co/zhP9ZM9z/revivo-heal-logo.png" />
               <div>
                 <span className="text-brand-green font-bold text-xl">RevivoHeal</span>
                 <span className="text-brand-gold text-xs block">Pain Relief &amp; Healing</span>
