@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Heart, Calendar, BookOpen } from 'lucide-react';
+import { Heart, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Hero = () => {
@@ -11,8 +11,12 @@ const Hero = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
           <div className="mb-6 inline-block">
-            <div className="h-20 w-20 mx-auto rounded-full bg-brand-green p-5">
-              <BookOpen className="h-full w-full text-white" />
+            <div className="h-20 w-20 mx-auto rounded-full bg-white p-3 shadow-lg">
+              <img 
+                src="/lovable-uploads/a2f81c2e-c7fd-41be-bcee-e95c0e4202e5.png" 
+                alt="RevivoHeal Logo" 
+                className="h-full w-full object-contain"
+              />
             </div>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand-green mb-6 leading-tight animate-fade-in">
