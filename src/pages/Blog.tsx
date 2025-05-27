@@ -151,8 +151,8 @@ const Blog = () => {
             </p>
           </div>
 
-          <div className="max-w-3xl mx-auto mb-12 relative">
-            <div className="relative">
+          <div className="max-w-3xl mx-auto mb-16 relative">
+            <div className="relative mb-6">
               <Search className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
               <Input
                 type="text"
@@ -163,25 +163,27 @@ const Blog = () => {
               />
             </div>
 
-            <Tabs defaultValue="All Topics" className="mt-4" onValueChange={handleTagChange}>
-              <TabsList className="flex flex-wrap gap-2 justify-center bg-transparent">
-                <TabsTrigger 
-                  value="All Topics" 
-                  className="rounded-full data-[state=active]:bg-brand-green data-[state=active]:text-white"
-                >
-                  All Topics
-                </TabsTrigger>
-                {allTags.map((tag) => (
-                  <TabsTrigger
-                    key={tag}
-                    value={tag}
-                    className="rounded-full data-[state=active]:bg-brand-green data-[state=active]:text-white"
+            <div className="bg-white rounded-lg shadow-sm border p-4">
+              <Tabs defaultValue="All Topics" className="w-full" onValueChange={handleTagChange}>
+                <TabsList className="flex flex-wrap gap-2 justify-center bg-transparent h-auto p-0">
+                  <TabsTrigger 
+                    value="All Topics" 
+                    className="rounded-full data-[state=active]:bg-brand-green data-[state=active]:text-white mb-2"
                   >
-                    {tag}
+                    All Topics
                   </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
+                  {allTags.map((tag) => (
+                    <TabsTrigger
+                      key={tag}
+                      value={tag}
+                      className="rounded-full data-[state=active]:bg-brand-green data-[state=active]:text-white mb-2"
+                    >
+                      {tag}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+            </div>
           </div>
 
           {displayedPosts.length > 0 ? (
