@@ -86,21 +86,29 @@ const AdminBlogEditor = () => {
         published,
       };
 
-      let query = supabase.from('blogs');
-
+      let data, error;
       if (blogId) {
-        query = query.update(blogPost).eq('id', blogId);
+        // UPDATE
+        ({ data, error } = await supabase
+          .from('blogs')
+          .update(blogPost)
+          .eq('id', blogId)
+          .select()
+          .single());
       } else {
-        query = query.insert(blogPost);
+        // INSERT
+        ({ data, error } = await supabase
+          .from('blogs')
+          .insert(blogPost)
+          .select()
+          .single());
       }
-
-      const { data, error } = await query.select().single();
 
       if (error) throw error;
 
       toast.success(`Blog post ${blogId ? 'updated' : 'created'} successfully!`);
 
-      if (!blogId) {
+      if (!blogId && data?.id) {
         navigate(`/admin/blog/edit/${data.id}`);
       }
     } catch (error) {
