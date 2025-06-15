@@ -4,55 +4,44 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { HeartPulse, BookOpen, BriefcaseMedical, Flame, DropletIcon, CheckCircle, Utensils } from 'lucide-react';
-
 const ServicesPage = () => {
-  const allServices = [
-    {
-      id: "dry-cupping",
-      icon: <HeartPulse className="h-12 w-12" />,
-      title: "Dry Cupping",
-      description: "Non-invasive therapy that uses suction to improve blood flow and relieve muscle tension."
-    },
-    {
-      id: "wet-cupping",
-      icon: <BookOpen className="h-12 w-12" />,
-      title: "Wet Cupping",
-      description: "Traditional Hijama therapy that involves creating small incisions for detoxification and healing."
-    },
-    {
-      id: "sports-massage",
-      icon: <BriefcaseMedical className="h-12 w-12" />,
-      title: "Sports Injury Massage",
-      description: "Specialized massage techniques to treat and prevent sports-related injuries and improve performance."
-    },
-    {
-      id: "deep-tissue-massage",
-      icon: <Flame className="h-12 w-12" />,
-      title: "Deep Tissue Oil Massage",
-      description: "Therapeutic massage that targets deeper layers of muscle and connective tissue for chronic pain relief."
-    },
-    {
-      id: "leech-therapy",
-      icon: <DropletIcon className="h-12 w-12" />,
-      title: "Leech Therapy",
-      description: "Ancient medical treatment using medicinal leeches to improve blood circulation and relieve pain."
-    },
-    {
-      id: "steam-bath",
-      icon: <CheckCircle className="h-12 w-12" />,
-      title: "Steam Bath Therapy",
-      description: "Relaxing steam treatment that opens pores, improves circulation, and detoxifies the body."
-    },
-    {
-      id: "diet-plans",
-      icon: <Utensils className="h-12 w-12" />,
-      title: "Personalized Diet Plans",
-      description: "Customized nutritional guidance based on Islamic principles and your specific health needs."
-    }
-  ];
-  
-const ServicePriceChart = () => (
-  <section className="my-16 mx-auto max-w-5xl px-4">
+  const allServices = [{
+    id: "dry-cupping",
+    icon: <HeartPulse className="h-12 w-12" />,
+    title: "Dry Cupping",
+    description: "Non-invasive therapy that uses suction to improve blood flow and relieve muscle tension."
+  }, {
+    id: "wet-cupping",
+    icon: <BookOpen className="h-12 w-12" />,
+    title: "Wet Cupping",
+    description: "Traditional Hijama therapy that involves creating small incisions for detoxification and healing."
+  }, {
+    id: "sports-massage",
+    icon: <BriefcaseMedical className="h-12 w-12" />,
+    title: "Sports Injury Massage",
+    description: "Specialized massage techniques to treat and prevent sports-related injuries and improve performance."
+  }, {
+    id: "deep-tissue-massage",
+    icon: <Flame className="h-12 w-12" />,
+    title: "Deep Tissue Oil Massage",
+    description: "Therapeutic massage that targets deeper layers of muscle and connective tissue for chronic pain relief."
+  }, {
+    id: "leech-therapy",
+    icon: <DropletIcon className="h-12 w-12" />,
+    title: "Leech Therapy",
+    description: "Ancient medical treatment using medicinal leeches to improve blood circulation and relieve pain."
+  }, {
+    id: "steam-bath",
+    icon: <CheckCircle className="h-12 w-12" />,
+    title: "Steam Bath Therapy",
+    description: "Relaxing steam treatment that opens pores, improves circulation, and detoxifies the body."
+  }, {
+    id: "diet-plans",
+    icon: <Utensils className="h-12 w-12" />,
+    title: "Personalized Diet Plans",
+    description: "Customized nutritional guidance based on Islamic principles and your specific health needs."
+  }];
+  const ServicePriceChart = () => <section className="my-16 mx-auto max-w-5xl px-4">
     <h2 className="text-2xl md:text-3xl font-bold text-brand-green text-center mb-6 tracking-tight">
       Service Price Chart
     </h2>
@@ -100,14 +89,11 @@ const ServicePriceChart = () => (
       </div>
     </div>
     <div className="text-center text-gray-500 mt-8 text-xs">
-      <div>Contact: +91 9480389296</div>
-      <div>Address: Frazer Town, Bangalore</div>
+      
+      
     </div>
-  </section>
-);
-  
-  return (
-    <Layout>
+  </section>;
+  return <Layout>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 className="text-3xl md:text-5xl font-bold text-brand-green mb-2 text-center">Our Services</h1>
         <div className="h-1 w-24 bg-brand-gold mx-auto mb-8"></div>
@@ -122,8 +108,7 @@ const ServicePriceChart = () => (
         {/* Insert price chart below header and intro */}
         <ServicePriceChart />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {allServices.map((service, index) => (
-            <Link to={`/service/${service.id}`} key={index} className="group">
+          {allServices.map((service, index) => <Link to={`/service/${service.id}`} key={index} className="group">
               <Card className="service-card border-t-4 border-brand-green overflow-hidden transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl h-full">
                 <div className="text-center px-4 pt-8">
                   <div className="flex justify-center">
@@ -141,12 +126,9 @@ const ServicePriceChart = () => (
                   </Button>
                 </CardContent>
               </Card>
-            </Link>
-          ))}
+            </Link>)}
         </div>
       </div>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default ServicesPage;
