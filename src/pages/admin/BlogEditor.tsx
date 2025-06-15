@@ -8,9 +8,7 @@ import { BlogPost } from '@/types/supabase-types';
 const BlogEditor = () => {
   const { blogId } = useParams();
   const navigate = useNavigate();
-  const [blogData, setBlogData] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(false);
-  const isEditMode = !!blogId;
 
   useEffect(() => {
     // Check authentication
@@ -25,8 +23,8 @@ const BlogEditor = () => {
 
     // If in edit mode, fetch the blog data
     const fetchBlogData = async () => {
-      if (!isEditMode) return;
-      
+      if (!blogId) return;
+
       const isAuthenticated = await checkAuth();
       if (!isAuthenticated) return;
 
@@ -44,7 +42,6 @@ const BlogEditor = () => {
           return;
         }
 
-        setBlogData(data as BlogPost);
       } catch (error) {
         console.error('Error fetching blog data:', error);
         toast.error('Failed to fetch blog data');
@@ -55,7 +52,7 @@ const BlogEditor = () => {
     };
 
     fetchBlogData();
-  }, [blogId, isEditMode, navigate]);
+  }, [blogId, navigate]);
 
   if (loading) {
     return (
@@ -65,19 +62,10 @@ const BlogEditor = () => {
     );
   }
 
-  // For edit mode, wait until blog data is loaded
-  if (isEditMode && !blogData) {
-    return null;
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto">
-        <AdminBlogEditor 
-          editMode={isEditMode} 
-          blogData={blogData as BlogPost} 
-          onSave={() => navigate('/admin/dashboard')}
-        />
+        <AdminBlogEditor />
       </div>
     </div>
   );

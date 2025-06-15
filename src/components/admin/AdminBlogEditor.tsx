@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from "@/components/ui/switch"
 import { toast } from '@/components/ui/sonner';
 import { Editor } from '@tinymce/tinymce-react';
@@ -12,12 +12,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { BlogPost } from '@/types/supabase-types';
 
-const BlogEditor = () => {
+const AdminBlogEditor = () => {
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const [author, setAuthor] = useState('');
-  const [category, setCategory] = useState('');
   const [content, setContent] = useState('');
+  const [metaDescription, setMetaDescription] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
   const [featuredImage, setFeaturedImage] = useState('');
   const [published, setPublished] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
@@ -26,14 +27,14 @@ const BlogEditor = () => {
   const editorRef = React.useRef<any>(null);
   const { blogId } = useParams<{ blogId: string }>();
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     if (blogId && initialLoad) {
       fetchBlog(blogId);
       setInitialLoad(false);
     }
   }, [blogId, initialLoad]);
-  
+
   const fetchBlog = async (id: string) => {
     try {
       setLoading(true);
@@ -42,15 +43,16 @@ const BlogEditor = () => {
         .select('*')
         .eq('id', id)
         .single();
-        
+
       if (error) throw error;
-      
+
       if (data) {
         setTitle(data.title);
         setSlug(data.slug);
         setAuthor(data.author);
-        setCategory(data.category);
+        setTags(data.tags || []);
         setContent(data.content);
+        setMetaDescription(data.meta_description || '');
         setFeaturedImage(data.featured_image || '');
         setPublished(data.published);
       } else {
@@ -64,45 +66,40 @@ const BlogEditor = () => {
       setLoading(false);
     }
   };
-  
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
-  
+
   const handleSave = async () => {
-    if (!title || !slug || !author || !category || !content) {
+    if (!title || !slug || !author || !content || !metaDescription) {
       toast.error('Please fill in all fields.');
       return;
     }
-    
+
     setLoading(true);
     try {
       const blogPost: Omit<BlogPost, 'id' | 'created_at' | 'published_date'> = {
         title,
         slug,
         author,
-        category,
+        tags,
+        meta_description: metaDescription,
         content,
         featured_image: featuredImage || null,
         published,
       };
-      
+
       let query = supabase.from('blogs');
-      
+
       if (blogId) {
         query = query.update(blogPost).eq('id', blogId);
       } else {
         query = query.insert(blogPost);
       }
-      
+
       const { data, error } = await query.select().single();
-      
+
       if (error) throw error;
-      
+
       toast.success(`Blog post ${blogId ? 'updated' : 'created'} successfully!`);
-      
+
       if (!blogId) {
         navigate(`/admin/blog/edit/${data.id}`);
       }
@@ -113,7 +110,7 @@ const BlogEditor = () => {
       setLoading(false);
     }
   };
-  
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -166,18 +163,31 @@ const BlogEditor = () => {
           />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="category">Category</Label>
-          <Select onValueChange={setCategory} defaultValue={category} disabled={previewMode}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Hijama">Hijama</SelectItem>
-              <SelectItem value="Massage Therapy">Massage Therapy</SelectItem>
-              <SelectItem value="Nutrition">Nutrition</SelectItem>
-              <SelectItem value="General Wellness">General Wellness</SelectItem>
-            </SelectContent>
-          </Select>
+          <Label htmlFor="tags">Tags (comma separated)</Label>
+          <Input
+            id="tags"
+            value={tags.join(', ')}
+            onChange={e =>
+              setTags(
+                e.target.value
+                  .split(',')
+                  .map(tag => tag.trim())
+                  .filter(Boolean)
+              )
+            }
+            disabled={previewMode}
+            placeholder="Add tags separated by comma"
+          />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="metaDesc">Meta Description</Label>
+          <Textarea
+            id="metaDesc"
+            value={metaDescription}
+            onChange={e => setMetaDescription(e.target.value)}
+            disabled={previewMode}
+            placeholder="Meta description for SEO"
+          />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="featuredImage">Featured Image URL</Label>
@@ -195,7 +205,7 @@ const BlogEditor = () => {
           {!previewMode ? (
             <Editor
               apiKey="YOUR_API_KEY"
-              onInit={(evt, editor) => editorRef.current = editor}
+              onInit={(evt, editor) => (editorRef.current = editor)}
               value={content}
               onEditorChange={(newContent) => setContent(newContent)}
               init={{
@@ -206,7 +216,8 @@ const BlogEditor = () => {
                   'searchreplace visualblocks code fullscreen',
                   'insertdatetime media table paste code help wordcount'
                 ],
-                toolbar: 'undo redo | formatselect | ' +
+                toolbar:
+                  'undo redo | formatselect | ' +
                   'bold italic backcolor | alignleft aligncenter ' +
                   'alignright alignjustify | bullist numlist outdent indent | ' +
                   'removeformat | help',
@@ -231,4 +242,4 @@ const BlogEditor = () => {
   );
 };
 
-export default BlogEditor;
+export default AdminBlogEditor;
