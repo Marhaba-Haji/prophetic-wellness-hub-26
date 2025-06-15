@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent } from '@/components/ui/card';
@@ -52,6 +51,61 @@ const ServicesPage = () => {
     }
   ];
   
+const ServicePriceChart = () => (
+  <section className="my-16 mx-auto max-w-5xl px-4">
+    <h2 className="text-2xl md:text-3xl font-bold text-brand-green text-center mb-6 tracking-tight">
+      Service Price Chart
+    </h2>
+    <div className="flex flex-col md:flex-row gap-6">
+      {/* Massage Therapy */}
+      <div className="bg-white/90 rounded-lg shadow p-6 flex-1">
+        <h3 className="text-xl font-semibold text-amber-900 mb-4 text-center">Massage Therapy</h3>
+        <ul className="space-y-2 text-amber-900">
+          <li className="flex justify-between border-b pb-2"><span>Dry Cupping Massage</span> <span>&#8377; 999</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Sports Gun Massage with dry cupping</span> <span>&#8377; 999</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Sports Scraping Massage with dry cupping</span> <span>&#8377; 1999</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Sports Combo Massage with dry cupping</span> <span>&#8377; 2499</span></li>
+          <li className="flex justify-between"><span>Facial Massage</span> <span>&#8377; 499</span></li>
+        </ul>
+      </div>
+      {/* Hijama Therapy */}
+      <div className="bg-white/90 rounded-lg shadow p-6 flex-1">
+        <h3 className="text-xl font-semibold text-amber-900 mb-4 text-center">Hijama Therapy</h3>
+        <ul className="space-y-2 text-amber-900">
+          <li className="flex justify-between border-b pb-2"><span>Wet Cupping</span> <span>&#8377; 999</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Unlimited Wet Cupping</span> <span>&#8377; 1499</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Unlimited Dry & Wet  Cupping with Scraping</span> <span>&#8377; 2499</span></li>
+          <li className="flex justify-between"><span>Facial Wet Cupping</span> <span>&#8377; 749</span></li>
+        </ul>
+      </div>
+    </div>
+    <div className="flex flex-col md:flex-row gap-6 mt-6">
+      {/* Add Ons */}
+      <div className="bg-white/90 rounded-lg shadow p-6 flex-1">
+        <h3 className="text-xl font-semibold text-amber-900 mb-4 text-center">Add ons</h3>
+        <ul className="space-y-2 text-amber-900">
+          <li className="flex justify-between border-b pb-2"><span>Dry Cup</span> <span>&#8377; 99</span></li>
+          <li className="flex justify-between"><span>Wet Cup</span> <span>&#8377; 149</span></li>
+        </ul>
+      </div>
+      {/* Massage with Steam Therapy */}
+      <div className="bg-emerald-900/90 rounded-lg shadow p-6 flex-1">
+        <h3 className="text-xl font-semibold text-brand-gold mb-4 text-center">Massage with Steam Therapy</h3>
+        <ul className="space-y-2 text-brand-gold">
+          <li className="flex justify-between border-b pb-2"><span>Dry Cupping Massage</span> <span>&#8377; 1749</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Sports Gun Massage with full body steam</span> <span>&#8377; 1749</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Sports Scraping Massage with full body steam</span> <span>&#8377; 2749</span></li>
+          <li className="flex justify-between"><span>Sports Combo Massage with full body steam</span> <span>&#8377; 2999</span></li>
+        </ul>
+      </div>
+    </div>
+    <div className="text-center text-gray-500 mt-8 text-xs">
+      <div>Contact: +91 9480389296</div>
+      <div>Address: Frazer Town, Bangalore</div>
+    </div>
+  </section>
+);
+  
   return (
     <Layout>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -65,7 +119,8 @@ const ServicesPage = () => {
             Each treatment is performed following the highest standards of hygiene and safety by our qualified practitioners.
           </p>
         </div>
-        
+        {/* Insert price chart below header and intro */}
+        <ServicePriceChart />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {allServices.map((service, index) => (
             <Link to={`/service/${service.id}`} key={index} className="group">
