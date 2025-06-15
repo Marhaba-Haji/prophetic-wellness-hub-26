@@ -103,7 +103,7 @@ const AdminBlogs = () => {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl">Blog Management</CardTitle>
-        <Link to="/admin/blogs/new">
+        <Link to="/admin/blog/new">
           <Button className="bg-brand-green hover:bg-brand-green-dark">
             <Plus className="w-4 h-4 mr-2" />
             Create New Blog
@@ -118,7 +118,7 @@ const AdminBlogs = () => {
         ) : blogs.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-gray-500 mb-4">No blog posts found</p>
-            <Link to="/admin/blogs/new">
+            <Link to="/admin/blog/new">
               <Button variant="outline" className="border-brand-green text-brand-green">
                 Create your first blog post
               </Button>
@@ -159,7 +159,7 @@ const AdminBlogs = () => {
                             <Eye className="h-4 w-4" />
                           </Button>
                         </Link>
-                        <Link to={`/admin/blogs/edit/${blog.id}`}>
+                        <Link to={`/admin/blog/edit/${blog.id}`}>
                           <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                             <Edit className="h-4 w-4" />
                           </Button>
