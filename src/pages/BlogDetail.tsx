@@ -113,11 +113,16 @@ const BlogDetail = () => {
   const getValidImageUrl = (url: string | null) => {
     if (!url) return null;
     
-    // Handle imgbb URLs - ensure they end with image extension
+    // Handle various image hosting services
     if (url.includes('imgbb.com')) {
-      // If it's an imgbb URL but doesn't contain a direct image path, it's likely invalid
-      if (!url.includes('.jpg') && !url.includes('.png') && !url.includes('.jpeg') && !url.includes('.gif') && !url.includes('.webp')) {
-        return null;
+      // For imgbb, ensure we have a direct image URL
+      if (url.includes('/image/') && !url.includes('.jpg') && !url.includes('.png') && !url.includes('.jpeg') && !url.includes('.gif') && !url.includes('.webp')) {
+        // Try to construct direct image URL by adding common extension
+        return url + '.jpg';
+      }
+      // If it already has an extension or is a direct link, use as is
+      if (url.includes('.jpg') || url.includes('.png') || url.includes('.jpeg') || url.includes('.gif') || url.includes('.webp')) {
+        return url;
       }
     }
     
@@ -206,28 +211,30 @@ const BlogDetail = () => {
     <>
       <Helmet>
         {/* Basic Meta Tags */}
-        <title>{blog.meta_title || blog.title}</title>
-        <meta name="description" content={blog.meta_description} />
+        <title>{blog.meta_title || `${blog.title} - Hijama Healing`}</title>
+        <meta name="description" content={blog.meta_description || blog.excerpt || `Read about ${blog.title} on Hijama Healing`} />
         {blog.meta_keywords && <meta name="keywords" content={blog.meta_keywords} />}
         {blog.canonical_url && <link rel="canonical" href={blog.canonical_url} />}
+        {!blog.canonical_url && <link rel="canonical" href={currentUrl} />}
         {blog.robots_meta && <meta name="robots" content={blog.robots_meta} />}
+        {!blog.robots_meta && <meta name="robots" content="index, follow" />}
         
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={blog.og_title || blog.meta_title || blog.title} />
-        <meta property="og:description" content={blog.og_description || blog.meta_description} />
+        <meta property="og:description" content={blog.og_description || blog.meta_description || blog.excerpt || `Read about ${blog.title} on Hijama Healing`} />
         <meta property="og:type" content={blog.og_type || 'article'} />
         <meta property="og:url" content={currentUrl} />
         {(blog.og_image || validImageUrl) && (
-          <meta property="og:image" content={blog.og_image || validImageUrl} />
+          <meta property="og:image" content={blog.og_image || validImageUrl || ''} />
         )}
         <meta property="og:site_name" content="Hijama Healing" />
         
         {/* Twitter Card Meta Tags */}
         <meta name="twitter:card" content={blog.twitter_card || 'summary_large_image'} />
         <meta name="twitter:title" content={blog.twitter_title || blog.meta_title || blog.title} />
-        <meta name="twitter:description" content={blog.twitter_description || blog.meta_description} />
+        <meta name="twitter:description" content={blog.twitter_description || blog.meta_description || blog.excerpt || `Read about ${blog.title} on Hijama Healing`} />
         {(blog.twitter_image || blog.og_image || validImageUrl) && (
-          <meta name="twitter:image" content={blog.twitter_image || blog.og_image || validImageUrl} />
+          <meta name="twitter:image" content={blog.twitter_image || blog.og_image || validImageUrl || ''} />
         )}
         
         {/* Article Specific Meta Tags */}
@@ -239,11 +246,9 @@ const BlogDetail = () => {
         ))}
         
         {/* Schema Markup */}
-        {(blog.schema_markup || generateSchemaMarkup()) && (
-          <script type="application/ld+json">
-            {blog.schema_markup || generateSchemaMarkup()}
-          </script>
-        )}
+        <script type="application/ld+json">
+          {blog.schema_markup || generateSchemaMarkup()}
+        </script>
       </Helmet>
       
       <Layout>
@@ -276,6 +281,7 @@ const BlogDetail = () => {
                           }`}
                           onLoad={handleImageLoad}
                           onError={handleImageError}
+                          crossOrigin="anonymous"
                         />
                       </div>
                     )}
@@ -283,10 +289,10 @@ const BlogDetail = () => {
                     {(imageError || !validImageUrl) && blog.featured_image && (
                       <div className="mb-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                         <p className="text-yellow-800 text-sm">
-                          <strong>Image URL Issue:</strong> The featured image URL appears to be invalid.
+                          <strong>Image loading failed:</strong> The featured image could not be loaded. This might be due to CORS restrictions or an invalid URL.
                         </p>
                         <p className="text-yellow-700 text-xs mt-1">
-                          Current URL: {blog.featured_image}
+                          URL: {blog.featured_image}
                         </p>
                       </div>
                     )}
@@ -344,8 +350,8 @@ const BlogDetail = () => {
 
               {/* Sidebar */}
               <div className="lg:col-span-1">
-                <div className="space-y-6">
-                  {/* CTA Card */}
+                <div className="lg:sticky lg:top-8 space-y-6">
+                  {/* CTA Card - Now Sticky */}
                   <Card className="bg-brand-green text-white">
                     <CardHeader>
                       <CardTitle className="text-white">Ready to Experience Hijama?</CardTitle>
