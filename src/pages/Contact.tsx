@@ -1,14 +1,11 @@
-
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import ContactMap from '@/components/ContactMap';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import ContactForm from '@/components/ContactForm';
-
 const Contact = () => {
-  return (
-    <Layout>
+  return <Layout>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 className="text-3xl md:text-4xl font-bold text-brand-green mb-8 text-center">Contact Us</h1>
         
@@ -50,7 +47,7 @@ const Contact = () => {
                 <Mail className="h-5 w-5 text-brand-gold mr-2 mt-1 flex-shrink-0" />
                 <div>
                   <h3 className="font-semibold text-lg">Email</h3>
-                  <p className="text-gray-700">info@hijamahealing.com</p>
+                  <p className="text-gray-700">revivoheal@gmail.com</p>
                 </div>
               </div>
               
@@ -71,8 +68,6 @@ const Contact = () => {
           </div>
         </div>
       </div>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Contact;
