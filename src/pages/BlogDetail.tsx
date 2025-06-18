@@ -53,6 +53,8 @@ const BlogDetail = () => {
 
       if (error) throw error;
       setBlog(data);
+      console.log('Blog data fetched:', data);
+      console.log('Featured image URL from database:', data.featured_image);
     } catch (error) {
       console.error('Error fetching blog post:', error);
       toast.error('Blog post not found');
@@ -110,6 +112,43 @@ const BlogDetail = () => {
     }
   };
 
+  const fixImgBBUrl = (url: string) => {
+    console.log('Original URL:', url);
+    
+    // If it's already a proper direct ImgBB URL, return as is
+    if (url.includes('i.ibb.co/') && !url.includes('/f/')) {
+      console.log('URL is already in correct format:', url);
+      return url;
+    }
+    
+    // Extract the image ID from various ImgBB URL formats
+    let imageId = '';
+    
+    // Handle format: https://ibb.co/f/xxxxxxx
+    const fMatch = url.match(/ibb\.co\/f\/([a-zA-Z0-9]+)/);
+    if (fMatch) {
+      imageId = fMatch[1];
+      console.log('Extracted image ID from /f/ format:', imageId);
+    }
+    
+    // Handle format: https://ibb.co/xxxxxxx
+    const directMatch = url.match(/ibb\.co\/([a-zA-Z0-9]+)$/);
+    if (directMatch && !imageId) {
+      imageId = directMatch[1];
+      console.log('Extracted image ID from direct format:', imageId);
+    }
+    
+    // If we found an image ID, construct the direct URL
+    if (imageId) {
+      const directUrl = `https://i.ibb.co/${imageId}`;
+      console.log('Converted to direct URL:', directUrl);
+      return directUrl;
+    }
+    
+    console.log('Could not convert URL, returning original:', url);
+    return url;
+  };
+
   const getValidImageUrl = (url: string | null) => {
     if (!url) {
       console.log('No URL provided');
@@ -121,6 +160,14 @@ const BlogDetail = () => {
     // Basic URL validation
     try {
       new URL(url);
+      
+      // Fix ImgBB URLs if needed
+      if (url.includes('ibb.co')) {
+        const fixedUrl = fixImgBBUrl(url);
+        console.log('Fixed ImgBB URL:', fixedUrl);
+        return fixedUrl;
+      }
+      
       console.log('Valid URL detected:', url);
       return url;
     } catch {
@@ -189,11 +236,6 @@ const BlogDetail = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-800 mb-4">Blog post not found</h1>
-            <Link to="/blog">
-              <Button variant="outline" className="border-brand-green text-brand-green">
-                Back to Blog
-              </Button>
-            </Link>
           </div>
         </div>
       </Layout>
@@ -202,6 +244,17 @@ const BlogDetail = () => {
 
   const validImageUrl = getValidImageUrl(blog.featured_image);
   const currentUrl = `${window.location.origin}/blog/${blog.slug}`;
+
+  console.log('SEO Debug - Blog data:', {
+    meta_title: blog.meta_title,
+    title: blog.title,
+    meta_description: blog.meta_description,
+    excerpt: blog.excerpt,
+    og_title: blog.og_title,
+    og_description: blog.og_description,
+    featured_image: blog.featured_image,
+    og_image: blog.og_image
+  });
 
   return (
     <Layout>
@@ -252,18 +305,20 @@ const BlogDetail = () => {
               <div className="mb-8">
                 <div className="relative w-full h-64 md:h-96 overflow-hidden rounded-lg">
                   {imageLoading && (
-                    <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg"></div>
+                    <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">
+                      <span className="text-gray-500">Loading image...</span>
+                    </div>
                   )}
                   {!imageError && (
                     <img
                       src={validImageUrl}
-                      alt={blog.title}
+                      alt={blog.featured_image_alt || blog.title}
                       className={`w-full h-full object-cover transition-opacity duration-300 ${
                         imageLoading ? 'opacity-0' : 'opacity-100'
                       }`}
                       onLoad={handleImageLoad}
                       onError={handleImageError}
-                      crossOrigin="anonymous"
+                      referrerPolicy="no-referrer"
                     />
                   )}
                   {imageError && (
@@ -303,7 +358,8 @@ const BlogDetail = () => {
               </CardHeader>
               <CardContent>
                 <div 
-                  className="prose prose-lg max-w-none"
+                  className="prose prose-lg max-w-none prose-headings:text-left prose-p:text-left prose-li:text-left prose-blockquote:text-left prose-td:text-left"
+                  style={{ textAlign: 'left' }}
                   dangerouslySetInnerHTML={{ __html: blog.content }}
                 />
                 
@@ -340,7 +396,7 @@ const BlogDetail = () => {
                               src={getValidImageUrl(post.featured_image) || ''}
                               alt={post.title}
                               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                              crossOrigin="anonymous"
+                              referrerPolicy="no-referrer"
                             />
                           </div>
                         )}
@@ -362,18 +418,18 @@ const BlogDetail = () => {
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 space-y-6">
+            <div className="sticky top-28 space-y-6" style={{ marginTop: '1rem' }}>
               {/* Book Appointment Card */}
-              <Card className="bg-gradient-to-br from-brand-green to-brand-green/80 text-white">
-                <CardHeader>
+              <Card className="bg-gradient-to-br from-brand-green to-brand-green/80 text-white shadow-lg">
+                <CardHeader className="pb-4">
                   <CardTitle className="text-xl">Book Your Hijama Session</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="mb-4 text-white/90">
+                <CardContent className="pt-0">
+                  <p className="mb-4 text-white/90 text-sm">
                     Experience the healing benefits of traditional hijama cupping therapy.
                   </p>
                   <Link to="/booking">
-                    <Button className="w-full bg-white text-brand-green hover:bg-gray-50">
+                    <Button className="w-full bg-white text-brand-green hover:bg-gray-50 font-medium">
                       Book Now
                     </Button>
                   </Link>
@@ -382,11 +438,11 @@ const BlogDetail = () => {
 
               {/* Recent Posts */}
               {recentPosts.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Recent Posts</CardTitle>
+                <Card className="shadow-lg">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="text-lg">Recent Posts</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-4 pt-0">
                     {recentPosts.map((post) => (
                       <Link 
                         key={post.id} 
@@ -400,7 +456,7 @@ const BlogDetail = () => {
                                 src={getValidImageUrl(post.featured_image) || ''}
                                 alt={post.title}
                                 className="w-full h-full object-cover rounded"
-                                crossOrigin="anonymous"
+                                referrerPolicy="no-referrer"
                               />
                             </div>
                           )}
