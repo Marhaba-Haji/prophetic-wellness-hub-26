@@ -2,10 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { BookOpen, MapPin, Phone, Mail, Clock, Facebook, Instagram } from "lucide-react";
 import AdminFooterLink from "./AdminFooterLink";
-
 const Footer = () => {
-  return (
-    <footer className="bg-brand-green text-white pt-16 pb-6">
+  return <footer className="bg-brand-green text-white pt-16 pb-6">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
@@ -126,7 +124,7 @@ const Footer = () => {
               </p>
               <p className="flex items-center">
                 <Mail className="h-5 w-5 text-brand-gold mr-2 flex-shrink-0" />
-                <span>info@hijamahealing.com</span>
+                <span>revivoheal@gmail.com</span>
               </p>
               <p className="flex items-start">
                 <Clock className="h-5 w-5 text-brand-gold mr-2 mt-1 flex-shrink-0" />
@@ -147,20 +145,13 @@ const Footer = () => {
             </p>
             <div className="flex items-center space-x-4">
               <AdminFooterLink />
-              <a 
-                href="https://facelyft.in" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-gray-400 hover:text-gray-300 text-sm flex items-center"
-              >
+              <a href="https://facelyft.in" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-300 text-sm flex items-center">
                 Powered by <span className="text-brand-gold ml-1">FaceLyft.in</span>
               </a>
             </div>
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
