@@ -7,7 +7,6 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from "@/components/ui/switch"
 import { toast } from '@/components/ui/sonner';
-import { Editor } from '@tinymce/tinymce-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { BlogPost } from '@/types/supabase-types';
@@ -24,7 +23,6 @@ const AdminBlogEditor = () => {
   const [previewMode, setPreviewMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
-  const editorRef = React.useRef<any>(null);
   const { blogId } = useParams<{ blogId: string }>();
   const navigate = useNavigate();
 
@@ -211,29 +209,18 @@ const AdminBlogEditor = () => {
         <div className="grid gap-2">
           <Label htmlFor="content">Content</Label>
           {!previewMode ? (
-            <Editor
-              apiKey="YOUR_API_KEY"
-              onInit={(evt, editor) => (editorRef.current = editor)}
+            <Textarea
+              id="content"
               value={content}
-              onEditorChange={(newContent) => setContent(newContent)}
-              init={{
-                height: 500,
-                menubar: true,
-                plugins: [
-                  'advlist autolink lists link image charmap print preview anchor',
-                  'searchreplace visualblocks code fullscreen',
-                  'insertdatetime media table paste code help wordcount'
-                ],
-                toolbar:
-                  'undo redo | formatselect | ' +
-                  'bold italic backcolor | alignleft aligncenter ' +
-                  'alignright alignjustify | bullist numlist outdent indent | ' +
-                  'removeformat | help',
-                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-              }}
+              onChange={(e) => setContent(e.target.value)}
+              className="min-h-[400px] font-mono"
+              placeholder="Write your blog content here. You can use HTML tags for formatting."
             />
           ) : (
-            <div dangerouslySetInnerHTML={{ __html: content }} />
+            <div 
+              className="min-h-[400px] p-4 border rounded-md bg-white prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{ __html: content }} 
+            />
           )}
         </div>
         <div className="flex items-center space-x-2">
