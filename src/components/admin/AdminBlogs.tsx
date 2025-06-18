@@ -1,10 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { toast } from '@/components/ui/sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { Eye, Edit, Trash2, Plus } from 'lucide-react';
+import { Eye, Edit, Trash2, Plus, Power, PowerOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
@@ -131,6 +132,7 @@ const AdminBlogs = () => {
                 <TableRow>
                   <TableHead className="w-[40%]">Title</TableHead>
                   <TableHead>Author</TableHead>
+                  <TableHead>Category</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Published</TableHead>
                   <TableHead>Actions</TableHead>
@@ -145,6 +147,15 @@ const AdminBlogs = () => {
                     </TableCell>
                     <TableCell>{blog.author}</TableCell>
                     <TableCell>
+                      {blog.category ? (
+                        <Badge variant="outline" className="capitalize">
+                          {blog.category.replace('-', ' ')}
+                        </Badge>
+                      ) : (
+                        <span className="text-gray-400">No category</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
                       <Badge
                         className={blog.published ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}
                       >
@@ -154,16 +165,28 @@ const AdminBlogs = () => {
                     <TableCell>{formatDate(blog.published_date)}</TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
-                        <Link to={`/blog/${blog.slug}`} target="_blank">
-                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </Link>
+                        {blog.published && (
+                          <Link to={`/blog/${blog.slug}`} target="_blank">
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                          </Link>
+                        )}
                         <Link to={`/admin/blog/edit/${blog.id}`}>
                           <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                             <Edit className="h-4 w-4" />
                           </Button>
                         </Link>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className={`h-8 w-8 p-0 ${blog.published ? 'text-orange-500' : 'text-green-500'}`}
+                          onClick={() => handleStatusToggle(blog.id, blog.published)}
+                          disabled={selectedBlog === blog.id}
+                          title={blog.published ? 'Unpublish' : 'Publish'}
+                        >
+                          {blog.published ? <PowerOff className="h-4 w-4" /> : <Power className="h-4 w-4" />}
+                        </Button>
                         <Button 
                           variant="ghost" 
                           size="sm" 

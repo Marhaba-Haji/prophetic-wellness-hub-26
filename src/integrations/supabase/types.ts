@@ -71,49 +71,121 @@ export type Database = {
       }
       blogs: {
         Row: {
+          allow_comments: boolean | null
           author: string
+          canonical_url: string | null
+          category: string | null
           content: string
           created_at: string | null
+          excerpt: string | null
+          featured: boolean | null
           featured_image: string | null
           featured_image_alt: string | null
+          focus_keyword: string | null
           id: string
           meta_description: string
+          meta_keywords: string | null
+          meta_title: string | null
+          og_description: string | null
+          og_image: string | null
+          og_title: string | null
+          og_type: string | null
+          password: string | null
           published: boolean | null
           published_date: string | null
+          readability_score: number | null
+          reading_time: number | null
+          robots_meta: string | null
+          scheduled_date: string | null
           schema_markup: string | null
+          seo_score: number | null
           slug: string
+          status: string | null
           tags: string[] | null
           title: string
+          twitter_card: string | null
+          twitter_description: string | null
+          twitter_image: string | null
+          twitter_title: string | null
+          visibility: string | null
         }
         Insert: {
+          allow_comments?: boolean | null
           author: string
+          canonical_url?: string | null
+          category?: string | null
           content: string
           created_at?: string | null
+          excerpt?: string | null
+          featured?: boolean | null
           featured_image?: string | null
           featured_image_alt?: string | null
+          focus_keyword?: string | null
           id?: string
           meta_description: string
+          meta_keywords?: string | null
+          meta_title?: string | null
+          og_description?: string | null
+          og_image?: string | null
+          og_title?: string | null
+          og_type?: string | null
+          password?: string | null
           published?: boolean | null
           published_date?: string | null
+          readability_score?: number | null
+          reading_time?: number | null
+          robots_meta?: string | null
+          scheduled_date?: string | null
           schema_markup?: string | null
+          seo_score?: number | null
           slug: string
+          status?: string | null
           tags?: string[] | null
           title: string
+          twitter_card?: string | null
+          twitter_description?: string | null
+          twitter_image?: string | null
+          twitter_title?: string | null
+          visibility?: string | null
         }
         Update: {
+          allow_comments?: boolean | null
           author?: string
+          canonical_url?: string | null
+          category?: string | null
           content?: string
           created_at?: string | null
+          excerpt?: string | null
+          featured?: boolean | null
           featured_image?: string | null
           featured_image_alt?: string | null
+          focus_keyword?: string | null
           id?: string
           meta_description?: string
+          meta_keywords?: string | null
+          meta_title?: string | null
+          og_description?: string | null
+          og_image?: string | null
+          og_title?: string | null
+          og_type?: string | null
+          password?: string | null
           published?: boolean | null
           published_date?: string | null
+          readability_score?: number | null
+          reading_time?: number | null
+          robots_meta?: string | null
+          scheduled_date?: string | null
           schema_markup?: string | null
+          seo_score?: number | null
           slug?: string
+          status?: string | null
           tags?: string[] | null
           title?: string
+          twitter_card?: string | null
+          twitter_description?: string | null
+          twitter_image?: string | null
+          twitter_title?: string | null
+          visibility?: string | null
         }
         Relationships: []
       }
