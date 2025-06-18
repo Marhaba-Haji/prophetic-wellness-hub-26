@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -19,38 +18,35 @@ interface SimpleBlogPost {
   featured_image: string | null;
   category?: string | null;
 }
-
 const BlogDetail = () => {
-  const { blogSlug } = useParams<{ blogSlug: string }>();
+  const {
+    blogSlug
+  } = useParams<{
+    blogSlug: string;
+  }>();
   const [blog, setBlog] = useState<BlogPost | null>(null);
   const [recentPosts, setRecentPosts] = useState<SimpleBlogPost[]>([]);
   const [relatedPosts, setRelatedPosts] = useState<SimpleBlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
-
   useEffect(() => {
     if (blogSlug) {
       fetchBlogPost();
       fetchRecentPosts();
     }
   }, [blogSlug]);
-
   useEffect(() => {
     if (blog) {
       fetchRelatedPosts();
     }
   }, [blog]);
-
   const fetchBlogPost = async () => {
     try {
-      const { data, error } = await supabase
-        .from('blogs')
-        .select('*')
-        .eq('slug', blogSlug)
-        .eq('published', true)
-        .single();
-
+      const {
+        data,
+        error
+      } = await supabase.from('blogs').select('*').eq('slug', blogSlug).eq('published', true).single();
       if (error) throw error;
       setBlog(data);
       console.log('Blog data fetched:', data);
@@ -60,36 +56,27 @@ const BlogDetail = () => {
       toast.error('Blog post not found');
     }
   };
-
   const fetchRecentPosts = async () => {
     try {
-      const { data, error } = await supabase
-        .from('blogs')
-        .select('id, title, slug, published_date, featured_image')
-        .eq('published', true)
-        .neq('slug', blogSlug)
-        .order('published_date', { ascending: false })
-        .limit(5);
-
+      const {
+        data,
+        error
+      } = await supabase.from('blogs').select('id, title, slug, published_date, featured_image').eq('published', true).neq('slug', blogSlug).order('published_date', {
+        ascending: false
+      }).limit(5);
       if (error) throw error;
       setRecentPosts(data || []);
     } catch (error) {
       console.error('Error fetching recent posts:', error);
     }
   };
-
   const fetchRelatedPosts = async () => {
     if (!blog) return;
-
     try {
-      const { data, error } = await supabase
-        .from('blogs')
-        .select('id, title, slug, published_date, featured_image, category')
-        .eq('published', true)
-        .eq('category', blog.category)
-        .neq('slug', blogSlug)
-        .limit(3);
-
+      const {
+        data,
+        error
+      } = await supabase.from('blogs').select('id, title, slug, published_date, featured_image, category').eq('published', true).eq('category', blog.category).neq('slug', blogSlug).limit(3);
       if (error) throw error;
       setRelatedPosts(data || []);
     } catch (error) {
@@ -98,7 +85,6 @@ const BlogDetail = () => {
       setLoading(false);
     }
   };
-
   const formatDate = (dateString: string | null) => {
     if (!dateString) return 'Recently';
     try {
@@ -111,63 +97,58 @@ const BlogDetail = () => {
       return 'Recently';
     }
   };
-
   const fixImgBBUrl = (url: string) => {
     console.log('Original URL:', url);
-    
+
     // If it's already a proper direct ImgBB URL, return as is
     if (url.includes('i.ibb.co/') && !url.includes('/f/')) {
       console.log('URL is already in correct format:', url);
       return url;
     }
-    
+
     // Extract the image ID from various ImgBB URL formats
     let imageId = '';
-    
+
     // Handle format: https://ibb.co/f/xxxxxxx
     const fMatch = url.match(/ibb\.co\/f\/([a-zA-Z0-9]+)/);
     if (fMatch) {
       imageId = fMatch[1];
       console.log('Extracted image ID from /f/ format:', imageId);
     }
-    
+
     // Handle format: https://ibb.co/xxxxxxx
     const directMatch = url.match(/ibb\.co\/([a-zA-Z0-9]+)$/);
     if (directMatch && !imageId) {
       imageId = directMatch[1];
       console.log('Extracted image ID from direct format:', imageId);
     }
-    
+
     // If we found an image ID, construct the direct URL
     if (imageId) {
       const directUrl = `https://i.ibb.co/${imageId}`;
       console.log('Converted to direct URL:', directUrl);
       return directUrl;
     }
-    
     console.log('Could not convert URL, returning original:', url);
     return url;
   };
-
   const getValidImageUrl = (url: string | null) => {
     if (!url) {
       console.log('No URL provided');
       return null;
     }
-
     console.log('Processing image URL:', url);
 
     // Basic URL validation
     try {
       new URL(url);
-      
+
       // Fix ImgBB URLs if needed
       if (url.includes('ibb.co')) {
         const fixedUrl = fixImgBBUrl(url);
         console.log('Fixed ImgBB URL:', fixedUrl);
         return fixedUrl;
       }
-      
       console.log('Valid URL detected:', url);
       return url;
     } catch {
@@ -175,22 +156,18 @@ const BlogDetail = () => {
       return null;
     }
   };
-
   const handleImageError = () => {
     console.log('Image failed to load');
     setImageError(true);
     setImageLoading(false);
   };
-
   const handleImageLoad = () => {
     console.log('Image loaded successfully');
     setImageError(false);
     setImageLoading(false);
   };
-
   const generateSchemaMarkup = () => {
     if (!blog) return '';
-
     const schema = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
@@ -210,25 +187,19 @@ const BlogDetail = () => {
       "keywords": blog.meta_keywords || blog.tags?.join(', '),
       "url": `${window.location.origin}/blog/${blog.slug}`
     };
-
     return JSON.stringify(schema);
   };
-
   if (loading) {
-    return (
-      <Layout>
+    return <Layout>
         <div className="container mx-auto px-4 py-8">
           <div className="flex justify-center items-center min-h-[400px]">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-green"></div>
           </div>
         </div>
-      </Layout>
-    );
+      </Layout>;
   }
-
   if (!blog) {
-    return (
-      <Layout>
+    return <Layout>
         <Helmet>
           <title>Blog post not found - Hijama Healing</title>
           <meta name="description" content="The requested blog post could not be found." />
@@ -238,13 +209,10 @@ const BlogDetail = () => {
             <h1 className="text-2xl font-bold text-gray-800 mb-4">Blog post not found</h1>
           </div>
         </div>
-      </Layout>
-    );
+      </Layout>;
   }
-
   const validImageUrl = getValidImageUrl(blog.featured_image);
   const currentUrl = `${window.location.origin}/blog/${blog.slug}`;
-
   console.log('SEO Debug - Blog data:', {
     meta_title: blog.meta_title,
     title: blog.title,
@@ -255,9 +223,7 @@ const BlogDetail = () => {
     featured_image: blog.featured_image,
     og_image: blog.og_image
   });
-
-  return (
-    <Layout>
+  return <Layout>
       <Helmet>
         {/* Basic Meta Tags */}
         <title>{blog.meta_title || `${blog.title} - Hijama Healing`}</title>
@@ -286,9 +252,7 @@ const BlogDetail = () => {
         <meta property="article:author" content={blog.author} />
         {blog.published_date && <meta property="article:published_time" content={blog.published_date} />}
         {blog.category && <meta property="article:section" content={blog.category} />}
-        {blog.tags && blog.tags.map((tag, index) => (
-          <meta key={index} property="article:tag" content={tag} />
-        ))}
+        {blog.tags && blog.tags.map((tag, index) => <meta key={index} property="article:tag" content={tag} />)}
         
         {/* Schema Markup */}
         <script type="application/ld+json">
@@ -301,34 +265,9 @@ const BlogDetail = () => {
           {/* Main Content */}
           <div className="lg:col-span-3">
             {/* Featured Image */}
-            {validImageUrl && (
-              <div className="mb-8">
-                <div className="relative w-full h-64 md:h-96 overflow-hidden rounded-lg">
-                  {imageLoading && (
-                    <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">
-                      <span className="text-gray-500">Loading image...</span>
-                    </div>
-                  )}
-                  {!imageError && (
-                    <img
-                      src={validImageUrl}
-                      alt={blog.featured_image_alt || blog.title}
-                      className={`w-full h-full object-cover transition-opacity duration-300 ${
-                        imageLoading ? 'opacity-0' : 'opacity-100'
-                      }`}
-                      onLoad={handleImageLoad}
-                      onError={handleImageError}
-                      referrerPolicy="no-referrer"
-                    />
-                  )}
-                  {imageError && (
-                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-500">Image not available</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
+            {validImageUrl && <div className="mb-8">
+                
+              </div>}
 
             {/* Blog Content */}
             <Card>
@@ -342,64 +281,44 @@ const BlogDetail = () => {
                     <User className="w-4 h-4 mr-1" />
                     {blog.author}
                   </div>
-                  {blog.category && (
-                    <div className="flex items-center">
+                  {blog.category && <div className="flex items-center">
                       <Tag className="w-4 h-4 mr-1" />
                       {blog.category}
-                    </div>
-                  )}
+                    </div>}
                 </div>
                 <CardTitle className="text-3xl md:text-4xl font-bold text-gray-800">
                   {blog.title}
                 </CardTitle>
-                {blog.excerpt && (
-                  <p className="text-lg text-gray-600 mt-4">{blog.excerpt}</p>
-                )}
+                {blog.excerpt && <p className="text-lg text-gray-600 mt-4">{blog.excerpt}</p>}
               </CardHeader>
               <CardContent>
-                <div 
-                  className="prose prose-lg max-w-none prose-headings:text-left prose-p:text-left prose-li:text-left prose-blockquote:text-left prose-td:text-left"
-                  style={{ textAlign: 'left' }}
-                  dangerouslySetInnerHTML={{ __html: blog.content }}
-                />
+                <div className="prose prose-lg max-w-none prose-headings:text-left prose-p:text-left prose-li:text-left prose-blockquote:text-left prose-td:text-left" style={{
+                textAlign: 'left'
+              }} dangerouslySetInnerHTML={{
+                __html: blog.content
+              }} />
                 
                 {/* Tags */}
-                {blog.tags && blog.tags.length > 0 && (
-                  <div className="mt-8 pt-6 border-t">
+                {blog.tags && blog.tags.length > 0 && <div className="mt-8 pt-6 border-t">
                     <h3 className="text-lg font-semibold mb-3">Tags</h3>
                     <div className="flex flex-wrap gap-2">
-                      {blog.tags.map((tag, index) => (
-                        <span 
-                          key={index}
-                          className="px-3 py-1 bg-brand-green/10 text-brand-green rounded-full text-sm"
-                        >
+                      {blog.tags.map((tag, index) => <span key={index} className="px-3 py-1 bg-brand-green/10 text-brand-green rounded-full text-sm">
                           {tag}
-                        </span>
-                      ))}
+                        </span>)}
                     </div>
-                  </div>
-                )}
+                  </div>}
               </CardContent>
             </Card>
 
             {/* Related Posts */}
-            {relatedPosts.length > 0 && (
-              <div className="mt-12">
+            {relatedPosts.length > 0 && <div className="mt-12">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Related Posts</h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {relatedPosts.map((post) => (
-                    <Card key={post.id} className="hover:shadow-lg transition-shadow">
+                  {relatedPosts.map(post => <Card key={post.id} className="hover:shadow-lg transition-shadow">
                       <Link to={`/blog/${post.slug}`}>
-                        {post.featured_image && (
-                          <div className="h-48 overflow-hidden rounded-t-lg">
-                            <img
-                              src={getValidImageUrl(post.featured_image) || ''}
-                              alt={post.title}
-                              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                              referrerPolicy="no-referrer"
-                            />
-                          </div>
-                        )}
+                        {post.featured_image && <div className="h-48 overflow-hidden rounded-t-lg">
+                            <img src={getValidImageUrl(post.featured_image) || ''} alt={post.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" referrerPolicy="no-referrer" />
+                          </div>}
                         <CardContent className="p-4">
                           <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2">
                             {post.title}
@@ -409,16 +328,16 @@ const BlogDetail = () => {
                           </p>
                         </CardContent>
                       </Link>
-                    </Card>
-                  ))}
+                    </Card>)}
                 </div>
-              </div>
-            )}
+              </div>}
           </div>
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="sticky top-28 space-y-6" style={{ marginTop: '1rem' }}>
+            <div className="sticky top-28 space-y-6" style={{
+            marginTop: '1rem'
+          }}>
               {/* Book Appointment Card */}
               <Card className="bg-gradient-to-br from-brand-green to-brand-green/80 text-white shadow-lg">
                 <CardHeader className="pb-4">
@@ -437,29 +356,16 @@ const BlogDetail = () => {
               </Card>
 
               {/* Recent Posts */}
-              {recentPosts.length > 0 && (
-                <Card className="shadow-lg">
+              {recentPosts.length > 0 && <Card className="shadow-lg">
                   <CardHeader className="pb-4">
                     <CardTitle className="text-lg">Recent Posts</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4 pt-0">
-                    {recentPosts.map((post) => (
-                      <Link 
-                        key={post.id} 
-                        to={`/blog/${post.slug}`}
-                        className="block group"
-                      >
+                    {recentPosts.map(post => <Link key={post.id} to={`/blog/${post.slug}`} className="block group">
                         <div className="flex gap-3">
-                          {post.featured_image && (
-                            <div className="w-16 h-16 flex-shrink-0">
-                              <img
-                                src={getValidImageUrl(post.featured_image) || ''}
-                                alt={post.title}
-                                className="w-full h-full object-cover rounded"
-                                referrerPolicy="no-referrer"
-                              />
-                            </div>
-                          )}
+                          {post.featured_image && <div className="w-16 h-16 flex-shrink-0">
+                              <img src={getValidImageUrl(post.featured_image) || ''} alt={post.title} className="w-full h-full object-cover rounded" referrerPolicy="no-referrer" />
+                            </div>}
                           <div className="flex-1">
                             <h4 className="text-sm font-medium text-gray-800 group-hover:text-brand-green line-clamp-2">
                               {post.title}
@@ -469,17 +375,13 @@ const BlogDetail = () => {
                             </p>
                           </div>
                         </div>
-                      </Link>
-                    ))}
+                      </Link>)}
                   </CardContent>
-                </Card>
-              )}
+                </Card>}
             </div>
           </div>
         </div>
       </div>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default BlogDetail;
