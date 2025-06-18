@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
@@ -25,6 +24,8 @@ const BlogDetail = () => {
   const [recentPosts, setRecentPosts] = useState<SimpleBlogPost[]>([]);
   const [relatedPosts, setRelatedPosts] = useState<SimpleBlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
 
   useEffect(() => {
     if (blogSlug) {
@@ -107,6 +108,40 @@ const BlogDetail = () => {
     }
   };
 
+  const handleImageError = () => {
+    console.log('Featured image failed to load:', blog?.featured_image);
+    setImageError(true);
+    setImageLoading(false);
+  };
+
+  const handleImageLoad = () => {
+    setImageError(false);
+    setImageLoading(false);
+  };
+
+  const getValidImageUrl = (url: string | null) => {
+    if (!url) return null;
+    
+    // Check if it's an imgbb.com URL and try to extract the direct image URL
+    if (url.includes('imgbb.com') && !url.includes('/i/')) {
+      console.warn('Invalid imgbb URL detected:', url);
+      return null;
+    }
+    
+    // Check if URL ends with common image extensions
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+    const hasImageExtension = imageExtensions.some(ext => 
+      url.toLowerCase().includes(ext)
+    );
+    
+    if (!hasImageExtension && url.includes('imgbb.com')) {
+      console.warn('imgbb URL without image extension:', url);
+      return null;
+    }
+    
+    return url;
+  };
+
   if (loading) {
     return (
       <Layout>
@@ -136,6 +171,8 @@ const BlogDetail = () => {
     );
   }
 
+  const validImageUrl = getValidImageUrl(blog.featured_image);
+
   return (
     <Layout>
       <div className="bg-gray-50 min-h-screen py-8">
@@ -152,13 +189,36 @@ const BlogDetail = () => {
 
               <Card className="bg-white shadow-sm">
                 <CardContent className="p-8">
-                  {blog.featured_image && (
+                  {validImageUrl && !imageError && (
                     <div className="mb-8 overflow-hidden rounded-lg">
+                      {imageLoading && (
+                        <div className="w-full h-64 md:h-80 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">
+                          <span className="text-gray-500">Loading image...</span>
+                        </div>
+                      )}
                       <img
-                        src={blog.featured_image}
+                        src={validImageUrl}
                         alt={blog.featured_image_alt || blog.title}
-                        className="w-full h-64 md:h-80 object-cover"
+                        className={`w-full h-64 md:h-80 object-cover transition-opacity duration-300 ${
+                          imageLoading ? 'opacity-0 absolute' : 'opacity-100'
+                        }`}
+                        onLoad={handleImageLoad}
+                        onError={handleImageError}
                       />
+                    </div>
+                  )}
+
+                  {(imageError || !validImageUrl) && blog.featured_image && (
+                    <div className="mb-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                      <p className="text-yellow-800 text-sm">
+                        <strong>Image URL Issue:</strong> The featured image URL appears to be invalid or pointing to an upload page rather than a direct image.
+                      </p>
+                      <p className="text-yellow-700 text-xs mt-1">
+                        Current URL: {blog.featured_image}
+                      </p>
+                      <p className="text-yellow-700 text-xs mt-1">
+                        Please ensure the URL points directly to an image file (e.g., ends with .jpg, .png, etc.)
+                      </p>
                     </div>
                   )}
 
@@ -247,11 +307,14 @@ const BlogDetail = () => {
                           className="block group"
                         >
                           <div className="flex gap-3">
-                            {post.featured_image && (
+                            {getValidImageUrl(post.featured_image) && (
                               <img 
-                                src={post.featured_image} 
+                                src={getValidImageUrl(post.featured_image)!} 
                                 alt={post.title}
                                 className="w-16 h-16 object-cover rounded flex-shrink-0"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                }}
                               />
                             )}
                             <div className="flex-1 min-w-0">
@@ -285,11 +348,14 @@ const BlogDetail = () => {
                           className="block group"
                         >
                           <div className="flex gap-3">
-                            {post.featured_image && (
+                            {getValidImageUrl(post.featured_image) && (
                               <img 
-                                src={post.featured_image} 
+                                src={getValidImageUrl(post.featured_image)!} 
                                 alt={post.title}
                                 className="w-16 h-16 object-cover rounded flex-shrink-0"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                }}
                               />
                             )}
                             <div className="flex-1 min-w-0">
