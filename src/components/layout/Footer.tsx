@@ -116,7 +116,7 @@ const Footer = () => {
             <address className="not-italic text-gray-200 space-y-4">
               <p className="flex items-start">
                 <MapPin className="h-5 w-5 text-brand-gold mr-2 mt-1 flex-shrink-0" />
-                <span>Paramount Avenue, 63/1, 3rd floor,<br />Mosque Road Cross, Frazer Town,<br />Bangalore 560005</span>
+                <span className="text-left">Paramount Avenue, 63/1, 3rd floor,<br />Mosque Road Cross, Frazer Town,<br />Bangalore 560005</span>
               </p>
               <p className="flex items-center">
                 <Phone className="h-5 w-5 text-brand-gold mr-2 flex-shrink-0" />
