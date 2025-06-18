@@ -9,11 +9,21 @@ import { supabase } from '@/integrations/supabase/client';
 import { BlogPost } from '@/types/supabase-types';
 import { toast } from '@/components/ui/sonner';
 
+// Simplified interface for recent and related posts
+interface SimpleBlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  published_date: string | null;
+  featured_image: string | null;
+  category?: string | null;
+}
+
 const BlogDetail = () => {
   const { blogSlug } = useParams<{ blogSlug: string }>();
   const [blog, setBlog] = useState<BlogPost | null>(null);
-  const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
-  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
+  const [recentPosts, setRecentPosts] = useState<SimpleBlogPost[]>([]);
+  const [relatedPosts, setRelatedPosts] = useState<SimpleBlogPost[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
