@@ -68,11 +68,11 @@ const router = createBrowserRouter([
     element: <AdminDashboard />,
   },
   {
-    path: "/admin/blogs/new",
+    path: "/admin/blog/new",
     element: <BlogEditor />,
   },
   {
-    path: "/admin/blogs/edit/:blogId",
+    path: "/admin/blog/edit/:blogId",
     element: <BlogEditor />,
   },
   {
