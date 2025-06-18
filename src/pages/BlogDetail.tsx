@@ -1,10 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, User, Tag, Clock, ArrowLeft } from 'lucide-react';
+import { Calendar, User, Tag, Clock } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { BlogPost } from '@/types/supabase-types';
 import { toast } from '@/components/ui/sonner';
@@ -18,35 +19,38 @@ interface SimpleBlogPost {
   featured_image: string | null;
   category?: string | null;
 }
+
 const BlogDetail = () => {
-  const {
-    blogSlug
-  } = useParams<{
-    blogSlug: string;
-  }>();
+  const { blogSlug } = useParams<{ blogSlug: string }>();
   const [blog, setBlog] = useState<BlogPost | null>(null);
   const [recentPosts, setRecentPosts] = useState<SimpleBlogPost[]>([]);
   const [relatedPosts, setRelatedPosts] = useState<SimpleBlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
+
   useEffect(() => {
     if (blogSlug) {
       fetchBlogPost();
       fetchRecentPosts();
     }
   }, [blogSlug]);
+
   useEffect(() => {
     if (blog) {
       fetchRelatedPosts();
     }
   }, [blog]);
+
   const fetchBlogPost = async () => {
     try {
-      const {
-        data,
-        error
-      } = await supabase.from('blogs').select('*').eq('slug', blogSlug).eq('published', true).single();
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('*')
+        .eq('slug', blogSlug)
+        .eq('published', true)
+        .single();
+
       if (error) throw error;
       setBlog(data);
     } catch (error) {
@@ -54,27 +58,36 @@ const BlogDetail = () => {
       toast.error('Blog post not found');
     }
   };
+
   const fetchRecentPosts = async () => {
     try {
-      const {
-        data,
-        error
-      } = await supabase.from('blogs').select('id, title, slug, published_date, featured_image').eq('published', true).neq('slug', blogSlug).order('published_date', {
-        ascending: false
-      }).limit(5);
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('id, title, slug, published_date, featured_image')
+        .eq('published', true)
+        .neq('slug', blogSlug)
+        .order('published_date', { ascending: false })
+        .limit(5);
+
       if (error) throw error;
       setRecentPosts(data || []);
     } catch (error) {
       console.error('Error fetching recent posts:', error);
     }
   };
+
   const fetchRelatedPosts = async () => {
     if (!blog) return;
+
     try {
-      const {
-        data,
-        error
-      } = await supabase.from('blogs').select('id, title, slug, published_date, featured_image, category').eq('published', true).eq('category', blog.category).neq('slug', blogSlug).limit(3);
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('id, title, slug, published_date, featured_image, category')
+        .eq('published', true)
+        .eq('category', blog.category)
+        .neq('slug', blogSlug)
+        .limit(3);
+
       if (error) throw error;
       setRelatedPosts(data || []);
     } catch (error) {
@@ -83,6 +96,7 @@ const BlogDetail = () => {
       setLoading(false);
     }
   };
+
   const formatDate = (dateString: string | null) => {
     if (!dateString) return 'Recently';
     try {
@@ -95,40 +109,41 @@ const BlogDetail = () => {
       return 'Recently';
     }
   };
-  const getValidImageUrl = (url: string | null) => {
-    if (!url) return null;
 
-    // Handle various image hosting services
-    if (url.includes('imgbb.com')) {
-      // For imgbb, ensure we have a direct image URL
-      if (url.includes('/image/') && !url.includes('.jpg') && !url.includes('.png') && !url.includes('.jpeg') && !url.includes('.gif') && !url.includes('.webp')) {
-        // Try to construct direct image URL by adding common extension
-        return url + '.jpg';
-      }
-      // If it already has an extension or is a direct link, use as is
-      if (url.includes('.jpg') || url.includes('.png') || url.includes('.jpeg') || url.includes('.gif') || url.includes('.webp')) {
-        return url;
-      }
+  const getValidImageUrl = (url: string | null) => {
+    if (!url) {
+      console.log('No URL provided');
+      return null;
     }
+
+    console.log('Processing image URL:', url);
 
     // Basic URL validation
     try {
       new URL(url);
+      console.log('Valid URL detected:', url);
       return url;
     } catch {
+      console.log('Invalid URL format:', url);
       return null;
     }
   };
+
   const handleImageError = () => {
+    console.log('Image failed to load');
     setImageError(true);
     setImageLoading(false);
   };
+
   const handleImageLoad = () => {
+    console.log('Image loaded successfully');
     setImageError(false);
     setImageLoading(false);
   };
+
   const generateSchemaMarkup = () => {
     if (!blog) return '';
+
     const schema = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
@@ -148,8 +163,10 @@ const BlogDetail = () => {
       "keywords": blog.meta_keywords || blog.tags?.join(', '),
       "url": `${window.location.origin}/blog/${blog.slug}`
     };
+
     return JSON.stringify(schema);
   };
+
   if (loading) {
     return (
       <Layout>
@@ -187,7 +204,7 @@ const BlogDetail = () => {
   const currentUrl = `${window.location.origin}/blog/${blog.slug}`;
 
   return (
-    <>
+    <Layout>
       <Helmet>
         {/* Basic Meta Tags */}
         <title>{blog.meta_title || `${blog.title} - Hijama Healing`}</title>
@@ -225,195 +242,187 @@ const BlogDetail = () => {
           {blog.schema_markup || generateSchemaMarkup()}
         </script>
       </Helmet>
-      
-      <Layout>
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid lg:grid-cols-4 gap-8">
-            {/* Main Content */}
-            <div className="lg:col-span-3">
-              {/* Back to Blog Button */}
-              <Link to="/blog" className="inline-flex items-center text-brand-green hover:text-brand-green/80 mb-6">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Blog
-              </Link>
 
-              {/* Featured Image */}
-              {validImageUrl && (
-                <div className="mb-8">
-                  <div className="relative w-full h-64 md:h-96 overflow-hidden rounded-lg">
-                    {imageLoading && (
-                      <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg"></div>
-                    )}
-                    {!imageError && (
-                      <img
-                        src={validImageUrl}
-                        alt={blog.title}
-                        className={`w-full h-full object-cover transition-opacity duration-300 ${
-                          imageLoading ? 'opacity-0' : 'opacity-100'
-                        }`}
-                        onLoad={handleImageLoad}
-                        onError={handleImageError}
-                        crossOrigin="anonymous"
-                      />
-                    )}
-                    {imageError && (
-                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                        <span className="text-gray-500">Image not available</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Blog Content */}
-              <Card>
-                <CardHeader>
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
-                    <div className="flex items-center">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {formatDate(blog.published_date)}
-                    </div>
-                    <div className="flex items-center">
-                      <User className="w-4 h-4 mr-1" />
-                      {blog.author}
-                    </div>
-                    {blog.category && (
-                      <div className="flex items-center">
-                        <Tag className="w-4 h-4 mr-1" />
-                        {blog.category}
-                      </div>
-                    )}
-                  </div>
-                  <CardTitle className="text-3xl md:text-4xl font-bold text-gray-800">
-                    {blog.title}
-                  </CardTitle>
-                  {blog.excerpt && (
-                    <p className="text-lg text-gray-600 mt-4">{blog.excerpt}</p>
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid lg:grid-cols-4 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-3">
+            {/* Featured Image */}
+            {validImageUrl && (
+              <div className="mb-8">
+                <div className="relative w-full h-64 md:h-96 overflow-hidden rounded-lg">
+                  {imageLoading && (
+                    <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg"></div>
                   )}
+                  {!imageError && (
+                    <img
+                      src={validImageUrl}
+                      alt={blog.title}
+                      className={`w-full h-full object-cover transition-opacity duration-300 ${
+                        imageLoading ? 'opacity-0' : 'opacity-100'
+                      }`}
+                      onLoad={handleImageLoad}
+                      onError={handleImageError}
+                      crossOrigin="anonymous"
+                    />
+                  )}
+                  {imageError && (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                      <span className="text-gray-500">Image not available</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Blog Content */}
+            <Card>
+              <CardHeader>
+                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
+                  <div className="flex items-center">
+                    <Calendar className="w-4 h-4 mr-1" />
+                    {formatDate(blog.published_date)}
+                  </div>
+                  <div className="flex items-center">
+                    <User className="w-4 h-4 mr-1" />
+                    {blog.author}
+                  </div>
+                  {blog.category && (
+                    <div className="flex items-center">
+                      <Tag className="w-4 h-4 mr-1" />
+                      {blog.category}
+                    </div>
+                  )}
+                </div>
+                <CardTitle className="text-3xl md:text-4xl font-bold text-gray-800">
+                  {blog.title}
+                </CardTitle>
+                {blog.excerpt && (
+                  <p className="text-lg text-gray-600 mt-4">{blog.excerpt}</p>
+                )}
+              </CardHeader>
+              <CardContent>
+                <div 
+                  className="prose prose-lg max-w-none"
+                  dangerouslySetInnerHTML={{ __html: blog.content }}
+                />
+                
+                {/* Tags */}
+                {blog.tags && blog.tags.length > 0 && (
+                  <div className="mt-8 pt-6 border-t">
+                    <h3 className="text-lg font-semibold mb-3">Tags</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {blog.tags.map((tag, index) => (
+                        <span 
+                          key={index}
+                          className="px-3 py-1 bg-brand-green/10 text-brand-green rounded-full text-sm"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Related Posts */}
+            {relatedPosts.length > 0 && (
+              <div className="mt-12">
+                <h2 className="text-2xl font-bold text-gray-800 mb-6">Related Posts</h2>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {relatedPosts.map((post) => (
+                    <Card key={post.id} className="hover:shadow-lg transition-shadow">
+                      <Link to={`/blog/${post.slug}`}>
+                        {post.featured_image && (
+                          <div className="h-48 overflow-hidden rounded-t-lg">
+                            <img
+                              src={getValidImageUrl(post.featured_image) || ''}
+                              alt={post.title}
+                              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                              crossOrigin="anonymous"
+                            />
+                          </div>
+                        )}
+                        <CardContent className="p-4">
+                          <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2">
+                            {post.title}
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            {formatDate(post.published_date)}
+                          </p>
+                        </CardContent>
+                      </Link>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-24 space-y-6">
+              {/* Book Appointment Card */}
+              <Card className="bg-gradient-to-br from-brand-green to-brand-green/80 text-white">
+                <CardHeader>
+                  <CardTitle className="text-xl">Book Your Hijama Session</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div 
-                    className="prose prose-lg max-w-none"
-                    dangerouslySetInnerHTML={{ __html: blog.content }}
-                  />
-                  
-                  {/* Tags */}
-                  {blog.tags && blog.tags.length > 0 && (
-                    <div className="mt-8 pt-6 border-t">
-                      <h3 className="text-lg font-semibold mb-3">Tags</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {blog.tags.map((tag, index) => (
-                          <span 
-                            key={index}
-                            className="px-3 py-1 bg-brand-green/10 text-brand-green rounded-full text-sm"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  <p className="mb-4 text-white/90">
+                    Experience the healing benefits of traditional hijama cupping therapy.
+                  </p>
+                  <Link to="/booking">
+                    <Button className="w-full bg-white text-brand-green hover:bg-gray-50">
+                      Book Now
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
 
-              {/* Related Posts */}
-              {relatedPosts.length > 0 && (
-                <div className="mt-12">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-6">Related Posts</h2>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {relatedPosts.map((post) => (
-                      <Card key={post.id} className="hover:shadow-lg transition-shadow">
-                        <Link to={`/blog/${post.slug}`}>
+              {/* Recent Posts */}
+              {recentPosts.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Recent Posts</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {recentPosts.map((post) => (
+                      <Link 
+                        key={post.id} 
+                        to={`/blog/${post.slug}`}
+                        className="block group"
+                      >
+                        <div className="flex gap-3">
                           {post.featured_image && (
-                            <div className="h-48 overflow-hidden rounded-t-lg">
+                            <div className="w-16 h-16 flex-shrink-0">
                               <img
                                 src={getValidImageUrl(post.featured_image) || ''}
                                 alt={post.title}
-                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                                className="w-full h-full object-cover rounded"
                                 crossOrigin="anonymous"
                               />
                             </div>
                           )}
-                          <CardContent className="p-4">
-                            <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2">
+                          <div className="flex-1">
+                            <h4 className="text-sm font-medium text-gray-800 group-hover:text-brand-green line-clamp-2">
                               {post.title}
-                            </h3>
-                            <p className="text-sm text-gray-600">
+                            </h4>
+                            <p className="text-xs text-gray-600 mt-1">
                               {formatDate(post.published_date)}
                             </p>
-                          </CardContent>
-                        </Link>
-                      </Card>
+                          </div>
+                        </div>
+                      </Link>
                     ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Sidebar */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-8 space-y-6">
-                {/* Book Appointment Card */}
-                <Card className="bg-gradient-to-br from-brand-green to-brand-green/80 text-white">
-                  <CardHeader>
-                    <CardTitle className="text-xl">Book Your Hijama Session</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="mb-4 text-white/90">
-                      Experience the healing benefits of traditional hijama cupping therapy.
-                    </p>
-                    <Link to="/booking">
-                      <Button className="w-full bg-white text-brand-green hover:bg-gray-50">
-                        Book Now
-                      </Button>
-                    </Link>
                   </CardContent>
                 </Card>
-
-                {/* Recent Posts */}
-                {recentPosts.length > 0 && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Recent Posts</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      {recentPosts.map((post) => (
-                        <Link 
-                          key={post.id} 
-                          to={`/blog/${post.slug}`}
-                          className="block group"
-                        >
-                          <div className="flex gap-3">
-                            {post.featured_image && (
-                              <div className="w-16 h-16 flex-shrink-0">
-                                <img
-                                  src={getValidImageUrl(post.featured_image) || ''}
-                                  alt={post.title}
-                                  className="w-full h-full object-cover rounded"
-                                  crossOrigin="anonymous"
-                                />
-                              </div>
-                            )}
-                            <div className="flex-1">
-                              <h4 className="text-sm font-medium text-gray-800 group-hover:text-brand-green line-clamp-2">
-                                {post.title}
-                              </h4>
-                              <p className="text-xs text-gray-600 mt-1">
-                                {formatDate(post.published_date)}
-                              </p>
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
+              )}
             </div>
           </div>
         </div>
-      </Layout>
-    </>
+      </div>
+    </Layout>
   );
 };
 
