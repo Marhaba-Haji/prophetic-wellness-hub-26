@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import App from './App';
 
-// Ensure consistent hydration by suppressing hydration warnings during development
+// Use a consistent empty object for helmet context
 const helmetContext = {};
 
 hydrateRoot(

@@ -18,20 +18,29 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import BlogEditor from "./pages/admin/BlogEditor";
 import NotFound from "./pages/NotFound";
 
-// Create a stable QueryClient instance to prevent hydration mismatches
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 60 * 1000, // 1 minute
-      // Disable refetch on window focus during SSR
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+// Create a stable QueryClient instance that's the same on server and client
+let queryClient: QueryClient;
+
+function getQueryClient() {
+  if (!queryClient) {
+    queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          staleTime: 60 * 1000, // 1 minute
+          refetchOnWindowFocus: false,
+          refetchOnMount: false,
+          refetchOnReconnect: false,
+          retry: false, // Disable retries to prevent hydration issues
+        },
+      },
+    });
+  }
+  return queryClient;
+}
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={getQueryClient()}>
       <TooltipProvider>
         <Toaster />
         <Routes>

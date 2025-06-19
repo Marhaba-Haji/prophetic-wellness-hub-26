@@ -72,7 +72,6 @@ async function fetchSEOData(url) {
           twitterDescription: blog.twitter_description || blog.meta_description || blog.excerpt || `Read about ${blog.title} on RevivoHeal's blog.`,
           twitterImage: blog.twitter_image || blog.og_image || blog.featured_image || 'https://i.ibb.co/TxLzP5H7/revivo-heal-logo.png',
           canonicalUrl: blog.canonical_url || `https://revivoheal.com/blog/${blog.slug}`,
-          schemaMarkup: blog.schema_markup || generateDefaultSchema(blog),
           author: blog.author,
           publishedDate: blog.published_date,
           category: blog.category,
@@ -86,30 +85,6 @@ async function fetchSEOData(url) {
   
   // Default SEO data for other pages
   return getDefaultSEOData(url);
-}
-
-function generateDefaultSchema(blog) {
-  return JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": blog.title,
-    "description": blog.meta_description || blog.excerpt,
-    "author": {
-      "@type": "Person",
-      "name": blog.author
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "RevivoHeal",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://i.ibb.co/TxLzP5H7/revivo-heal-logo.png"
-      }
-    },
-    "datePublished": blog.published_date,
-    "dateModified": blog.created_at,
-    "url": `https://revivoheal.com/blog/${blog.slug}`
-  });
 }
 
 function getDefaultSEOData(url) {
@@ -170,8 +145,6 @@ function injectSEOTags(html, seoData, url) {
     <meta name="twitter:title" content="${seoData.twitterTitle}" />
     <meta name="twitter:description" content="${seoData.twitterDescription}" />
     <meta name="twitter:image" content="${seoData.twitterImage}" />
-    
-    ${seoData.schemaMarkup ? `<script type="application/ld+json">${seoData.schemaMarkup}</script>` : ''}
   `;
   
   // Replace the head section with our dynamic meta tags
@@ -209,8 +182,8 @@ app.use('*', async (req, res) => {
     // Render the app HTML
     const rendered = await render(url, ssrManifest);
     
-    // Inject SEO tags into the template
-    const html = injectSEOTags(template, seoData, url)
+    // Inject SEO tags into the template - simplified to avoid hydration issues
+    const html = template
       .replace(`<!--app-html-->`, rendered.html ?? '')
       .replace(`<!--app-head-->`, rendered.head ?? '');
 

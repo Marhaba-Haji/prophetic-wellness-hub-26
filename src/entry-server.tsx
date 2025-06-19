@@ -6,6 +6,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import App from './App';
 
 export function render(url: string, _manifest?: any) {
+  // Use a consistent empty object for helmet context
   const helmetContext = {};
   
   const html = renderToString(
@@ -18,11 +19,7 @@ export function render(url: string, _manifest?: any) {
     </React.StrictMode>
   );
 
-  // Extract helmet data after rendering
-  const { helmet } = helmetContext as any;
-  const head = helmet 
-    ? `${helmet.title.toString()}${helmet.meta.toString()}${helmet.link.toString()}`
-    : '';
-
-  return { html, head };
+  // Don't extract helmet data to avoid hydration mismatches
+  // The client will handle the helmet updates
+  return { html, head: '' };
 }
