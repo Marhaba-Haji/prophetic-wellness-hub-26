@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Home, Calendar } from 'lucide-react';
@@ -7,6 +9,13 @@ import { CheckCircle, Home, Calendar } from 'lucide-react';
 const BookingSuccess = () => {
   return (
     <Layout>
+      <Helmet>
+        <title>Booking Confirmed - RevivoHeal Hijama Therapy Appointment</title>
+        <meta name="description" content="Your Hijama cupping therapy appointment has been successfully booked at RevivoHeal Bangalore. Check your email for confirmation details." />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://revivoheal.com/booking/success" />
+      </Helmet>
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="max-w-2xl mx-auto text-center">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 mb-6">
