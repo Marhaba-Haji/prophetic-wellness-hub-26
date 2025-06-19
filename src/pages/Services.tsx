@@ -50,21 +50,21 @@ const ServicesPage = () => {
       <div className="bg-white/90 rounded-lg shadow p-6 flex-1">
         <h3 className="text-xl font-semibold text-amber-900 mb-4 text-center">Massage Therapy</h3>
         <ul className="space-y-2 text-amber-900">
-          <li className="flex justify-between border-b pb-2"><span>Dry Cupping Massage</span> <span>&#8377; 999</span></li>
-          <li className="flex justify-between border-b pb-2"><span>Sports Gun Massage with dry cupping</span> <span>&#8377; 999</span></li>
-          <li className="flex justify-between border-b pb-2"><span>Sports Scraping Massage with dry cupping</span> <span>&#8377; 1999</span></li>
-          <li className="flex justify-between border-b pb-2"><span>Sports Combo Massage with dry cupping</span> <span>&#8377; 2499</span></li>
-          <li className="flex justify-between"><span>Facial Massage</span> <span>&#8377; 499</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Dry Cupping Massage</span> <span>₹ 999</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Sports Gun Massage with dry cupping</span> <span>₹ 999</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Sports Scraping Massage with dry cupping</span> <span>₹ 1999</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Sports Combo Massage with dry cupping</span> <span>₹ 2499</span></li>
+          <li className="flex justify-between"><span>Facial Massage</span> <span>₹ 499</span></li>
         </ul>
       </div>
       {/* Hijama Therapy */}
       <div className="bg-white/90 rounded-lg shadow p-6 flex-1">
         <h3 className="text-xl font-semibold text-amber-900 mb-4 text-center">Hijama Therapy</h3>
         <ul className="space-y-2 text-amber-900">
-          <li className="flex justify-between border-b pb-2"><span>Wet Cupping</span> <span>&#8377; 999</span></li>
-          <li className="flex justify-between border-b pb-2"><span>Unlimited Wet Cupping</span> <span>&#8377; 1499</span></li>
-          <li className="flex justify-between border-b pb-2"><span>Unlimited Dry & Wet  Cupping with Scraping</span> <span>&#8377; 2499</span></li>
-          <li className="flex justify-between"><span>Facial Wet Cupping</span> <span>&#8377; 749</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Wet Cupping</span> <span>₹ 999</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Unlimited Wet Cupping</span> <span>₹ 1499</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Unlimited Dry & Wet Cupping with Scraping</span> <span>₹ 2499</span></li>
+          <li className="flex justify-between"><span>Facial Wet Cupping</span> <span>₹ 749</span></li>
         </ul>
       </div>
     </div>
@@ -73,18 +73,18 @@ const ServicesPage = () => {
       <div className="bg-white/90 rounded-lg shadow p-6 flex-1">
         <h3 className="text-xl font-semibold text-amber-900 mb-4 text-center">Add ons</h3>
         <ul className="space-y-2 text-amber-900">
-          <li className="flex justify-between border-b pb-2"><span>Dry Cup</span> <span>&#8377; 99</span></li>
-          <li className="flex justify-between"><span>Wet Cup</span> <span>&#8377; 149</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Dry Cup</span> <span>₹ 99</span></li>
+          <li className="flex justify-between"><span>Wet Cup</span> <span>₹ 149</span></li>
         </ul>
       </div>
       {/* Massage with Steam Therapy */}
       <div className="bg-emerald-900/90 rounded-lg shadow p-6 flex-1">
         <h3 className="text-xl font-semibold text-brand-gold mb-4 text-center">Massage with Steam Therapy</h3>
         <ul className="space-y-2 text-brand-gold">
-          <li className="flex justify-between border-b pb-2"><span>Dry Cupping Massage</span> <span>&#8377; 1749</span></li>
-          <li className="flex justify-between border-b pb-2"><span>Sports Gun Massage with full body steam</span> <span>&#8377; 1749</span></li>
-          <li className="flex justify-between border-b pb-2"><span>Sports Scraping Massage with full body steam</span> <span>&#8377; 2749</span></li>
-          <li className="flex justify-between"><span>Sports Combo Massage with full body steam</span> <span>&#8377; 2999</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Dry Cupping Massage</span> <span>₹ 1749</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Sports Gun Massage with full body steam</span> <span>₹ 1749</span></li>
+          <li className="flex justify-between border-b pb-2"><span>Sports Scraping Massage with full body steam</span> <span>₹ 2749</span></li>
+          <li className="flex justify-between"><span>Sports Combo Massage with full body steam</span> <span>₹ 2999</span></li>
         </ul>
       </div>
     </div>

@@ -15,10 +15,10 @@ const Footer = () => {
               Experience the healing power of traditional Islamic medicine with our professional hijama therapy services.
             </p>
             <div className="flex space-x-4">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white transition-colors duration-200">
+              <a href="https://www.facebook.com/RevivoHeal" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white transition-colors duration-200">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white transition-colors duration-200">
+              <a href="https://www.instagram.com/revivoheal/" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white transition-colors duration-200">
                 <Instagram className="h-5 w-5" />
               </a>
             </div>

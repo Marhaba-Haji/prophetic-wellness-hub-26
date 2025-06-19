@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
@@ -168,7 +167,7 @@ const BookingAppointment = () => {
       setNotes('');
       
       // Redirect after successful booking
-      navigate('/booking-success');
+      navigate('/booking/success');
     } catch (error) {
       if (error instanceof z.ZodError) {
         const firstError = error.errors[0];
@@ -375,40 +374,40 @@ const BookingAppointment = () => {
           
           <div>
             <Card>
-              <CardContent className="p-6">
-                <h3 className="font-bold text-xl text-brand-green mb-4">Booking Information</h3>
-                
-                <div className="space-y-4 text-sm">
+              <CardContent className="p-6 text-center">
+                <h3 className="font-bold text-2xl text-brand-green mb-4">Booking Information</h3>
+                <div className="space-y-6 text-sm">
                   <div>
                     <h4 className="font-semibold mb-1">Opening Hours</h4>
-                    <p>Monday - Thursday: 9:00 AM - 8:00 PM</p>
-                    <p>Saturday - Sunday: 9:00 AM - 8:00 PM</p>
-                    <p>Friday: Closed</p>
+                    <div className="text-center">
+                      <p>Monday - Thursday: 9:00 AM - 8:00 PM</p>
+                      <p>Saturday - Sunday: 9:00 AM - 8:00 PM</p>
+                      <p>Friday: Closed</p>
+                    </div>
                   </div>
-                  
-                  <div className="pt-2 border-t border-gray-100">
+                  <div className="pt-4 border-t border-gray-100">
                     <h4 className="font-semibold mb-1">Location</h4>
-                    <p className="flex items-start">
-                      <MapPin className="h-4 w-4 text-brand-green mr-2 mt-1 flex-shrink-0" />
+                    <div className="flex flex-col items-center justify-center">
+                      <MapPin className="h-5 w-5 text-brand-green mb-1" />
                       <span>Paramount Avenue, 63/1, 3rd floor,<br />Mosque Road Cross, Frazer Town,<br />Bangalore 560005</span>
-                    </p>
+                    </div>
                   </div>
-                  
-                  <div className="pt-2 border-t border-gray-100">
+                  <div className="pt-4 border-t border-gray-100">
                     <h4 className="font-semibold mb-1">Contact</h4>
-                    <p className="flex items-center">
-                      <Phone className="h-4 w-4 text-brand-green mr-2 flex-shrink-0" />
-                      <span>+91 9480389296</span>
-                    </p>
-                    <p className="flex items-center">
-                      <Mail className="h-4 w-4 text-brand-green mr-2 flex-shrink-0" />
-                      <span>info@hijamahealing.com</span>
-                    </p>
+                    <div className="flex flex-col items-center justify-center gap-1">
+                      <div className="flex items-center justify-center">
+                        <Phone className="h-4 w-4 text-brand-green mr-2" />
+                        <span>+91 9480389296</span>
+                      </div>
+                      <div className="flex items-center justify-center">
+                        <Mail className="h-4 w-4 text-brand-green mr-2" />
+                        <span>info@hijamahealing.com</span>
+                      </div>
+                    </div>
                   </div>
-                  
-                  <div className="pt-2 border-t border-gray-100">
-                    <h4 className="font-semibold mb-1">Important Notes</h4>
-                    <ul className="list-disc pl-5 space-y-1">
+                  <div className="pt-4 border-t border-gray-100">
+                    <h4 className="font-semibold mb-2">Important Notes</h4>
+                    <ul className="list-disc pl-5 space-y-1 inline-block text-left">
                       <li>Please arrive 15 minutes before your appointment</li>
                       <li>Wear loose, comfortable clothing</li>
                       <li>Avoid heavy meals before the session</li>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
@@ -59,7 +58,7 @@ const BookingSuccess = () => {
                 <Home className="h-5 w-5 mr-2" /> Return Home
               </Button>
             </Link>
-            <Link to="/booking-appointment">
+            <Link to="/booking">
               <Button className="gold-gradient text-white px-6 hover:opacity-90 transition-opacity">
                 <Calendar className="h-5 w-5 mr-2" /> Book Another Appointment
               </Button>

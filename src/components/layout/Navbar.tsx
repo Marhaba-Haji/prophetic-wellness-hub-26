@@ -26,7 +26,7 @@ const Navbar = () => {
             <NavLinks />
           </nav>
           <div className="hidden md:flex items-center">
-            <Link to="/booking-appointment">
+            <Link to="/booking">
               <Button className="gold-gradient text-white hover:opacity-90 transition-opacity rounded-full">
                 <Heart className="h-4 w-4 mr-2" />
                 Book Appointment
@@ -48,7 +48,7 @@ const Navbar = () => {
           <div className="flex flex-col space-y-3">
             <MobileNavLinks closeMenu={closeMenu} />
             <div className="pt-2 pb-4 px-4">
-              <Link to="/booking-appointment" onClick={closeMenu}>
+              <Link to="/booking" onClick={closeMenu}>
                 <Button className="gold-gradient w-full text-white hover:opacity-90 transition-opacity rounded-full">
                   <Heart className="h-4 w-4 mr-2" />
                   Book Appointment
