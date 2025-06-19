@@ -189,6 +189,7 @@ const BlogDetail = () => {
 
   const generateSchemaMarkup = () => {
     if (!blog) return '';
+    const currentUrl = typeof window !== 'undefined' ? `${window.location.origin}/blog/${blog.slug}` : `https://revivoheal.com/blog/${blog.slug}`;
     const schema = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
@@ -210,7 +211,7 @@ const BlogDetail = () => {
       "datePublished": blog.published_date,
       "dateModified": blog.created_at,
       "keywords": blog.meta_keywords || blog.tags?.join(', '),
-      "url": `${window.location.origin}/blog/${blog.slug}`
+      "url": currentUrl
     };
     return JSON.stringify(schema);
   };
@@ -249,7 +250,7 @@ const BlogDetail = () => {
   }
 
   const validImageUrl = getValidImageUrl(blog.featured_image);
-  const currentUrl = `${window.location.origin}/blog/${blog.slug}`;
+  const currentUrl = typeof window !== 'undefined' ? `${window.location.origin}/blog/${blog.slug}` : `https://revivoheal.com/blog/${blog.slug}`;
 
   console.log('SEO Debug - Blog data:', {
     meta_title: blog.meta_title,
