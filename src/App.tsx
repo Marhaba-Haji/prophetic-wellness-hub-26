@@ -18,7 +18,16 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import BlogEditor from "./pages/admin/BlogEditor";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+// Create a stable QueryClient instance to prevent hydration mismatches
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000, // 1 minute
+      // Disable refetch on window focus during SSR
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function App() {
   return (

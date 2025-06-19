@@ -18,5 +18,11 @@ export function render(url: string, _manifest?: any) {
     </React.StrictMode>
   );
 
-  return { html, head: '' };
+  // Extract helmet data after rendering
+  const { helmet } = helmetContext as any;
+  const head = helmet 
+    ? `${helmet.title.toString()}${helmet.meta.toString()}${helmet.link.toString()}`
+    : '';
+
+  return { html, head };
 }

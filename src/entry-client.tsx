@@ -5,10 +5,13 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import App from './App';
 
+// Ensure consistent hydration by suppressing hydration warnings during development
+const helmetContext = {};
+
 hydrateRoot(
   document.getElementById('root')!,
   <React.StrictMode>
-    <HelmetProvider>
+    <HelmetProvider context={helmetContext}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
