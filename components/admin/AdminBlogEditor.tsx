@@ -8,13 +8,17 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from '@/components/ui/sonner';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/integrations/supabase/client';
 import { BlogPost } from '@/types/supabase-types';
 import ReactQuill from 'react-quill';
 import 'quill/dist/quill.snow.css';
 
-const AdminBlogEditor = () => {
+interface AdminBlogEditorProps {
+  blogId?: string;
+}
+
+const AdminBlogEditor = ({ blogId }: AdminBlogEditorProps) => {
   // Basic fields
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
@@ -57,8 +61,7 @@ const AdminBlogEditor = () => {
   const [previewMode, setPreviewMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
-  const { blogId } = useParams<{ blogId: string }>();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   // Rich text editor modules
   const modules = {
@@ -137,7 +140,7 @@ const AdminBlogEditor = () => {
         setSchemaMarkup(data.schema_markup || '');
       } else {
         toast.error('Blog post not found');
-        navigate('/admin/dashboard');
+        router.push('/admin/dashboard');
       }
     } catch (error) {
       console.error('Error fetching blog:', error);
@@ -223,7 +226,7 @@ const AdminBlogEditor = () => {
       toast.success(`Blog post ${blogId ? 'updated' : 'created'} successfully!`);
 
       if (!blogId && data?.id) {
-        navigate(`/admin/blog/edit/${data.id}`);
+        router.push(`/admin/blog/edit/${data.id}`);
       }
     } catch (error) {
       console.error('Error saving blog:', error);

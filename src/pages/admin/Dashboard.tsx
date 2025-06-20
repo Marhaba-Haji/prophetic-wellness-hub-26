@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -13,7 +13,7 @@ import { Admin } from '@/types/supabase-types';
 const AdminDashboard = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const router = useRouter();
   
   useEffect(() => {
     const checkAuth = async () => {
@@ -23,7 +23,7 @@ const AdminDashboard = () => {
         
         if (!session) {
           // No session, redirect to login
-          navigate('/admin');
+          router.push('/admin');
           return;
         }
         
@@ -41,7 +41,7 @@ const AdminDashboard = () => {
           if (adminError || !adminData) {
             // Not an admin, sign out and redirect
             await supabase.auth.signOut();
-            navigate('/admin');
+            router.push('/admin');
             return;
           }
         }
@@ -50,20 +50,20 @@ const AdminDashboard = () => {
         setUser(session.user);
       } catch (error) {
         console.error('Auth check error:', error);
-        navigate('/admin');
+        router.push('/admin');
       } finally {
         setLoading(false);
       }
     };
     
     checkAuth();
-  }, [navigate]);
+  }, [router]);
   
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut();
       toast.success('Signed out successfully');
-      navigate('/admin');
+      router.push('/admin');
     } catch (error) {
       console.error('Sign out error:', error);
       toast.error('Failed to sign out');

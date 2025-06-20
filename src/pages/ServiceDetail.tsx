@@ -1,6 +1,7 @@
-
 import React, { useEffect } from 'react';
-import { useParams, Link, useLocation } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -163,10 +164,14 @@ const servicesData = {
   }
 };
 
-const ServiceDetail = () => {
-  const { serviceId } = useParams<{ serviceId: string }>();
+interface ServiceDetailProps {
+  serviceId?: string;
+}
+
+const ServiceDetail = ({ serviceId }: ServiceDetailProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const service = serviceId ? servicesData[serviceId as keyof typeof servicesData] : null;
-  const location = useLocation();
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -178,7 +183,7 @@ const ServiceDetail = () => {
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-3xl font-bold text-brand-green mb-6">Service Not Found</h1>
           <p className="mb-8">The service you are looking for does not exist.</p>
-          <Link to="/services">
+          <Link href="/services">
             <Button className="gold-gradient text-white hover:opacity-90 transition-opacity">
               Back to Services
             </Button>
@@ -191,7 +196,7 @@ const ServiceDetail = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-16">
-        <Link to="/services" className="inline-flex items-center text-brand-green mb-8 hover:text-brand-gold transition-colors">
+        <Link href="/services" className="inline-flex items-center text-brand-green mb-8 hover:text-brand-gold transition-colors">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Services
         </Link>
@@ -243,7 +248,7 @@ const ServiceDetail = () => {
           </div>
           
           <div className="text-center">
-            <Link to="/booking-appointment" state={{ selectedService: service.title, price: service.priceNumber }}>
+            <Link href="/booking-appointment">
               <Button className="gold-gradient text-white text-lg px-8 py-6 hover:opacity-90 transition-opacity rounded-full">
                 Book This Treatment
               </Button>

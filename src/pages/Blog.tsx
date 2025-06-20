@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Search, Calendar, User, Tag } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -146,7 +146,7 @@ const Blog = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {displayedPosts.map((post) => (
                     <Card key={post.id} className="group overflow-hidden transition-all duration-300 hover:shadow-lg">
-                      <Link to={`/blog/${post.slug}`} className="block">
+                      <Link href={`/blog/${post.slug}`} className="block">
                         <div className="overflow-hidden h-48">
                           <img
                             src={post.featured_image || "https://images.unsplash.com/photo-1584515933487-779824d29309?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"}
@@ -165,7 +165,7 @@ const Blog = () => {
                           </span>
                         </div>
                         
-                        <Link to={`/blog/${post.slug}`} className="block">
+                        <Link href={`/blog/${post.slug}`} className="block">
                           <h2 className="text-xl font-bold text-brand-green hover:text-brand-green-light transition-colors mb-2">{post.title}</h2>
                         </Link>
                         
@@ -185,7 +185,7 @@ const Blog = () => {
                         )}
                       </CardContent>
                       <CardFooter className="px-6 pb-6 pt-0">
-                        <Link to={`/blog/${post.slug}`}>
+                        <Link href={`/blog/${post.slug}`}>
                           <Button variant="link" className="text-brand-green p-0 hover:text-brand-green-light">
                             Read More →
                           </Button>
@@ -231,7 +231,7 @@ const Blog = () => {
                     <p className="mb-4 text-white/90 text-sm">
                       Experience the healing benefits of traditional hijama cupping therapy.
                     </p>
-                    <Link to="/booking">
+                    <Link href="/booking">
                       <Button className="w-full bg-white text-brand-green hover:bg-gray-50 font-medium">
                         Book Now
                       </Button>
@@ -244,7 +244,7 @@ const Blog = () => {
                     <h3 className="text-lg font-semibold mb-4">Featured Articles</h3>
                     <div className="space-y-4">
                       {blogPosts.slice(0, 3).map((post) => (
-                        <Link key={post.id} to={`/blog/${post.slug}`} className="flex gap-3 group">
+                        <Link key={post.id} href={`/blog/${post.slug}`} className="flex gap-3 group">
                           <div className="w-16 h-16 flex-shrink-0">
                             <img src={post.featured_image || ''} alt={post.title} className="w-full h-full object-cover rounded" />
                           </div>
