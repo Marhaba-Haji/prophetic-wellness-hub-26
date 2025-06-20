@@ -1,4 +1,3 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -20,15 +19,4 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  build: {
-    rollupOptions: {
-      input: {
-        client: './src/entry-client.tsx',
-        server: './src/entry-server.tsx'
-      }
-    }
-  },
-  ssr: {
-    noExternal: ['react-helmet-async']
-  }
 }));

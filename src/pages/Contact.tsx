@@ -1,28 +1,11 @@
-
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import ContactForm from '@/components/ContactForm';
 
 const Contact = () => {
-  return (
-    <Layout>
-      <Helmet>
-        <title>Contact RevivoHeal - Book Hijama Cupping Therapy in Bangalore</title>
-        <meta name="description" content="Contact RevivoHeal for Hijama cupping therapy appointments in Bangalore. Call +91 9480389296 or visit us at Frazer Town. Professional healing services." />
-        <meta name="keywords" content="contact revivoheal, book hijama appointment, cupping therapy bangalore, hijama center contact, frazer town clinic" />
-        <link rel="canonical" href="https://revivoheal.com/contact" />
-        
-        <meta property="og:title" content="Contact RevivoHeal - Book Hijama Cupping Therapy" />
-        <meta property="og:description" content="Contact RevivoHeal for professional Hijama cupping therapy appointments in Bangalore." />
-        <meta property="og:url" content="https://revivoheal.com/contact" />
-        
-        <meta name="twitter:title" content="Contact RevivoHeal - Hijama Therapy Bangalore" />
-        <meta name="twitter:description" content="Book your Hijama cupping therapy session in Bangalore. Professional healing services." />
-      </Helmet>
-
+  return <Layout>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 className="text-3xl md:text-4xl font-bold text-brand-green mb-8 text-center">Contact Us</h1>
         
@@ -104,8 +87,7 @@ const Contact = () => {
           ></iframe>
         </div>
       </div>
-    </Layout>
-  );
+    </Layout>;
 };
 
 export default Contact;
