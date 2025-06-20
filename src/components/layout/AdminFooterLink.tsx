@@ -1,10 +1,9 @@
-
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const AdminFooterLink = () => {
   return (
-    <Link to="/admin" className="text-gray-400 hover:text-gray-300 text-sm">
+    <Link href="/admin" className="text-gray-400 hover:text-gray-300 text-sm">
       Admin
     </Link>
   );

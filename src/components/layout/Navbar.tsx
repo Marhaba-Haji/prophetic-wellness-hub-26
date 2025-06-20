@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Heart } from "lucide-react";
 const Navbar = () => {
@@ -14,11 +14,11 @@ const Navbar = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center" onClick={closeMenu}>
+            <Link href="/" className="flex items-center" onClick={closeMenu}>
               <img alt="RevivoHeal Logo" className="h-10 w-10 mr-3" src="https://i.ibb.co/zhP9ZM9z/revivo-heal-logo.png" />
               <div>
                 <span className="text-brand-green font-bold text-xl">RevivoHeal</span>
-                <span className="text-brand-gold text-xs block">Pain Relief &amp; Healing</span>
+                <span className="text-brand-gold text-xs block">Pain Relief & Healing</span>
               </div>
             </Link>
           </div>
@@ -26,7 +26,7 @@ const Navbar = () => {
             <NavLinks />
           </nav>
           <div className="hidden md:flex items-center">
-            <Link to="/booking">
+            <Link href="/booking">
               <Button className="gold-gradient text-white hover:opacity-90 transition-opacity rounded-full">
                 <Heart className="h-4 w-4 mr-2" />
                 Book Appointment
@@ -48,7 +48,7 @@ const Navbar = () => {
           <div className="flex flex-col space-y-3">
             <MobileNavLinks closeMenu={closeMenu} />
             <div className="pt-2 pb-4 px-4">
-              <Link to="/booking" onClick={closeMenu}>
+              <Link href="/booking" onClick={closeMenu}>
                 <Button className="gold-gradient w-full text-white hover:opacity-90 transition-opacity rounded-full">
                   <Heart className="h-4 w-4 mr-2" />
                   Book Appointment
@@ -61,22 +61,22 @@ const Navbar = () => {
     </header>;
 };
 const NavLinks = () => <>
-    <Link to="/" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
+    <Link href="/" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
       Home
     </Link>
-    <Link to="/about" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
+    <Link href="/about" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
       About Us
     </Link>
-    <Link to="/services" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
+    <Link href="/services" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
       Services
     </Link>
-    <Link to="/benefits" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
+    <Link href="/benefits" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
       Benefits
     </Link>
-    <Link to="/blog" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
+    <Link href="/blog" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
       Blog
     </Link>
-    <Link to="/contact" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
+    <Link href="/contact" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
       Contact
     </Link>
   </>;
@@ -85,22 +85,22 @@ const MobileNavLinks = ({
 }: {
   closeMenu: () => void;
 }) => <>
-    <Link to="/" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
+    <Link href="/" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
       Home
     </Link>
-    <Link to="/about" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
+    <Link href="/about" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
       About Us
     </Link>
-    <Link to="/services" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
+    <Link href="/services" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
       Services
     </Link>
-    <Link to="/benefits" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
+    <Link href="/benefits" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
       Benefits
     </Link>
-    <Link to="/blog" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
+    <Link href="/blog" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
       Blog
     </Link>
-    <Link to="/contact" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
+    <Link href="/contact" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
       Contact
     </Link>
   </>;

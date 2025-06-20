@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { HeartPulse, BookOpen, BriefcaseMedical } from 'lucide-react';
 
 const services = [
@@ -41,7 +40,7 @@ const Services = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Link to={`/service/${service.id}`} key={index} className="group">
+            <Link href={`/service/${service.id}`} key={index} className="group">
               <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border-t-4 border-t-brand-green group">
                 <div className="bg-gradient-to-r from-brand-green-light/10 to-brand-green/10 p-6 text-center">
                   <div className="bg-white p-4 rounded-full inline-block mb-6 shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all">
@@ -62,7 +61,7 @@ const Services = () => {
         </div>
         
         <div className="text-center mt-12">
-          <Link to="/services">
+          <Link href="/services">
             <Button className="gold-gradient text-white hover:opacity-90 transition-opacity rounded-full px-8 py-6 text-lg font-medium shadow-md hover:shadow-lg">
               View All Services
             </Button>

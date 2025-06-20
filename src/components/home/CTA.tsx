@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const CTA = () => {
   return (
@@ -19,7 +18,7 @@ const CTA = () => {
             Book your appointment today and take the first step towards better health and well-being through traditional Islamic medicine.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link to="/booking-appointment">
+            <Link href="/booking-appointment">
               <Button className="gold-gradient text-white text-lg px-8 py-6 hover:opacity-90 transition-opacity rounded-full">
                 <Calendar className="h-5 w-5 mr-2" /> Book An Appointment
               </Button>

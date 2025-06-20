@@ -3,7 +3,7 @@ import { useState } from 'react';
 import type { AppProps } from 'next/app';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import '@/styles/globals.css';
+import '../styles/globals.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient({

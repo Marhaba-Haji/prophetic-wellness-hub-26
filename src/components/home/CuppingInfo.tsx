@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Youtube, History, BookOpen, Award, Droplet, PlayCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -180,7 +179,7 @@ const CuppingInfo = () => {
         </div>
         
         <div className="text-center">
-          <Link to="/booking-appointment">
+          <Link href="/booking-appointment">
             <Button className="gold-gradient text-white hover:opacity-90 transition-opacity px-8 py-6 rounded-full shadow-lg">
               Book An Appointment
             </Button>

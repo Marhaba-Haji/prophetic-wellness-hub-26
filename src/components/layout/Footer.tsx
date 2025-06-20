@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { BookOpen, MapPin, Phone, Mail, Clock, Facebook, Instagram } from "lucide-react";
 import AdminFooterLink from "./AdminFooterLink";
 const Footer = () => {
@@ -31,37 +31,37 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link href="/" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link href="/about" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link href="/services" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Services
                 </Link>
               </li>
               <li>
-                <Link to="/benefits" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link href="/benefits" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Benefits
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link href="/blog" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Blog
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link href="/contact" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Contact
                 </Link>
@@ -76,31 +76,31 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/service/dry-cupping" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link href="/service/dry-cupping" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Dry Cupping
                 </Link>
               </li>
               <li>
-                <Link to="/service/wet-cupping" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link href="/service/wet-cupping" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Wet Cupping
                 </Link>
               </li>
               <li>
-                <Link to="/service/sports-massage" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link href="/service/sports-massage" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Sports Injury Massage
                 </Link>
               </li>
               <li>
-                <Link to="/service/oil-massage" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link href="/service/oil-massage" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Deep Tissue Oil Massage
                 </Link>
               </li>
               <li>
-                <Link to="/service/steam-bath" className="text-gray-200 hover:text-brand-gold flex items-center">
+                <Link href="/service/steam-bath" className="text-gray-200 hover:text-brand-gold flex items-center">
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
                   Steam Bath Therapy
                 </Link>
