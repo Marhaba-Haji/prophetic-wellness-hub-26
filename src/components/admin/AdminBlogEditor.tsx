@@ -11,8 +11,23 @@ import { toast } from '@/components/ui/sonner';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { BlogPost } from '@/types/supabase-types';
-import ReactQuill from 'react-quill';
-import 'quill/dist/quill.snow.css';
+import dynamic from 'next/dynamic';
+
+// Import ReactQuill dynamically to avoid SSR issues
+const ReactQuill = dynamic(() => import('react-quill'), {
+  ssr: false,
+  loading: () => <p>Loading editor...</p>,
+});
+
+// Import the CSS only on the client side
+const QuillCSS = () => {
+  useEffect(() => {
+    // This will only run on the client
+    import('react-quill/dist/quill.snow.css');
+  }, []);
+  
+  return null;
+};
 
 const AdminBlogEditor = () => {
   // Basic fields
@@ -235,6 +250,7 @@ const AdminBlogEditor = () => {
 
   return (
     <Card>
+      <QuillCSS />
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl">{blogId ? 'Edit Blog Post' : 'Create New Blog Post'}</CardTitle>
         <div className="flex gap-2">
@@ -366,7 +382,7 @@ const AdminBlogEditor = () => {
             
             <div className="grid gap-2">
               <Label htmlFor="content">Content *</Label>
-              {!previewMode ? (
+              {!previewMode && typeof window !== 'undefined' ? (
                 <ReactQuill
                   theme="snow"
                   value={content}
