@@ -1,16 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useNavigate } from 'react-router-dom';
 import AdminBlogEditor from '@/components/admin/AdminBlogEditor';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/sonner';
 import { BlogPost } from '@/types/supabase-types';
 
-interface BlogEditorProps {
-  blogId?: string;
-}
-
-const BlogEditor = ({ blogId }: BlogEditorProps) => {
-  const router = useRouter();
+const BlogEditor = () => {
+  const { blogId } = useParams<{ blogId: string }>();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -18,7 +16,7 @@ const BlogEditor = ({ blogId }: BlogEditorProps) => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        router.push('/admin');
+        navigate('/admin');
         return false;
       }
       return true;
@@ -41,21 +39,21 @@ const BlogEditor = ({ blogId }: BlogEditorProps) => {
 
         if (error) {
           toast.error('Blog post not found');
-          router.push('/admin/dashboard');
+          navigate('/admin/dashboard');
           return;
         }
 
       } catch (error) {
         console.error('Error fetching blog data:', error);
         toast.error('Failed to fetch blog data');
-        router.push('/admin/dashboard');
+        navigate('/admin/dashboard');
       } finally {
         setLoading(false);
       }
     };
 
     fetchBlogData();
-  }, [blogId, router]);
+  }, [blogId, navigate]);
 
   if (loading) {
     return (
