@@ -11,25 +11,16 @@ import { toast } from '@/components/ui/sonner';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { BlogPost } from '@/types/supabase-types';
-import dynamic from 'next/dynamic';
 
 // Import ReactQuill dynamically to avoid SSR issues
-const ReactQuill = dynamic(() => import('react-quill'), {
-  ssr: false,
-  loading: () => <p>Loading editor...</p>,
-});
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
-// Import the CSS only on the client side
-const QuillCSS = () => {
-  useEffect(() => {
-    // This will only run on the client
-    import('react-quill/dist/quill.snow.css');
-  }, []);
-  
-  return null;
-};
+interface AdminBlogEditorProps {
+  blogId?: string;
+}
 
-const AdminBlogEditor = () => {
+const AdminBlogEditor = ({ blogId }: AdminBlogEditorProps) => {
   // Basic fields
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
@@ -72,7 +63,6 @@ const AdminBlogEditor = () => {
   const [previewMode, setPreviewMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
-  const { blogId } = useParams<{ blogId: string }>();
   const navigate = useNavigate();
 
   // Rich text editor modules
@@ -250,7 +240,6 @@ const AdminBlogEditor = () => {
 
   return (
     <Card>
-      <QuillCSS />
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl">{blogId ? 'Edit Blog Post' : 'Create New Blog Post'}</CardTitle>
         <div className="flex gap-2">
@@ -382,7 +371,7 @@ const AdminBlogEditor = () => {
             
             <div className="grid gap-2">
               <Label htmlFor="content">Content *</Label>
-              {!previewMode && typeof window !== 'undefined' ? (
+              {!previewMode ? (
                 <ReactQuill
                   theme="snow"
                   value={content}
