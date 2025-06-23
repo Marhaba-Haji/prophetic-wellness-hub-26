@@ -16,6 +16,8 @@ import NotFound from './pages/NotFound';
 import AdminAuth from './pages/AdminAuth';
 import AdminDashboard from './pages/admin/Dashboard';
 import BlogEditor from './pages/admin/BlogEditor';
+import Blog from './pages/Blog';
+import BlogDetail from './pages/BlogDetail';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -37,6 +39,8 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/benefits" element={<Benefits />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogDetail />} />
               <Route path="/booking-success" element={<BookingSuccess />} />
               <Route path="/admin" element={<AdminAuth />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />

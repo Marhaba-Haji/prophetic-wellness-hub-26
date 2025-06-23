@@ -1,81 +1,43 @@
+
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { Search, Calendar, User, Tag } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Link } from 'react-router-dom';
+import { Calendar, User, Tag } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { BlogPost } from '@/types/supabase-types';
-import { toast } from '@/components/ui/sonner';
+import PageSEO from '@/components/SEO/PageSEO';
 
 const Blog = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All Topics");
-  const [visiblePosts, setVisiblePosts] = useState(6);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 9;
 
   useEffect(() => {
     fetchBlogPosts();
-  }, []);
+  }, [currentPage]);
 
   const fetchBlogPosts = async () => {
     try {
-      setLoading(true);
+      const from = (currentPage - 1) * postsPerPage;
+      const to = from + postsPerPage - 1;
+
       const { data, error } = await supabase
         .from('blogs')
         .select('*')
         .eq('published', true)
-        .order('published_date', { ascending: false });
+        .order('published_date', { ascending: false })
+        .range(from, to);
 
       if (error) throw error;
-
       setBlogPosts(data || []);
-      
-      // Extract unique categories
-      const uniqueCategories = Array.from(new Set(
-        data?.map(post => post.category).filter(Boolean) || []
-      ));
-      setCategories(uniqueCategories);
     } catch (error) {
       console.error('Error fetching blog posts:', error);
-      toast.error('Failed to fetch blog posts');
     } finally {
       setLoading(false);
     }
-  };
-
-  // Filter posts based on search query and selected category
-  const filteredPosts = blogPosts.filter((post) => {
-    const matchesSearch = searchQuery === "" || 
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      (post.excerpt && post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      post.author.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesCategory = selectedCategory === "All Topics" || post.category === selectedCategory;
-    
-    return matchesSearch && matchesCategory;
-  });
-
-  // Posts to display based on current visibility limit
-  const displayedPosts = filteredPosts.slice(0, visiblePosts);
-
-  // Handle search input change
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
-
-  // Handle category selection
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category);
-  };
-
-  // Handle load more articles
-  const handleLoadMore = () => {
-    setVisiblePosts(prev => prev + 3);
   };
 
   const formatDate = (dateString: string | null) => {
@@ -91,180 +53,97 @@ const Blog = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <Layout>
-        <div className="bg-gray-50 py-12">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-center items-center min-h-[400px]">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-green"></div>
-            </div>
-          </div>
-        </div>
-      </Layout>
-    );
-  }
-
   return (
-    <Layout>
-      <div className="bg-gray-50 py-4">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-4">
-            <h1 className="text-2xl md:text-4xl font-bold text-brand-green mb-2">Our Blog</h1>
-            <p className="text-base md:text-lg text-gray-700 max-w-3xl mx-auto">
-              Explore our collection of articles about hijama therapy, Islamic medicine, wellness tips, and more.
-            </p>
+    <Layout
+      title="Blog - RevivoHeal Bangalore | Hijama Therapy Articles & Health Tips"
+      description="Read our latest articles on Hijama cupping therapy, traditional healing methods, and wellness tips from certified professionals at RevivoHeal Bangalore."
+      keywords="hijama therapy, cupping therapy, traditional healing, wellness articles, health tips, bangalore"
+    >
+      <PageSEO
+        title="Blog - RevivoHeal Bangalore | Hijama Therapy Articles & Health Tips"
+        description="Read our latest articles on Hijama cupping therapy, traditional healing methods, and wellness tips from certified professionals at RevivoHeal Bangalore."
+        keywords="hijama therapy, cupping therapy, traditional healing, wellness articles, health tips, bangalore"
+      />
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-brand-green mb-4">
+            Health & Wellness Blog
+          </h1>
+          <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+            Discover the benefits of traditional healing methods, Hijama therapy insights, 
+            and expert wellness advice from our certified practitioners.
+          </p>
+        </div>
+
+        {loading ? (
+          <div className="flex justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-green"></div>
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Main Blog Cards */}
-            <div className="lg:col-span-3 order-2 lg:order-1">
-              {/* Category Tabs */}
-              <div className="bg-white rounded-lg shadow-sm border p-4 mb-4">
-                <Tabs defaultValue="All Topics" className="w-full" onValueChange={handleCategoryChange}>
-                  <TabsList className="flex flex-wrap gap-2 justify-center bg-transparent h-auto p-0">
-                    <TabsTrigger 
-                      value="All Topics" 
-                      className="rounded-full data-[state=active]:bg-brand-green data-[state=active]:text-white mb-2"
-                    >
-                      All Topics
-                    </TabsTrigger>
-                    {categories.map((category) => (
-                      <TabsTrigger
-                        key={category}
-                        value={category}
-                        className="rounded-full data-[state=active]:bg-brand-green data-[state=active]:text-white mb-2 capitalize"
-                      >
-                        {category.replace('-', ' ')}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-                </Tabs>
-              </div>
-
-              {displayedPosts.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {displayedPosts.map((post) => (
-                    <Card key={post.id} className="group overflow-hidden transition-all duration-300 hover:shadow-lg">
-                      <Link href={`/blog/${post.slug}`} className="block">
-                        <div className="overflow-hidden h-48">
-                          <img
-                            src={post.featured_image || "https://images.unsplash.com/photo-1584515933487-779824d29309?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"}
-                            alt={post.featured_image_alt || post.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                        </div>
-                      </Link>
-                      <CardContent className="p-6">
-                        <div className="flex flex-wrap items-center text-xs text-gray-600 mb-2">
-                          <span className="flex items-center mr-4 mb-1">
-                            <Calendar className="h-3 w-3 mr-1" /> {formatDate(post.published_date)}
-                          </span>
-                          <span className="flex items-center mb-1">
-                            <User className="h-3 w-3 mr-1" /> {post.author}
-                          </span>
-                        </div>
-                        
-                        <Link href={`/blog/${post.slug}`} className="block">
-                          <h2 className="text-xl font-bold text-brand-green hover:text-brand-green-light transition-colors mb-2">{post.title}</h2>
-                        </Link>
-                        
-                        <p className="text-gray-700 mb-4">{post.excerpt || post.meta_description}</p>
-                        
-                        {post.tags && post.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-2">
-                            {post.tags.slice(0, 3).map((tag, i) => (
-                              <span 
-                                key={i} 
-                                className="text-xs bg-brand-green/10 text-brand-green px-2 py-1 rounded-full flex items-center"
-                              >
-                                <Tag className="h-2.5 w-2.5 mr-1" /> {tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </CardContent>
-                      <CardFooter className="px-6 pb-6 pt-0">
-                        <Link href={`/blog/${post.slug}`}>
-                          <Button variant="link" className="text-brand-green p-0 hover:text-brand-green-light">
-                            Read More →
-                          </Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-16">
-                  <h3 className="text-xl font-medium text-gray-700">No articles found matching your search</h3>
-                  <p className="text-gray-500 mt-2">Try adjusting your search terms or filter</p>
-                  <Button 
-                    variant="outline" 
-                    className="mt-4"
-                    onClick={() => {
-                      setSearchQuery("");
-                      setSelectedCategory("All Topics");
-                    }}
-                  >
-                    Clear filters
-                  </Button>
-                </div>
-              )}
-              {filteredPosts.length > visiblePosts && (
-                <div className="mt-12 text-center">
-                  <Button 
-                    className="gold-gradient text-white hover:opacity-90 px-8 py-2 rounded-full"
-                    onClick={handleLoadMore}
-                  >
-                    Load More Articles
-                  </Button>
-                </div>
-              )}
-            </div>
-            {/* Sidebar */}
-            <div className="lg:col-span-1 order-1 lg:order-2 mb-8 lg:mb-0 space-y-6">
-              <div className="sticky top-24 z-20 space-y-6">
-                {/* Book Appointment Card */}
-                <Card className="bg-gradient-to-br from-brand-green to-brand-green/80 text-white shadow-lg w-full">
-                  <CardContent className="pt-4 pb-6">
-                    <h3 className="text-lg font-semibold mb-2">Book Your Hijama Session</h3>
-                    <p className="mb-4 text-white/90 text-sm">
-                      Experience the healing benefits of traditional hijama cupping therapy.
-                    </p>
-                    <Link href="/booking">
-                      <Button className="w-full bg-white text-brand-green hover:bg-gray-50 font-medium">
-                        Book Now
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-                {/* Featured Articles Card */}
-                <Card className="shadow-lg w-full">
-                  <CardContent className="pt-4 pb-6">
-                    <h3 className="text-lg font-semibold mb-4">Featured Articles</h3>
-                    <div className="space-y-4">
-                      {blogPosts.slice(0, 3).map((post) => (
-                        <Link key={post.id} href={`/blog/${post.slug}`} className="flex gap-3 group">
-                          <div className="w-16 h-16 flex-shrink-0">
-                            <img src={post.featured_image || ''} alt={post.title} className="w-full h-full object-cover rounded" />
-                          </div>
-                          <div className="flex-1">
-                            <h4 className="text-sm font-medium text-gray-800 group-hover:text-brand-green line-clamp-2">
-                              {post.title}
-                            </h4>
-                            <p className="text-xs text-gray-600 mt-1">
-                              {formatDate(post.published_date)}
-                            </p>
-                          </div>
-                        </Link>
+        ) : blogPosts.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {blogPosts.map((post) => (
+              <Card key={post.id} className="group border border-gray-200 hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+                <Link to={`/blog/${post.slug}`}>
+                  <div className="overflow-hidden">
+                    <img 
+                      src={post.featured_image || "https://images.unsplash.com/photo-1584515933487-779824d29309?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"} 
+                      alt={post.featured_image_alt || post.title} 
+                      className="w-full h-48 object-cover transition-all duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                </Link>
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
+                    <div className="flex items-center">
+                      <Calendar className="h-3.5 w-3.5 mr-1" />
+                      <span>{formatDate(post.published_date)}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <User className="h-3.5 w-3.5 mr-1" />
+                      <span>{post.author}</span>
+                    </div>
+                  </div>
+                  
+                  {post.category && (
+                    <div className="flex items-center mb-2">
+                      <Tag className="h-3.5 w-3.5 mr-1 text-brand-green" />
+                      <span className="text-sm text-brand-green font-medium">{post.category}</span>
+                    </div>
+                  )}
+                  
+                  <Link to={`/blog/${post.slug}`}>
+                    <h2 className="text-xl font-bold text-brand-green mb-2 hover:text-brand-green-light transition-colors line-clamp-2">
+                      {post.title}
+                    </h2>
+                  </Link>
+                  <p className="text-gray-700 line-clamp-3">{post.excerpt || post.meta_description}</p>
+                  
+                  {post.tags && post.tags.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-1">
+                      {post.tags.slice(0, 3).map((tag, index) => (
+                        <span key={index} className="px-2 py-1 bg-brand-green/10 text-brand-green rounded-full text-xs">
+                          {tag}
+                        </span>
                       ))}
                     </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
+                  )}
+                </CardContent>
+                <CardFooter className="px-6 pb-6 pt-0">
+                  <Link to={`/blog/${post.slug}`}>
+                    <Button variant="link" className="text-brand-green p-0 hover:text-brand-green-light">
+                      Read More →
+                    </Button>
+                  </Link>
+                </CardFooter>
+              </Card>
+            ))}
           </div>
-        </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No blog posts available yet.</p>
+          </div>
+        )}
       </div>
     </Layout>
   );
