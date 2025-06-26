@@ -23,8 +23,27 @@ export default defineConfig(({ mode }) => ({
     emptyOutDir: true,
     sourcemap: true,
     minify: false,
+    // Ensure no declaration files are generated during build
+    rollupOptions: {
+      output: {
+        // Clean any existing declaration files
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name?.endsWith('.d.ts')) {
+            return '[name].[hash][extname]';
+          }
+          return '[name].[hash][extname]';
+        }
+      }
+    }
   },
   esbuild: {
     logOverride: { 'this-is-undefined-in-esm': 'silent' }
+  },
+  // Clear any TypeScript cache
+  clearScreen: false,
+  // Ensure proper TypeScript handling
+  define: {
+    'import.meta.env.DEV': mode === 'development',
+    'import.meta.env.PROD': mode === 'production'
   }
 }));
