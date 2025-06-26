@@ -66,6 +66,24 @@ const Footer = () => {
                   Contact
                 </Link>
               </li>
+              <li>
+                <Link to="/terms" className="text-gray-200 hover:text-brand-gold flex items-center">
+                  <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
+                  Terms and Conditions
+                </Link>
+              </li>
+              <li>
+                <Link to="/privacy" className="text-gray-200 hover:text-brand-gold flex items-center">
+                  <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/refund" className="text-gray-200 hover:text-brand-gold flex items-center">
+                  <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
+                  Refund and Return Policy
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -139,11 +157,12 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-white/20 mt-12 pt-6">
-          <div className="flex justify-between items-center">
-            <p className="text-gray-200">
+          <div className="flex flex-col md:flex-row md:justify-between items-center gap-2 md:gap-0">
+            <p className="text-gray-200 text-center md:text-left w-full md:w-auto">
               &copy; {new Date().getFullYear()} Hijama Healing. All rights reserved.
             </p>
-            <div className="flex items-center space-x-4">
+            <span className="text-xs text-gray-300 text-center w-full md:w-auto">A unit of Marhaba Ventures Private Limited</span>
+            <div className="flex items-center space-x-4 justify-center md:justify-end w-full md:w-auto">
               <AdminFooterLink />
               <a href="https://facelyft.in" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-300 text-sm flex items-center">
                 Powered by <span className="text-brand-gold ml-1">FaceLyft.in</span>

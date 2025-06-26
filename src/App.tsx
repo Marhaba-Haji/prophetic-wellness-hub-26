@@ -21,6 +21,9 @@ import BlogDetail from './pages/BlogDetail';
 import BookingAppointment from './pages/BookingAppointment';
 import Services from './pages/Services';
 import ServiceDetail from './pages/ServiceDetail';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
+import Refund from './pages/Refund';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,6 +52,10 @@ function App() {
               <Route path="/blog/:slug" element={<BlogDetail />} />
               <Route path="/booking" element={<BookingAppointment />} />
               <Route path="/booking-success" element={<BookingSuccess />} />
+              <Route path="/booking/success" element={<BookingSuccess />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/refund" element={<Refund />} />
               <Route path="/admin" element={<AdminAuth />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/blog/new" element={<BlogEditor />} />
