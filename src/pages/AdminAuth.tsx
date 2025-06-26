@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -55,7 +55,7 @@ function isAdminRegistrationResponse(data: any): data is AdminRegistrationRespon
 const AdminAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('login');
-  const router = useRouter();
+  const navigate = useNavigate();
 
   // Login form
   const loginForm = useForm<LoginFormValues>({
@@ -93,7 +93,7 @@ const AdminAuth = () => {
           
           if (adminData && !error) {
             // User is an admin, redirect to admin panel
-            router.push('/admin/dashboard');
+            navigate('/admin/dashboard');
           }
         }
       } catch (error) {
@@ -102,7 +102,7 @@ const AdminAuth = () => {
     };
     
     checkAdminStatus();
-  }, [router]);
+  }, [navigate]);
 
   const handleLogin = async (values: LoginFormValues) => {
     setIsLoading(true);
@@ -138,7 +138,7 @@ const AdminAuth = () => {
         
         // User is either super admin or regular admin, redirect to admin dashboard
         toast.success(isSuperAdmin ? 'Welcome back, Super Admin!' : 'Welcome back, Admin!');
-        router.push('/admin/dashboard');
+        navigate('/admin/dashboard');
       }
     } catch (error: any) {
       console.error('Login error:', error);

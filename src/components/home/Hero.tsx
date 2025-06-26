@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Heart, Calendar } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 const Hero = () => {
   return <section className="relative py-24 overflow-hidden islamic-pattern-bg">
       <div className="absolute inset-0 bg-gradient-to-r from-white/90 to-white/80"></div>
@@ -18,12 +18,12 @@ const Hero = () => {
           <div className="h-0.5 w-24 bg-brand-gold mx-auto mb-6"></div>
           <p className="text-lg md:text-xl text-gray-700 mb-8">Cupping & massage therapy for pain relief, improved circulation, and overall wellness in a professional, hygienic environment.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link href="/booking-appointment">
+            <Link to="/booking-appointment">
               <Button className="gold-gradient text-white text-lg px-8 py-6 hover:opacity-90 transition-opacity rounded-full">
                 <Heart className="h-5 w-5 mr-2" /> Book Appointment
               </Button>
             </Link>
-            <Link href="/services">
+            <Link to="/services">
               <Button variant="outline" className="text-lg px-8 py-6 border-brand-green text-brand-green hover:bg-brand-green hover:text-white rounded-full">
                 <Calendar className="h-5 w-5 mr-2" /> View Services
               </Button>

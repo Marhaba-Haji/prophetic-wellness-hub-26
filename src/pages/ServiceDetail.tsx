@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, HeartPulse, BookOpen, BriefcaseMedical, Flame, DropletIcon, CheckCircle, Utensils, Check } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const servicesData = {
   "dry-cupping": {
@@ -169,8 +168,8 @@ interface ServiceDetailProps {
 }
 
 const ServiceDetail = ({ serviceId }: ServiceDetailProps) => {
-  const router = useRouter();
-  const pathname = usePathname();
+  const navigate = useNavigate();
+  const location = useLocation();
   const service = serviceId ? servicesData[serviceId as keyof typeof servicesData] : null;
   
   useEffect(() => {
@@ -183,7 +182,7 @@ const ServiceDetail = ({ serviceId }: ServiceDetailProps) => {
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-3xl font-bold text-brand-green mb-6">Service Not Found</h1>
           <p className="mb-8">The service you are looking for does not exist.</p>
-          <Link href="/services">
+          <Link to="/services">
             <Button className="gold-gradient text-white hover:opacity-90 transition-opacity">
               Back to Services
             </Button>
@@ -196,7 +195,7 @@ const ServiceDetail = ({ serviceId }: ServiceDetailProps) => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-16">
-        <Link href="/services" className="inline-flex items-center text-brand-green mb-8 hover:text-brand-gold transition-colors">
+        <Link to="/services" className="inline-flex items-center text-brand-green mb-8 hover:text-brand-gold transition-colors">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Services
         </Link>
@@ -248,7 +247,7 @@ const ServiceDetail = ({ serviceId }: ServiceDetailProps) => {
           </div>
           
           <div className="text-center">
-            <Link href="/booking-appointment">
+            <Link to="/booking-appointment">
               <Button className="gold-gradient text-white text-lg px-8 py-6 hover:opacity-90 transition-opacity rounded-full">
                 Book This Treatment
               </Button>

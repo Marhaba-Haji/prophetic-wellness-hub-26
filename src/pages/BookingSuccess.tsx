@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Home, Calendar } from 'lucide-react';
@@ -53,12 +53,12 @@ const BookingSuccess = () => {
           </div>
           
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/">
+            <Link to="/">
               <Button variant="outline" className="px-6 border-brand-green text-brand-green hover:bg-brand-green hover:text-white">
                 <Home className="h-5 w-5 mr-2" /> Return Home
               </Button>
             </Link>
-            <Link href="/booking">
+            <Link to="/booking">
               <Button className="gold-gradient text-white px-6 hover:opacity-90 transition-opacity">
                 <Calendar className="h-5 w-5 mr-2" /> Book Another Appointment
               </Button>

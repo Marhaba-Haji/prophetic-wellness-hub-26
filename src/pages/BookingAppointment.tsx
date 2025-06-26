@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -56,7 +56,7 @@ const BookingAppointment = () => {
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
   const [availableSlots, setAvailableSlots] = useState<string[]>(availableTimes);
   
-  const router = useRouter();
+  const navigate = useNavigate();
   const { toast: uiToast } = useToast();
 
   // Check appointment availability
@@ -167,7 +167,7 @@ const BookingAppointment = () => {
       setNotes('');
       
       // Redirect after successful booking
-      router.push('/booking/success');
+      navigate('/booking/success');
     } catch (error) {
       if (error instanceof z.ZodError) {
         const firstError = error.errors[0];

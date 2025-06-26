@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { usePathname } from 'next/navigation';
-import Head from 'next/head';
-import Link from 'next/link';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -21,13 +20,10 @@ interface SimpleBlogPost {
   category?: string | null;
 }
 
-interface BlogDetailProps {
-  blogSlug?: string;
-}
-
-const BlogDetail = ({ blogSlug }: BlogDetailProps) => {
-  const router = useRouter();
-  const pathname = usePathname();
+const BlogDetail = () => {
+  const router = useNavigate();
+  const location = useLocation();
+  const { slug } = useParams();
   const [blog, setBlog] = useState<BlogPost | null>(null);
   const [recentPosts, setRecentPosts] = useState<SimpleBlogPost[]>([]);
   const [relatedPosts, setRelatedPosts] = useState<SimpleBlogPost[]>([]);
@@ -36,11 +32,11 @@ const BlogDetail = ({ blogSlug }: BlogDetailProps) => {
   const [imageLoading, setImageLoading] = useState(true);
   
   useEffect(() => {
-    if (blogSlug) {
+    if (slug) {
       fetchBlogPost();
       fetchRecentPosts();
     }
-  }, [blogSlug]);
+  }, [slug]);
   
   useEffect(() => {
     if (blog) {
@@ -53,7 +49,7 @@ const BlogDetail = ({ blogSlug }: BlogDetailProps) => {
       const { data, error } = await supabase
         .from('blogs')
         .select('*')
-        .eq('slug', blogSlug)
+        .eq('slug', slug)
         .eq('published', true)
         .single();
       
@@ -74,7 +70,7 @@ const BlogDetail = ({ blogSlug }: BlogDetailProps) => {
         .from('blogs')
         .select('id, title, slug, published_date, featured_image')
         .eq('published', true)
-        .neq('slug', blogSlug)
+        .neq('slug', slug)
         .order('published_date', { ascending: false })
         .limit(5);
       
@@ -95,7 +91,7 @@ const BlogDetail = ({ blogSlug }: BlogDetailProps) => {
         .select('id, title, slug, published_date, featured_image, category')
         .eq('published', true)
         .eq('category', blog.category)
-        .neq('slug', blogSlug)
+        .neq('slug', slug)
         .limit(3);
       
       if (error) throw error;
@@ -233,10 +229,10 @@ const BlogDetail = ({ blogSlug }: BlogDetailProps) => {
   if (!blog) {
     return (
       <Layout>
-        <Head>
+        <Helmet>
           <title>Blog post not found - Hijama Healing</title>
           <meta name="description" content="The requested blog post could not be found." />
-        </Head>
+        </Helmet>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-800 mb-4">Blog post not found</h1>
@@ -262,7 +258,7 @@ const BlogDetail = ({ blogSlug }: BlogDetailProps) => {
   
   return (
     <Layout>
-      <Head>
+      <Helmet>
         {/* Basic Meta Tags */}
         <title>{blog.meta_title || `${blog.title} - Hijama Healing`}</title>
         <meta name="description" content={blog.meta_description || blog.excerpt || `Read about ${blog.title} on Hijama Healing`} />
@@ -296,7 +292,7 @@ const BlogDetail = ({ blogSlug }: BlogDetailProps) => {
         <script type="application/ld+json" dangerouslySetInnerHTML={{
           __html: blog.schema_markup || generateSchemaMarkup()
         }} />
-      </Head>
+      </Helmet>
 
       <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
@@ -357,7 +353,7 @@ const BlogDetail = ({ blogSlug }: BlogDetailProps) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {relatedPosts.map(post => (
                     <Card key={post.id} className="hover:shadow-lg transition-shadow w-full">
-                      <Link href={`/blog/${post.slug}`}>
+                      <Link to={`/blog/${post.slug}`}>
                         {post.featured_image && (
                           <div className="h-32 sm:h-48 overflow-hidden rounded-t-lg">
                             <img 
@@ -396,7 +392,7 @@ const BlogDetail = ({ blogSlug }: BlogDetailProps) => {
                   <p className="mb-2 sm:mb-4 text-white/90 text-xs sm:text-sm">
                     Experience the healing benefits of traditional hijama cupping therapy.
                   </p>
-                  <Link href="/booking">
+                  <Link to="/booking">
                     <Button className="w-full bg-white text-brand-green hover:bg-gray-50 font-medium">
                       Book Now
                     </Button>
@@ -412,7 +408,7 @@ const BlogDetail = ({ blogSlug }: BlogDetailProps) => {
                   </CardHeader>
                   <CardContent className="space-y-2 sm:space-y-4 pt-0">
                     {recentPosts.map(post => (
-                      <Link key={post.id} href={`/blog/${post.slug}`} className="block group">
+                      <Link key={post.id} to={`/blog/${post.slug}`} className="block group">
                         <div className="flex gap-2 sm:gap-3">
                           {post.featured_image && (
                             <div className="w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
