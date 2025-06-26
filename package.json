@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "next build",
+    "build:dev": "vite build --mode development",
     "start": "next start",
     "lint": "next lint",
     "export": "next export"
