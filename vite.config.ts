@@ -23,6 +23,12 @@ export default defineConfig(({ mode }) => ({
     emptyOutDir: true,
     sourcemap: true,
     minify: false,
+    rollupOptions: {
+      output: {
+        // Prevent any declaration file generation
+        preserveModules: false,
+      }
+    }
   },
   esbuild: {
     logOverride: { 'this-is-undefined-in-esm': 'silent' },
@@ -37,17 +43,7 @@ export default defineConfig(({ mode }) => ({
   // Force clean builds and ignore cached files
   optimizeDeps: {
     force: true,
-    // Exclude problematic files from pre-bundling
-    exclude: ['**/*.d.ts']
-  },
-  // Configure TypeScript to skip declaration files
-  typescript: {
-    skipLibCheck: true,
-    compilerOptions: {
-      skipLibCheck: true,
-      noEmit: true,
-      declaration: false,
-      declarationMap: false,
-    }
+    // Exclude all TypeScript declaration files from processing
+    exclude: ['**/*.d.ts', '*.d.ts']
   }
 }));
