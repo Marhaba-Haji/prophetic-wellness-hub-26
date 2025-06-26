@@ -23,9 +23,23 @@ export default defineConfig(({ mode }) => ({
     emptyOutDir: true,
     sourcemap: true,
     minify: false,
+    rollupOptions: {
+      output: {
+        // Prevent any declaration file generation
+        preserveModules: false,
+      }
+    }
   },
   esbuild: {
-    logOverride: { 'this-is-undefined-in-esm': 'silent' }
+    logOverride: { 'this-is-undefined-in-esm': 'silent' },
+    // Disable TypeScript declaration generation
+    tsconfigRaw: {
+      compilerOptions: {
+        declaration: false,
+        declarationMap: false,
+        emitDeclarationOnly: false,
+      }
+    }
   },
   // Clear TypeScript cache and ensure clean builds
   clearScreen: false,
@@ -34,8 +48,10 @@ export default defineConfig(({ mode }) => ({
     'import.meta.env.DEV': mode === 'development',
     'import.meta.env.PROD': mode === 'production'
   },
-  // Force clean builds by ignoring any cached declaration files
+  // Force clean builds and ignore cached files
   optimizeDeps: {
-    force: true
+    force: true,
+    // Exclude problematic files from pre-bundling
+    exclude: ['**/*.d.ts']
   }
 }));
