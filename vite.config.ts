@@ -39,5 +39,15 @@ export default defineConfig(({ mode }) => ({
     force: true,
     // Exclude problematic files from pre-bundling
     exclude: ['**/*.d.ts']
+  },
+  // Configure TypeScript to skip declaration files
+  typescript: {
+    skipLibCheck: true,
+    compilerOptions: {
+      skipLibCheck: true,
+      noEmit: true,
+      declaration: false,
+      declarationMap: false,
+    }
   }
 }));
