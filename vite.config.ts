@@ -23,23 +23,9 @@ export default defineConfig(({ mode }) => ({
     emptyOutDir: true,
     sourcemap: true,
     minify: false,
-    rollupOptions: {
-      output: {
-        // Prevent any declaration file generation
-        preserveModules: false,
-      }
-    }
   },
   esbuild: {
     logOverride: { 'this-is-undefined-in-esm': 'silent' },
-    // Disable TypeScript declaration generation
-    tsconfigRaw: {
-      compilerOptions: {
-        declaration: false,
-        declarationMap: false,
-        emitDeclarationOnly: false,
-      }
-    }
   },
   // Clear TypeScript cache and ensure clean builds
   clearScreen: false,
