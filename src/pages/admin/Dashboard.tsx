@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -15,7 +16,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [activeModule, setActiveModule] = useState<'appointments' | 'contacts' | 'blogs'>('appointments');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const router = useNavigate();
+  const navigate = useNavigate();
   
   useEffect(() => {
     const checkAuth = async () => {
@@ -25,7 +26,7 @@ const AdminDashboard = () => {
         
         if (!session) {
           // No session, redirect to login
-          router.push('/admin');
+          navigate('/admin');
           return;
         }
         
@@ -43,7 +44,7 @@ const AdminDashboard = () => {
           if (adminError || !adminData) {
             // Not an admin, sign out and redirect
             await supabase.auth.signOut();
-            router.push('/admin');
+            navigate('/admin');
             return;
           }
         }
@@ -52,20 +53,20 @@ const AdminDashboard = () => {
         setUser(session.user);
       } catch (error) {
         console.error('Auth check error:', error);
-        router.push('/admin');
+        navigate('/admin');
       } finally {
         setLoading(false);
       }
     };
     
     checkAuth();
-  }, [router]);
+  }, [navigate]);
   
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut();
       toast.success('Signed out successfully');
-      router.push('/admin');
+      navigate('/admin');
     } catch (error) {
       console.error('Sign out error:', error);
       toast.error('Failed to sign out');
