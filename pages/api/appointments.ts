@@ -1,5 +1,6 @@
+
 import { NextApiRequest, NextApiResponse } from 'next';
-import { supabase } from '@/lib/integrations/supabase/client';
+import { supabase } from '../../src/integrations/supabase/client';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {

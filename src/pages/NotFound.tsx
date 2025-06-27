@@ -1,3 +1,4 @@
+
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -5,7 +6,7 @@ const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (import.meta.env.DEV) {
+    if (import.meta.env.MODE === 'development') {
       console.error(
         "404 Error: User attempted to access non-existent route:",
         location.pathname

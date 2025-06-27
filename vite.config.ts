@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
@@ -22,5 +23,21 @@ export default defineConfig(async ({ mode }: { mode: string }) => {
         "@": path.resolve(__dirname, "./src"),
       },
     },
+    optimizeDeps: {
+      exclude: ['**/*.d.ts']
+    },
+    build: {
+      rollupOptions: {
+        external: (id) => id.endsWith('.d.ts')
+      }
+    },
+    esbuild: {
+      tsconfigRaw: {
+        compilerOptions: {
+          declaration: false,
+          declarationMap: false
+        }
+      }
+    }
   };
 });
