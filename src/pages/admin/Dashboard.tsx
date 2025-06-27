@@ -15,7 +15,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [activeModule, setActiveModule] = useState<'appointments' | 'contacts' | 'blogs'>('appointments');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const navigate = useNavigate();
+  const router = useNavigate();
   
   useEffect(() => {
     const checkAuth = async () => {
@@ -25,7 +25,7 @@ const AdminDashboard = () => {
         
         if (!session) {
           // No session, redirect to login
-          navigate('/admin');
+          router.push('/admin');
           return;
         }
         
@@ -43,7 +43,7 @@ const AdminDashboard = () => {
           if (adminError || !adminData) {
             // Not an admin, sign out and redirect
             await supabase.auth.signOut();
-            navigate('/admin');
+            router.push('/admin');
             return;
           }
         }
@@ -52,20 +52,20 @@ const AdminDashboard = () => {
         setUser(session.user);
       } catch (error) {
         console.error('Auth check error:', error);
-        navigate('/admin');
+        router.push('/admin');
       } finally {
         setLoading(false);
       }
     };
     
     checkAuth();
-  }, [navigate]);
+  }, [router]);
   
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut();
       toast.success('Signed out successfully');
-      navigate('/admin');
+      router.push('/admin');
     } catch (error) {
       console.error('Sign out error:', error);
       toast.error('Failed to sign out');
