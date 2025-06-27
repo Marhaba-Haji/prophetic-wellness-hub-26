@@ -28,7 +28,7 @@ export default defineConfig(async ({ mode }: { mode: string }) => {
     },
     build: {
       rollupOptions: {
-        external: (id) => id.endsWith('.d.ts')
+        external: (id: string) => id.endsWith('.d.ts')
       }
     },
     esbuild: {
