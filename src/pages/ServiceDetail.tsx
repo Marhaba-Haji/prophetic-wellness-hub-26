@@ -1,30 +1,30 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import Layout from '@/components/layout/Layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Link } from 'react-router-dom';
-import { serviceContent } from '@/data/serviceContent';
-import { 
-  Clock, 
-  IndianRupee, 
-  CheckCircle, 
-  AlertCircle, 
-  Heart, 
+import React from "react";
+import { useParams } from "react-router-dom";
+import Layout from "@/components/layout/Layout";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
+import { serviceContent } from "@/data/serviceContent";
+import {
+  Clock,
+  IndianRupee,
+  CheckCircle,
+  AlertCircle,
+  Heart,
   Shield,
   Calendar,
-  ArrowRight
-} from 'lucide-react';
-import NotFound from './NotFound';
+  ArrowRight,
+} from "lucide-react";
+import NotFound from "./NotFound";
 
 const ServiceDetail = () => {
   const { serviceId } = useParams<{ serviceId: string }>();
-  
+
   if (!serviceId || !serviceContent[serviceId]) {
     return <NotFound />;
   }
-  
+
   const service = serviceContent[serviceId];
 
   return (
@@ -44,11 +44,17 @@ const ServiceDetail = () => {
             {service.shortDescription}
           </p>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
-            <Badge variant="secondary" className="text-lg px-4 py-2 bg-brand-green/10 text-brand-green">
+            <Badge
+              variant="secondary"
+              className="text-lg px-4 py-2 bg-brand-green/10 text-brand-green"
+            >
               <Clock className="h-4 w-4 mr-2" />
               {service.duration}
             </Badge>
-            <Badge variant="secondary" className="text-lg px-4 py-2 bg-brand-gold/10 text-amber-700">
+            <Badge
+              variant="secondary"
+              className="text-lg px-4 py-2 bg-brand-gold/10 text-amber-700"
+            >
               <IndianRupee className="h-4 w-4 mr-2" />
               {service.price}
             </Badge>
@@ -127,7 +133,9 @@ const ServiceDetail = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {service.conditions.map((condition, index) => (
                     <div key={index} className="bg-gray-50 rounded-lg p-3">
-                      <span className="text-gray-700 font-medium">{condition}</span>
+                      <span className="text-gray-700 font-medium">
+                        {condition}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -159,9 +167,12 @@ const ServiceDetail = () => {
             {/* Book Appointment */}
             <Card className="bg-brand-green text-white">
               <CardContent className="p-6 text-center">
-                <h3 className="text-xl font-bold mb-4">Ready to Begin Your Healing Journey?</h3>
+                <h3 className="text-xl font-bold mb-4">
+                  Ready to Begin Your Healing Journey?
+                </h3>
                 <p className="mb-6 text-brand-green-light">
-                  Book your appointment today and experience the benefits of professional therapy.
+                  Book your appointment today and experience the benefits of
+                  professional therapy.
                 </p>
                 <Link to="/booking">
                   <Button className="w-full bg-brand-gold hover:bg-brand-gold/90 text-white font-semibold py-3">
@@ -179,17 +190,22 @@ const ServiceDetail = () => {
               </CardHeader>
               <CardContent className="space-y-3">
                 <p className="text-gray-700">
-                  <strong>Phone:</strong><br />
+                  <strong>Phone:</strong>
+                  <br />
                   +91 9480389296
                 </p>
                 <p className="text-gray-700">
-                  <strong>Email:</strong><br />
+                  <strong>Email:</strong>
+                  <br />
                   revivoheal@gmail.com
                 </p>
                 <p className="text-gray-700">
-                  <strong>Address:</strong><br />
-                  Paramount Avenue, 63/1, 3rd floor,<br />
-                  Mosque Road Cross, Frazer Town,<br />
+                  <strong>Address:</strong>
+                  <br />
+                  Paramount Avenue, 63/1, 3rd floor,
+                  <br />
+                  Mosque Road Cross, Frazer Town,
+                  <br />
                   Bangalore 560005
                 </p>
                 <Link to="/contact">
@@ -204,12 +220,14 @@ const ServiceDetail = () => {
             {/* Other Services */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-brand-green">Other Services</CardTitle>
+                <CardTitle className="text-brand-green">
+                  Other Services
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
                   {Object.values(serviceContent)
-                    .filter(s => s.id !== serviceId)
+                    .filter((s) => s.id !== serviceId)
                     .map((otherService) => (
                       <Link
                         key={otherService.id}

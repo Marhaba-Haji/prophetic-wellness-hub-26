@@ -1,10 +1,9 @@
-
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import AdminBlogEditor from '@/components/admin/AdminBlogEditor';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/components/ui/sonner';
-import { BlogPost } from '@/types/supabase-types';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import AdminBlogEditor from "@/components/admin/AdminBlogEditor";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/sonner";
+import { BlogPost } from "@/types/supabase-types";
 
 const BlogEditor = () => {
   const { blogId } = useParams<{ blogId: string }>();
@@ -14,9 +13,11 @@ const BlogEditor = () => {
   useEffect(() => {
     // Check authentication
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
-        navigate('/admin');
+        navigate("/admin");
         return false;
       }
       return true;
@@ -32,21 +33,20 @@ const BlogEditor = () => {
       try {
         setLoading(true);
         const { data, error } = await supabase
-          .from('blogs')
-          .select('*')
-          .eq('id', blogId)
+          .from("blogs")
+          .select("*")
+          .eq("id", blogId)
           .single();
 
         if (error) {
-          toast.error('Blog post not found');
-          navigate('/admin/dashboard');
+          toast.error("Blog post not found");
+          navigate("/admin/dashboard");
           return;
         }
-
       } catch (error) {
-        console.error('Error fetching blog data:', error);
-        toast.error('Failed to fetch blog data');
-        navigate('/admin/dashboard');
+        console.error("Error fetching blog data:", error);
+        toast.error("Failed to fetch blog data");
+        navigate("/admin/dashboard");
       } finally {
         setLoading(false);
       }

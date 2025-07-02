@@ -1,28 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent } from '@/components/ui/card';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { toast } from '@/components/ui/sonner';
-import { format } from 'date-fns';
-import { ContactSubmission } from '@/types/supabase-types';
-import { Eye, Trash2 } from 'lucide-react';
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import { RotateCw } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/sonner";
+import { format } from "date-fns";
+import { ContactSubmission } from "@/types/supabase-types";
+import { Eye, Trash2 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
+import { RotateCw } from "lucide-react";
 
 const AdminContacts = () => {
   const [contacts, setContacts] = useState<ContactSubmission[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedContact, setSelectedContact] = useState<ContactSubmission | null>(null);
+  const [selectedContact, setSelectedContact] =
+    useState<ContactSubmission | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const allSelected = contacts.length > 0 && selectedIds.length === contacts.length;
+  const allSelected =
+    contacts.length > 0 && selectedIds.length === contacts.length;
 
   useEffect(() => {
     fetchContacts();
@@ -32,56 +38,66 @@ const AdminContacts = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('contact_submissions')
-        .select<string, ContactSubmission>('*')
-        .order('created_at', { ascending: false });
-      
+        .from("contact_submissions")
+        .select<string, ContactSubmission>("*")
+        .order("created_at", { ascending: false });
+
       if (error) throw error;
-      
+
       setContacts(data || []);
     } catch (error) {
-      console.error('Error fetching contacts:', error);
-      toast.error('Failed to load contact submissions');
+      console.error("Error fetching contacts:", error);
+      toast.error("Failed to load contact submissions");
     } finally {
       setLoading(false);
     }
   };
 
   const handleSelect = (id: string) => {
-    setSelectedIds((prev) => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+    );
   };
 
   const handleSelectAll = () => {
     if (allSelected) setSelectedIds([]);
-    else setSelectedIds(contacts.map(c => c.id));
+    else setSelectedIds(contacts.map((c) => c.id));
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Delete this contact submission?')) return;
+    if (!window.confirm("Delete this contact submission?")) return;
     try {
-      const { error } = await supabase.from('contact_submissions').delete().eq('id', id);
+      const { error } = await supabase
+        .from("contact_submissions")
+        .delete()
+        .eq("id", id);
       if (error) throw error;
       await fetchContacts();
-      setSelectedIds(selectedIds.filter(i => i !== id));
-      toast.success('Contact submission deleted');
+      setSelectedIds(selectedIds.filter((i) => i !== id));
+      toast.success("Contact submission deleted");
     } catch (error) {
-      console.error('Failed to delete contact submission:', error);
-      toast.error(error?.message || 'Failed to delete contact submission');
+      console.error("Failed to delete contact submission:", error);
+      toast.error(error?.message || "Failed to delete contact submission");
     }
   };
 
   const handleBulkDelete = async () => {
     if (selectedIds.length === 0) return;
-    if (!window.confirm('Delete all selected contact submissions?')) return;
+    if (!window.confirm("Delete all selected contact submissions?")) return;
     try {
-      const { error } = await supabase.from('contact_submissions').delete().in('id', selectedIds);
+      const { error } = await supabase
+        .from("contact_submissions")
+        .delete()
+        .in("id", selectedIds);
       if (error) throw error;
       await fetchContacts();
       setSelectedIds([]);
-      toast.success('Selected contact submissions deleted');
+      toast.success("Selected contact submissions deleted");
     } catch (error) {
-      console.error('Failed to delete selected contact submissions:', error);
-      toast.error(error?.message || 'Failed to delete selected contact submissions');
+      console.error("Failed to delete selected contact submissions:", error);
+      toast.error(
+        error?.message || "Failed to delete selected contact submissions",
+      );
     }
   };
 
@@ -110,7 +126,12 @@ const AdminContacts = () => {
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button onClick={handleBulkDelete} variant="destructive" size="icon" disabled={selectedIds.length === 0}>
+                  <Button
+                    onClick={handleBulkDelete}
+                    variant="destructive"
+                    size="icon"
+                    disabled={selectedIds.length === 0}
+                  >
                     <Trash2 />
                   </Button>
                 </TooltipTrigger>
@@ -129,7 +150,11 @@ const AdminContacts = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>
-                      <input type="checkbox" checked={allSelected} onChange={handleSelectAll} />
+                      <input
+                        type="checkbox"
+                        checked={allSelected}
+                        onChange={handleSelectAll}
+                      />
                     </TableHead>
                     <TableHead>Date</TableHead>
                     <TableHead>Name</TableHead>
@@ -149,9 +174,9 @@ const AdminContacts = () => {
                         />
                       </TableCell>
                       <TableCell>
-                        {format(new Date(contact.created_at), 'MMM dd, yyyy')}
+                        {format(new Date(contact.created_at), "MMM dd, yyyy")}
                         <div className="text-xs text-gray-500">
-                          {format(new Date(contact.created_at), 'HH:mm')}
+                          {format(new Date(contact.created_at), "HH:mm")}
                         </div>
                       </TableCell>
                       <TableCell>
@@ -205,9 +230,9 @@ const AdminContacts = () => {
           <CardContent className="p-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-medium">{selectedContact.subject}</h3>
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => setSelectedContact(null)}
               >
                 Close
@@ -215,10 +240,15 @@ const AdminContacts = () => {
             </div>
             <div className="mb-4">
               <p className="text-sm text-gray-500 mb-1">
-                <span className="font-medium">From:</span> {selectedContact.name} ({selectedContact.email})
+                <span className="font-medium">From:</span>{" "}
+                {selectedContact.name} ({selectedContact.email})
               </p>
               <p className="text-sm text-gray-500">
-                <span className="font-medium">Sent:</span> {format(new Date(selectedContact.created_at), 'MMMM dd, yyyy HH:mm')}
+                <span className="font-medium">Sent:</span>{" "}
+                {format(
+                  new Date(selectedContact.created_at),
+                  "MMMM dd, yyyy HH:mm",
+                )}
               </p>
             </div>
             <div className="bg-gray-50 p-4 rounded-md">

@@ -1,7 +1,6 @@
-
-import React from 'react';
-import { DynamicSEOHead, useDynamicSEO } from '@/hooks/useDynamicSEO';
-import { useBlogSEO } from '@/hooks/useBlogSEO';
+import React from "react";
+import { DynamicSEOHead, useDynamicSEO } from "@/hooks/useDynamicSEO";
+import { useBlogSEO } from "@/hooks/useBlogSEO";
 
 interface BlogSEOProps {
   blogSlug: string;
@@ -9,10 +8,10 @@ interface BlogSEOProps {
 
 const BlogSEO: React.FC<BlogSEOProps> = ({ blogSlug }) => {
   const blogSEO = useBlogSEO(blogSlug);
-  
+
   useDynamicSEO({
     title: blogSEO?.title,
-    description: blogSEO?.description
+    description: blogSEO?.description,
   });
 
   if (!blogSEO) {
@@ -20,18 +19,18 @@ const BlogSEO: React.FC<BlogSEOProps> = ({ blogSlug }) => {
   }
 
   return (
-    <DynamicSEOHead 
+    <DynamicSEOHead
       seoData={{
         title: blogSEO.title,
         description: blogSEO.description,
         image: blogSEO.image,
         url: blogSEO.url,
-        type: 'article',
+        type: "article",
         keywords: blogSEO.keywords,
         author: blogSEO.author,
         publishedTime: blogSEO.publishedTime,
-        modifiedTime: blogSEO.modifiedTime
-      }} 
+        modifiedTime: blogSEO.modifiedTime,
+      }}
     />
   );
 };

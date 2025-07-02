@@ -1,16 +1,17 @@
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  error?: boolean
-  helperText?: string
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  error?: boolean;
+  helperText?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, error, helperText, ...props }, ref) => {
-    const inputId = React.useId()
-    
+    const inputId = React.useId();
+
     return (
       <div className="relative w-full">
         <input
@@ -27,7 +28,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             "transition-colors duration-200",
             error && "border-destructive focus-visible:ring-destructive",
             "md:text-sm",
-            className
+            className,
           )}
           ref={ref}
           {...props}
@@ -37,16 +38,16 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             id={`${inputId}-helper`}
             className={cn(
               "mt-1 text-sm",
-              error ? "text-destructive" : "text-muted-foreground"
+              error ? "text-destructive" : "text-muted-foreground",
             )}
           >
             {helperText}
           </p>
         )}
       </div>
-    )
-  }
-)
-Input.displayName = "Input"
+    );
+  },
+);
+Input.displayName = "Input";
 
-export { Input }
+export { Input };

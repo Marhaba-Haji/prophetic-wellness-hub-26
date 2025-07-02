@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { HelmetProvider as ReactHelmetProvider } from 'react-helmet-async';
+import React from "react";
+import { HelmetProvider as ReactHelmetProvider } from "react-helmet-async";
 
 interface HelmetProviderProps {
   children: React.ReactNode;

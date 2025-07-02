@@ -1,15 +1,14 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
 import { ContactSubmission } from "@/types/supabase-types";
 
 const ContactForm = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [subject, setSubject] = useState('');
-  const [message, setMessage] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -18,27 +17,25 @@ const ContactForm = () => {
 
     try {
       // Insert data into Supabase
-      const { error } = await supabase
-        .from('contact_submissions')
-        .insert({
-          name, 
-          email, 
-          subject, 
-          message
-        });
+      const { error } = await supabase.from("contact_submissions").insert({
+        name,
+        email,
+        subject,
+        message,
+      });
 
       if (error) throw error;
 
       // Show success message
       toast.success("Message sent successfully! We'll get back to you soon.");
-      
+
       // Reset form
-      setName('');
-      setEmail('');
-      setSubject('');
-      setMessage('');
+      setName("");
+      setEmail("");
+      setSubject("");
+      setMessage("");
     } catch (error) {
-      console.error('Error submitting contact form:', error);
+      console.error("Error submitting contact form:", error);
       toast.error("Failed to send message. Please try again later.");
     } finally {
       setIsSubmitting(false);
@@ -49,7 +46,10 @@ const ContactForm = () => {
     <div className="p-4 bg-white rounded-lg shadow-md">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Name
           </label>
           <input
@@ -61,9 +61,12 @@ const ContactForm = () => {
             required
           />
         </div>
-        
+
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Email
           </label>
           <input
@@ -75,9 +78,12 @@ const ContactForm = () => {
             required
           />
         </div>
-        
+
         <div>
-          <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="subject"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Subject
           </label>
           <input
@@ -89,9 +95,12 @@ const ContactForm = () => {
             required
           />
         </div>
-        
+
         <div>
-          <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="message"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Message
           </label>
           <textarea
@@ -103,13 +112,13 @@ const ContactForm = () => {
             required
           ></textarea>
         </div>
-        
-        <Button 
-          type="submit" 
+
+        <Button
+          type="submit"
           className="gold-gradient text-white hover:opacity-90 transition-opacity"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Sending...' : 'Send Message'}
+          {isSubmitting ? "Sending..." : "Send Message"}
         </Button>
       </form>
     </div>

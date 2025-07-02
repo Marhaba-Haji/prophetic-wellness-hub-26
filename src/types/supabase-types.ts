@@ -1,4 +1,3 @@
-
 // Temporary type definitions to use until Supabase types are properly generated
 
 export interface ContactSubmission {
@@ -44,7 +43,7 @@ export interface BlogPost {
   published_date?: string;
   schema_markup?: string;
   created_at: string;
-  
+
   // SEO Fields
   meta_title?: string;
   meta_keywords?: string;
@@ -57,7 +56,7 @@ export interface BlogPost {
   twitter_description?: string;
   twitter_image?: string;
   twitter_card?: string;
-  
+
   // Content Settings
   excerpt?: string;
   reading_time?: number;
@@ -65,12 +64,12 @@ export interface BlogPost {
   status?: string;
   featured?: boolean;
   allow_comments?: boolean;
-  
+
   // Publishing Settings
   scheduled_date?: string;
   visibility?: string;
   password?: string;
-  
+
   // Advanced SEO
   robots_meta?: string;
   focus_keyword?: string;

@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { DynamicSEOHead, useDynamicSEO } from '@/hooks/useDynamicSEO';
+import React from "react";
+import { DynamicSEOHead, useDynamicSEO } from "@/hooks/useDynamicSEO";
 
 interface PageSEOProps {
   title: string;
@@ -16,21 +15,21 @@ const PageSEO: React.FC<PageSEOProps> = ({
   description,
   image,
   url,
-  type = 'website',
-  keywords
+  type = "website",
+  keywords,
 }) => {
   useDynamicSEO({ title, description });
 
   return (
-    <DynamicSEOHead 
+    <DynamicSEOHead
       seoData={{
         title,
         description,
         image,
         url,
         type,
-        keywords
-      }} 
+        keywords,
+      }}
     />
   );
 };

@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Layout from '@/components/layout/Layout';
-import { Button } from '@/components/ui/button';
-import { CheckCircle, Home, Calendar } from 'lucide-react';
+import React from "react";
+import { Link } from "react-router-dom";
+import Layout from "@/components/layout/Layout";
+import { Button } from "@/components/ui/button";
+import { CheckCircle, Home, Calendar } from "lucide-react";
 
 const BookingSuccess = () => {
   return (
@@ -12,30 +12,40 @@ const BookingSuccess = () => {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 mb-6">
             <CheckCircle className="h-10 w-10 text-brand-green" />
           </div>
-          
-          <h1 className="text-3xl md:text-4xl font-bold text-brand-green mb-6">Booking Confirmed!</h1>
-          
+
+          <h1 className="text-3xl md:text-4xl font-bold text-brand-green mb-6">
+            Booking Confirmed!
+          </h1>
+
           <div className="h-0.5 w-24 bg-brand-gold mx-auto mb-6"></div>
-          
+
           <p className="text-lg mb-8 text-gray-700">
-            Thank you for choosing Hijama Healing. Your appointment has been successfully booked. 
-            We've sent a confirmation email with all the details. We look forward to seeing you soon!
+            Thank you for choosing Hijama Healing. Your appointment has been
+            successfully booked. We've sent a confirmation email with all the
+            details. We look forward to seeing you soon!
           </p>
-          
+
           <div className="bg-gray-50 rounded-lg p-6 mb-8">
-            <h2 className="font-semibold text-xl text-brand-green mb-4">What's Next?</h2>
+            <h2 className="font-semibold text-xl text-brand-green mb-4">
+              What's Next?
+            </h2>
             <ul className="text-left space-y-2">
               <li className="flex items-start">
                 <div className="mr-2 mt-1 text-brand-green">
                   <CheckCircle className="h-5 w-5" />
                 </div>
-                <span>Check your email for a booking confirmation with all the appointment details.</span>
+                <span>
+                  Check your email for a booking confirmation with all the
+                  appointment details.
+                </span>
               </li>
               <li className="flex items-start">
                 <div className="mr-2 mt-1 text-brand-green">
                   <CheckCircle className="h-5 w-5" />
                 </div>
-                <span>Arrive 15 minutes before your scheduled appointment time.</span>
+                <span>
+                  Arrive 15 minutes before your scheduled appointment time.
+                </span>
               </li>
               <li className="flex items-start">
                 <div className="mr-2 mt-1 text-brand-green">
@@ -47,14 +57,20 @@ const BookingSuccess = () => {
                 <div className="mr-2 mt-1 text-brand-green">
                   <CheckCircle className="h-5 w-5" />
                 </div>
-                <span>If you need to reschedule, please contact us at least 24 hours before your appointment.</span>
+                <span>
+                  If you need to reschedule, please contact us at least 24 hours
+                  before your appointment.
+                </span>
               </li>
             </ul>
           </div>
-          
+
           <div className="flex flex-wrap justify-center gap-4">
             <Link to="/">
-              <Button variant="outline" className="px-6 border-brand-green text-brand-green hover:bg-brand-green hover:text-white">
+              <Button
+                variant="outline"
+                className="px-6 border-brand-green text-brand-green hover:bg-brand-green hover:text-white"
+              >
                 <Home className="h-5 w-5 mr-2" /> Return Home
               </Button>
             </Link>

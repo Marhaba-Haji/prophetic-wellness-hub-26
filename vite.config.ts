@@ -1,7 +1,7 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import { configDefaults } from 'vitest/config';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,12 +15,16 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  optimizeDeps: {
-    exclude: ['**/*.d.ts']
-  },
   build: {
     rollupOptions: {
-      external: (id: string) => id.endsWith('.d.ts')
+      // Removed external function for .d.ts files
     }
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.ts',
+    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+    exclude: [...configDefaults.exclude, 'e2e/*']
   }
 });

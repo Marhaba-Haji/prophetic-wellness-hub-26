@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Phone } from "lucide-react";
 import { Button } from "./button";
@@ -33,7 +32,7 @@ export const WhatsAppChat = ({
     <div
       className={cn(
         "fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4",
-        className
+        className,
       )}
     >
       {isOpen && (
@@ -54,7 +53,9 @@ export const WhatsAppChat = ({
         onClick={toggleChat}
         className={cn(
           "rounded-full h-14 w-14 p-0 flex items-center justify-center shadow-lg transition-all",
-          isOpen ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"
+          isOpen
+            ? "bg-red-500 hover:bg-red-600"
+            : "bg-green-500 hover:bg-green-600",
         )}
         aria-label={isOpen ? "Close WhatsApp chat" : "Open WhatsApp chat"}
       >
