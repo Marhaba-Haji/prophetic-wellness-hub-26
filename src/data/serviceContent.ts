@@ -1,285 +1,287 @@
-export interface ServiceContent {
-  id: string;
-  title: string;
-  shortDescription: string;
-  longDescription: string;
-  benefits: string[];
-  process: string[];
-  conditions: string[];
-  duration: string;
-  price: string;
-  aftercare: string[];
-  seoTitle: string;
-  seoDescription: string;
-  keywords: string;
-}
 
-export const serviceContent: Record<string, ServiceContent> = {
+export const serviceContent: Record<string, any> = {
   "dry-cupping": {
     id: "dry-cupping",
     title: "Dry Cupping Therapy",
-    shortDescription:
-      "Non-invasive therapy that uses suction to improve blood flow and relieve muscle tension.",
-    longDescription:
-      "Dry cupping therapy, also known as fire cupping or vacuum cupping, is an ancient healing practice that involves placing specially designed cups on the skin to create suction. This therapeutic technique promotes blood circulation, reduces muscle tension, and helps the body's natural healing processes. Unlike wet cupping (Hijama), dry cupping does not involve any incisions, making it a completely non-invasive treatment option suitable for a wide range of health conditions.",
+    shortDescription: "Traditional healing technique using suction cups to improve circulation and relieve pain without puncturing the skin.",
+    longDescription: "Dry cupping is an ancient therapeutic practice that uses specially designed cups to create suction on the skin. This gentle yet effective treatment improves blood circulation, reduces muscle tension, and promotes natural healing without any incisions or blood removal. Our certified practitioners use modern, sterile equipment to ensure a safe and comfortable experience.",
+    duration: "45-60 minutes",
+    price: "₹1,500",
     benefits: [
-      "Improved blood circulation and lymphatic drainage",
-      "Relief from muscle tension and chronic pain",
-      "Reduction in inflammation and swelling",
-      "Enhanced relaxation and stress relief",
-      "Improved range of motion and flexibility",
-      "Faster recovery from sports injuries",
-      "Detoxification through improved circulation",
-      "Relief from headaches and migraines",
+      "Improved blood circulation",
+      "Relief from muscle tension and stiffness",
+      "Reduced inflammation",
+      "Enhanced lymphatic drainage",
+      "Pain relief for chronic conditions",
+      "Stress reduction and relaxation",
+      "Improved skin health",
+      "Boosted immune system function"
     ],
     process: [
-      "Initial consultation to assess your health condition and needs",
-      "Preparation of the treatment area with proper sanitization",
-      "Placement of sterilized glass or silicone cups on targeted areas",
-      "Creation of vacuum suction using fire or mechanical pump",
-      "Cups remain in place for 10-20 minutes depending on condition",
-      "Gentle removal of cups and post-treatment care instructions",
+      "Initial consultation and health assessment",
+      "Preparation of sterile cupping equipment",
+      "Application of cups using controlled suction",
+      "Treatment duration of 15-20 minutes per area",
+      "Gentle removal of cups and skin care",
+      "Post-treatment guidance and recommendations"
     ],
     conditions: [
-      "Chronic back and neck pain",
-      "Sports injuries and muscle strains",
-      "Arthritis and joint stiffness",
-      "Fibromyalgia symptoms",
-      "Respiratory conditions like asthma",
-      "Digestive issues and bloating",
-      "Anxiety and stress-related tension",
-      "Poor circulation and cold extremities",
+      "Back pain and stiffness",
+      "Neck and shoulder tension",
+      "Headaches and migraines",
+      "Arthritis and joint pain",
+      "Muscle fatigue",
+      "Respiratory conditions",
+      "Digestive issues",
+      "Stress and anxiety"
     ],
-    duration: "45-60 minutes",
-    price: "₹999",
     aftercare: [
-      "Stay hydrated by drinking plenty of water",
-      "Avoid strenuous exercise for 24 hours",
-      "Keep the treated area clean and dry",
-      "Avoid exposure to cold air or air conditioning",
-      "Light bruising (cupping marks) is normal and will fade in 3-7 days",
+      "Drink plenty of water to aid detoxification",
+      "Avoid strenuous activity for 24 hours",
+      "Keep treated areas warm and covered",
       "Apply gentle moisturizer if skin feels dry",
+      "Avoid alcohol and caffeine for 24 hours",
+      "Take warm showers, avoid hot baths for 48 hours"
     ],
-    seoTitle:
-      "Dry Cupping Therapy in Bangalore | Professional Cupping Treatment - RevivoHeal",
-    seoDescription:
-      "Experience professional dry cupping therapy in Bangalore at RevivoHeal. Non-invasive treatment for pain relief, improved circulation, and muscle tension. Book your session today.",
-    keywords:
-      "dry cupping Bangalore, cupping therapy, fire cupping, vacuum cupping, muscle pain relief, blood circulation therapy, traditional healing Bangalore",
+    seoTitle: "Dry Cupping Therapy in Bangalore | Professional Cupping Treatment | RevivoHeal",
+    seoDescription: "Experience effective dry cupping therapy in Bangalore at RevivoHeal. Professional treatment for pain relief, improved circulation, and natural healing. Book your session today.",
+    keywords: "dry cupping Bangalore, cupping therapy, pain relief, muscle tension, circulation improvement, traditional healing, RevivoHeal"
   },
-
+  "diet-plans": {
+    id: "diet-plans",
+    title: "Personalized Diet Plans",
+    shortDescription: "Customized nutrition programs designed to support your health goals and complement your therapeutic treatments.",
+    longDescription: "Our personalized diet plans are carefully crafted by certified nutritionists to complement your healing journey. Whether you're recovering from treatment, managing chronic conditions, or seeking to optimize your health, our nutrition programs provide the foundation for lasting wellness. We consider your medical history, dietary preferences, lifestyle, and therapeutic treatments to create a sustainable eating plan.",
+    duration: "Initial consultation: 60 minutes",
+    price: "₹2,500",
+    benefits: [
+      "Customized meal plans for your specific needs",
+      "Enhanced treatment effectiveness",
+      "Improved energy levels and vitality",
+      "Better digestive health",
+      "Weight management support",
+      "Reduced inflammation through nutrition",
+      "Strengthened immune system",
+      "Long-term health optimization"
+    ],
+    process: [
+      "Comprehensive health and dietary assessment",
+      "Analysis of current eating patterns",
+      "Medical history and treatment consideration",
+      "Goal setting and preference discussion",
+      "Creation of personalized meal plan",
+      "Regular follow-ups and plan adjustments"
+    ],
+    conditions: [
+      "Post-cupping therapy recovery",
+      "Chronic fatigue syndrome",
+      "Digestive disorders",
+      "Inflammatory conditions",
+      "Weight management needs",
+      "Nutritional deficiencies",
+      "Metabolic disorders",
+      "General wellness optimization"
+    ],
+    aftercare: [
+      "Follow the meal plan consistently for best results",
+      "Keep a food diary to track progress",
+      "Stay hydrated throughout the day",
+      "Schedule regular follow-up consultations",
+      "Communicate any difficulties or concerns",
+      "Combine with regular physical activity as advised"
+    ],
+    seoTitle: "Personalized Diet Plans Bangalore | Nutrition Counseling | RevivoHeal",
+    seoDescription: "Get customized diet plans in Bangalore at RevivoHeal. Professional nutrition counseling to support your health goals and complement therapeutic treatments.",
+    keywords: "diet plans Bangalore, personalized nutrition, nutrition counseling, healthy eating, weight management, dietary consultation, RevivoHeal"
+  },
+  "deep-tissue-massage": {
+    id: "deep-tissue-massage",
+    title: "Deep Tissue Massage",
+    shortDescription: "Intensive therapeutic massage targeting deeper muscle layers to relieve chronic tension and promote healing.",
+    longDescription: "Deep tissue massage is a therapeutic technique that targets the deeper layers of muscle and connective tissue. Using sustained pressure and slow strokes, this treatment effectively addresses chronic pain, muscle tension, and mobility issues. Our skilled therapists combine traditional techniques with modern understanding of anatomy to provide profound healing and relaxation.",
+    duration: "60-90 minutes",
+    price: "₹2,200",
+    benefits: [
+      "Relief from chronic muscle pain",
+      "Improved muscle flexibility and mobility",
+      "Reduced muscle inflammation",
+      "Enhanced blood flow to affected areas",
+      "Breaking down of scar tissue",
+      "Stress and tension relief",
+      "Improved posture and alignment",
+      "Faster recovery from injuries"
+    ],
+    process: [
+      "Health assessment and problem identification",
+      "Preparation of treatment area and oils",
+      "Gradual warm-up of surface muscles",
+      "Application of deep pressure techniques",
+      "Focus on specific problem areas",
+      "Post-massage stretching and guidance"
+    ],
+    conditions: [
+      "Chronic back pain",
+      "Sports injuries and recovery",
+      "Fibromyalgia symptoms",
+      "Postural problems",
+      "Sciatica pain",
+      "Tension headaches",
+      "Repetitive strain injuries",
+      "Muscle rehabilitation"
+    ],
+    aftercare: [
+      "Drink extra water to flush out toxins",
+      "Apply ice to any sore areas if needed",
+      "Gentle stretching as recommended",
+      "Avoid strenuous activities for 24 hours",
+      "Take a warm bath with Epsom salts",
+      "Schedule follow-up sessions as advised"
+    ],
+    seoTitle: "Deep Tissue Massage Bangalore | Therapeutic Massage Therapy | RevivoHeal",
+    seoDescription: "Professional deep tissue massage in Bangalore at RevivoHeal. Therapeutic treatment for chronic pain, muscle tension, and injury recovery. Expert massage therapists.",
+    keywords: "deep tissue massage Bangalore, therapeutic massage, muscle pain relief, sports massage, chronic pain treatment, massage therapy, RevivoHeal"
+  },
+  "leech-therapy": {
+    id: "leech-therapy",
+    title: "Leech Therapy (Hirudotherapy)",
+    shortDescription: "Ancient medicinal practice using medicinal leeches to improve blood circulation and treat various health conditions naturally.",
+    longDescription: "Leech therapy, also known as Hirudotherapy, is an ancient medical practice that uses medicinal leeches to treat various health conditions. The leeches secrete beneficial enzymes and compounds that improve blood circulation, reduce inflammation, and promote natural healing. This FDA-approved treatment is performed by certified practitioners using medical-grade leeches in a sterile environment.",
+    duration: "60-90 minutes",
+    price: "₹3,500",
+    benefits: [
+      "Improved blood circulation",
+      "Natural anticoagulation effects",
+      "Reduced inflammation and swelling",
+      "Enhanced wound healing",
+      "Pain relief from arthritis",
+      "Treatment of venous congestion",
+      "Improved skin health",
+      "Natural detoxification"
+    ],
+    process: [
+      "Thorough medical assessment and consent",
+      "Preparation of sterile treatment environment",
+      "Careful placement of medical leeches",
+      "Monitoring during the treatment session",
+      "Safe removal and disposal of leeches",
+      "Post-treatment care and wound dressing"
+    ],
+    conditions: [
+      "Varicose veins and venous disorders",
+      "Arthritis and joint inflammation",
+      "Skin grafts and tissue reconstruction",
+      "Diabetic wounds and ulcers",
+      "Blood circulation problems",
+      "Localized pain and swelling",
+      "Post-surgical healing",
+      "Certain dermatological conditions"
+    ],
+    aftercare: [
+      "Keep the treated area clean and dry",
+      "Avoid scratching or disturbing the bite marks",
+      "Apply prescribed antiseptic cream",
+      "Watch for signs of infection",
+      "Avoid swimming or soaking for 48 hours",
+      "Follow prescribed medication if any",
+      "Schedule follow-up appointments as advised"
+    ],
+    seoTitle: "Leech Therapy Bangalore | Hirudotherapy Treatment | RevivoHeal",
+    seoDescription: "Professional leech therapy (Hirudotherapy) in Bangalore at RevivoHeal. Ancient healing treatment for circulation, inflammation, and various health conditions.",
+    keywords: "leech therapy Bangalore, hirudotherapy, medicinal leeches, blood circulation treatment, natural healing, alternative medicine, RevivoHeal"
+  },
   "wet-cupping": {
     id: "wet-cupping",
-    title: "Wet Cupping (Hijama) Therapy",
-    shortDescription:
-      "Traditional Hijama therapy that involves creating small incisions for detoxification and healing.",
-    longDescription:
-      "Wet cupping, known as Hijama in Arabic, is a traditional Islamic healing practice that combines the benefits of dry cupping with controlled bloodletting. This ancient therapeutic method involves making small, superficial incisions on the skin after cupping to remove stagnant blood and toxins from the body. Hijama is mentioned in Islamic traditions as a recommended healing practice and has been used for over 1400 years to treat various health conditions naturally.",
+    title: "Wet Cupping (Hijama)",
+    shortDescription: "Traditional Islamic therapeutic practice combining cupping with controlled bloodletting for detoxification and healing.",
+    longDescription: "Wet cupping, known as Hijama in Arabic, is a traditional therapeutic practice that combines the benefits of cupping with controlled bloodletting. This ancient healing method helps remove toxins from the body, improves blood circulation, and treats various health conditions. Our certified Hijama practitioners follow strict hygiene protocols and use sterile, disposable equipment.",
+    duration: "60-75 minutes",
+    price: "₹2,000",
     benefits: [
-      "Deep detoxification and removal of toxins",
-      "Purification of blood and improved circulation",
-      "Relief from chronic pain and inflammation",
-      "Strengthened immune system function",
-      "Hormonal balance and regulation",
-      "Improved energy levels and vitality",
-      "Treatment of skin conditions and allergies",
-      "Spiritual and physical purification as per Islamic tradition",
+      "Body detoxification and cleansing",
+      "Improved blood circulation",
+      "Pain relief and inflammation reduction",
+      "Enhanced immune system function",
+      "Stress and anxiety relief",
+      "Improved energy levels",
+      "Treatment of chronic conditions",
+      "Spiritual and physical purification"
     ],
     process: [
-      "Comprehensive health assessment and consultation",
-      "Selection of appropriate cupping points based on condition",
-      "Sterilization of equipment and treatment area",
-      "Initial dry cupping to bring blood to the surface",
-      "Small, sterile incisions made with disposable blades",
-      "Re-application of cups to extract stagnant blood",
-      "Proper disposal of extracted blood and aftercare guidance",
+      "Pre-treatment health consultation",
+      "Sterilization and preparation",
+      "Application of cups for suction",
+      "Small, superficial incisions",
+      "Blood extraction and cup reapplication",
+      "Cleaning and aftercare instructions"
     ],
     conditions: [
-      "High blood pressure and cardiovascular issues",
-      "Diabetes and metabolic disorders",
       "Chronic headaches and migraines",
-      "Skin conditions like eczema and psoriasis",
-      "Fertility issues and hormonal imbalances",
-      "Digestive disorders and IBS",
-      "Chronic fatigue syndrome",
-      "Mental health conditions like anxiety and depression",
+      "Back and neck pain",
+      "High blood pressure",
+      "Diabetes management",
+      "Skin conditions",
+      "Digestive disorders",
+      "Respiratory problems",
+      "General wellness maintenance"
     ],
-    duration: "60-90 minutes",
-    price: "₹999 - ₹1499",
     aftercare: [
-      "Keep incision sites clean and dry for 24 hours",
-      "Avoid swimming or bathing for 24 hours",
-      "Apply prescribed antiseptic cream if needed",
-      "Drink plenty of water to aid detoxification",
-      "Avoid heavy lifting or strenuous exercise for 48 hours",
-      "Follow dietary recommendations for optimal healing",
+      "Keep incision sites clean and dry",
+      "Apply provided antiseptic cream",
+      "Avoid heavy lifting for 24 hours",
+      "Drink plenty of water",
+      "Rest and avoid strenuous activities",
+      "Follow dietary recommendations",
+      "Schedule follow-up if needed"
     ],
-    seoTitle:
-      "Hijama Wet Cupping Therapy in Bangalore | Traditional Islamic Healing - RevivoHeal",
-    seoDescription:
-      "Authentic Hijama wet cupping therapy in Bangalore following Islamic traditions. Professional bloodletting treatment for detoxification and healing. Certified practitioners.",
-    keywords:
-      "Hijama Bangalore, wet cupping therapy, Islamic healing, bloodletting therapy, traditional medicine, detoxification treatment, Sunnah healing Bangalore",
+    seoTitle: "Wet Cupping Hijama Bangalore | Traditional Islamic Healing | RevivoHeal",
+    seoDescription: "Authentic wet cupping (Hijama) therapy in Bangalore at RevivoHeal. Traditional Islamic healing for detoxification, pain relief, and wellness. Certified practitioners.",
+    keywords: "wet cupping Bangalore, Hijama therapy, Islamic medicine, detoxification, bloodletting therapy, traditional healing, RevivoHeal"
   },
-
   "sports-massage": {
     id: "sports-massage",
     title: "Sports Injury Massage",
-    shortDescription:
-      "Specialized massage techniques to treat and prevent sports-related injuries and improve performance.",
-    longDescription:
-      "Sports injury massage is a specialized form of therapeutic massage designed specifically for athletes and active individuals. This treatment combines various massage techniques including deep tissue massage, trigger point therapy, and myofascial release to address sports-related injuries, enhance performance, and prevent future injuries. Our certified therapists understand the unique demands placed on athletes' bodies and provide targeted treatment to restore optimal function and mobility.",
+    shortDescription: "Specialized massage therapy designed for athletes and active individuals to prevent injuries and enhance performance.",
+    longDescription: "Sports massage therapy is specifically designed for athletes and active individuals to prevent injuries, enhance performance, and accelerate recovery. Our certified sports massage therapists understand the unique demands placed on the body during physical activity and use targeted techniques to address muscle imbalances, reduce tension, and optimize athletic performance.",
+    duration: "60-75 minutes",
+    price: "₹2,500",
     benefits: [
-      "Faster recovery from sports injuries",
-      "Reduced muscle soreness and stiffness",
-      "Improved flexibility and range of motion",
+      "Injury prevention and recovery",
       "Enhanced athletic performance",
-      "Prevention of future injuries",
-      "Reduced inflammation and swelling",
-      "Better circulation and oxygen delivery to muscles",
-      "Stress relief and mental relaxation",
+      "Improved flexibility and range of motion",
+      "Reduced muscle soreness",
+      "Faster recovery between training sessions",
+      "Improved circulation and oxygen delivery",
+      "Stress reduction and mental clarity",
+      "Correction of muscle imbalances"
     ],
     process: [
-      "Detailed assessment of injury or performance goals",
-      "Evaluation of movement patterns and muscle imbalances",
-      "Customized treatment plan based on specific needs",
-      "Application of appropriate massage techniques",
-      "Integration of stretching and mobility exercises",
-      "Post-treatment recommendations and exercise prescription",
+      "Assessment of athletic demands and injuries",
+      "Evaluation of muscle condition and flexibility",
+      "Pre-event or post-event massage selection",
+      "Application of specific sports massage techniques",
+      "Focus on problem areas and muscle groups",
+      "Stretching and mobility recommendations"
     ],
     conditions: [
-      "Muscle strains and sprains",
+      "Sports-related muscle strains",
+      "Overuse injuries",
       "Tennis elbow and golfer's elbow",
       "Runner's knee and IT band syndrome",
-      "Shin splints and calf injuries",
-      "Shoulder impingement and rotator cuff issues",
-      "Lower back pain and sciatica",
-      "Plantar fasciitis and ankle injuries",
-      "Neck and upper trapezius tension",
+      "Shoulder impingement",
+      "Lower back pain from sports",
+      "Ankle sprains and rehabilitation",
+      "General athletic performance optimization"
     ],
-    duration: "60-90 minutes",
-    price: "₹999 - ₹2499",
     aftercare: [
-      "Stay hydrated and drink plenty of water",
-      "Apply ice if inflammation is present",
-      "Perform recommended stretching exercises",
-      "Gradually return to activity as advised",
-      "Monitor symptoms and report any concerns",
-      "Schedule follow-up sessions as recommended",
+      "Maintain proper hydration",
+      "Follow recommended stretching routine",
+      "Apply ice to any inflamed areas",
+      "Gradually return to training intensity",
+      "Monitor body response to activity",
+      "Schedule regular maintenance sessions"
     ],
-    seoTitle:
-      "Sports Injury Massage Therapy in Bangalore | Athletic Recovery Treatment - RevivoHeal",
-    seoDescription:
-      "Professional sports injury massage therapy in Bangalore. Specialized treatment for athletes, injury recovery, and performance enhancement. Expert therapists available.",
-    keywords:
-      "sports massage Bangalore, sports injury treatment, athletic massage therapy, muscle recovery, sports physiotherapy, deep tissue massage athletes",
-  },
-
-  "oil-massage": {
-    id: "oil-massage",
-    title: "Deep Tissue Oil Massage",
-    shortDescription:
-      "Therapeutic massage that targets deeper layers of muscle and connective tissue for chronic pain relief.",
-    longDescription:
-      "Deep tissue oil massage is an intensive therapeutic massage technique that focuses on the deeper layers of muscle and connective tissue. Using specially selected therapeutic oils, this treatment applies sustained pressure and slow, deep strokes to target chronic muscle tension, adhesions, and knots. The combination of skilled massage techniques with nourishing oils provides both immediate relief and long-term benefits for chronic pain conditions and muscle stiffness.",
-    benefits: [
-      "Relief from chronic muscle pain and tension",
-      "Improved posture and body alignment",
-      "Increased flexibility and mobility",
-      "Reduced stress and anxiety levels",
-      "Better sleep quality and relaxation",
-      "Enhanced circulation and lymphatic drainage",
-      "Nourished and moisturized skin",
-      "Release of muscle knots and adhesions",
-    ],
-    process: [
-      "Consultation to understand pain areas and preferences",
-      "Selection of appropriate therapeutic oils",
-      "Preparation of treatment room with optimal temperature",
-      "Application of warming techniques to prepare muscles",
-      "Deep tissue massage using sustained pressure",
-      "Focus on problem areas with specialized techniques",
-      "Gentle cool-down and relaxation phase",
-    ],
-    conditions: [
-      "Chronic back and neck pain",
-      "Postural problems from desk work",
-      "Muscle tension and stiffness",
-      "Stress-related physical symptoms",
-      "Poor circulation and muscle fatigue",
-      "Recovery from physical strain",
-      "Fibromyalgia and chronic pain syndromes",
-      "Rehabilitation after injury",
-    ],
-    duration: "60-90 minutes",
-    price: "₹1999 - ₹2499",
-    aftercare: [
-      "Drink water to help flush out toxins",
-      "Avoid strenuous activity for 24 hours",
-      "Take a warm bath to enhance relaxation",
-      "Apply heat if muscles feel sore",
-      "Get adequate rest and sleep",
-      "Schedule regular sessions for best results",
-    ],
-    seoTitle:
-      "Deep Tissue Oil Massage in Bangalore | Therapeutic Massage Treatment - RevivoHeal",
-    seoDescription:
-      "Professional deep tissue oil massage therapy in Bangalore. Chronic pain relief, muscle tension treatment with therapeutic oils. Expert massage therapists.",
-    keywords:
-      "deep tissue massage Bangalore, therapeutic oil massage, chronic pain relief, muscle tension therapy, relaxation massage, stress relief massage Bangalore",
-  },
-
-  "steam-bath": {
-    id: "steam-bath",
-    title: "Steam Bath Therapy",
-    shortDescription:
-      "Relaxing steam treatment that opens pores, improves circulation, and detoxifies the body.",
-    longDescription:
-      "Steam bath therapy is a traditional wellness treatment that uses moist heat to provide numerous health benefits. Our specialized steam chambers create the perfect environment for deep relaxation, detoxification, and healing. The combination of heat and humidity helps open pores, improve circulation, and promote the elimination of toxins through perspiration. This ancient therapy has been used across cultures for centuries to promote health, wellness, and spiritual purification.",
-    benefits: [
-      "Deep detoxification through increased perspiration",
-      "Improved cardiovascular health and circulation",
-      "Cleansed and purified skin with opened pores",
-      "Relief from respiratory congestion",
-      "Reduced muscle tension and joint stiffness",
-      "Enhanced relaxation and stress relief",
-      "Boosted immune system function",
-      "Improved sleep quality and mental clarity",
-    ],
-    process: [
-      "Pre-treatment consultation and health screening",
-      "Preparation with proper hydration guidelines",
-      "Entry into temperature-controlled steam chamber",
-      "Gradual exposure to therapeutic steam levels",
-      "Monitored session with regular check-ins",
-      "Cool-down period with refreshing shower",
-      "Post-treatment relaxation and rehydration",
-    ],
-    conditions: [
-      "Poor circulation and cold extremities",
-      "Respiratory conditions and sinus congestion",
-      "Skin problems and clogged pores",
-      "Muscle tension and joint stiffness",
-      "Stress and anxiety disorders",
-      "Poor sleep quality and insomnia",
-      "Chronic fatigue and low energy",
-      "Detoxification and cleansing needs",
-    ],
-    duration: "30-45 minutes",
-    price: "₹750 - ₹2999 (with massage)",
-    aftercare: [
-      "Rehydrate with plenty of water and electrolytes",
-      "Cool down gradually to room temperature",
-      "Avoid alcohol and caffeine for several hours",
-      "Take a lukewarm shower to remove toxins",
-      "Rest and avoid strenuous activity",
-      "Moisturize skin to prevent dryness",
-    ],
-    seoTitle:
-      "Steam Bath Therapy in Bangalore | Detox Steam Treatment - RevivoHeal",
-    seoDescription:
-      "Rejuvenating steam bath therapy in Bangalore. Professional steam treatment for detoxification, relaxation, and health benefits. Book your wellness session.",
-    keywords:
-      "steam bath Bangalore, steam therapy, detox steam treatment, wellness steam bath, relaxation therapy, circulation improvement, skin detox Bangalore",
-  },
+    seoTitle: "Sports Massage Therapy Bangalore | Athletic Performance & Recovery | RevivoHeal",
+    seoDescription: "Professional sports massage therapy in Bangalore at RevivoHeal. Specialized treatment for athletes, injury prevention, performance enhancement, and recovery.",
+    keywords: "sports massage Bangalore, athletic massage, sports injury treatment, performance enhancement, sports recovery, massage therapy, RevivoHeal"
+  }
 };

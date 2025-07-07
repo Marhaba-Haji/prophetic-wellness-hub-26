@@ -1,3 +1,4 @@
+
 import React from "react";
 import Layout from "@/components/layout/Layout";
 
@@ -7,7 +8,6 @@ const Privacy = () => (
       <h1 className="text-3xl font-bold mb-6 text-brand-green">
         PRIVACY POLICY – Revivo Heal
       </h1>
-      <p className="text-gray-700 mb-2">Effective Date: [Insert Date]</p>
       <p className="text-gray-700 mb-4">
         At Revivo Heal, we are committed to protecting your personal
         information. This Privacy Policy explains how we collect, use, and
