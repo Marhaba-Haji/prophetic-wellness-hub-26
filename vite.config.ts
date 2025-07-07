@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
@@ -15,9 +16,14 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  esbuild: {
+    target: 'es2020',
+    jsx: 'automatic'
+  },
   build: {
+    target: 'es2020',
     rollupOptions: {
-      // Removed external function for .d.ts files
+      // Ensure proper module resolution
     }
   },
   test: {
