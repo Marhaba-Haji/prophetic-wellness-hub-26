@@ -10,7 +10,9 @@
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css,md}\"",
     "prepare": "husky install",
     "test": "vitest run",
-    "test:watch": "vitest watch"
+    "test:watch": "vitest watch",
+    "auto-contact": "node scripts/auto-contact-filler.js",
+    "test-auto-contact": "node scripts/test-auto-contact.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -49,6 +51,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
+    "dotenv": "^17.2.1",
     "embla-carousel-react": "^8.3.0",
     "input-otp": "^1.2.4",
     "lovable-tagger": "^1.1.8",

@@ -1,0 +1,44 @@
+name: Supabase Auto Contact Filler
+
+on:
+  schedule:
+    # Run every Tuesday and Saturday at 9:00 AM UTC
+    - cron: '0 9 * * 2,6'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  auto-contact:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run auto contact filler
+      run: npm run auto-contact
+      env:
+        # Add any environment variables if needed
+        NODE_ENV: production
+        
+    - name: Success notification
+      if: success()
+      run: |
+        echo "✅ Auto contact filler completed successfully!"
+        echo "📅 Timestamp: $(date)"
+        echo "🤖 Database activity maintained"
+        
+    - name: Failure notification
+      if: failure()
+      run: |
+        echo "❌ Auto contact filler failed!"
+        echo "📅 Timestamp: $(date)"
+        echo "⚠️  Please check the logs for details"
