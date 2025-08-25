@@ -64,8 +64,8 @@ const BlogEditor = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto">
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
         <AdminBlogEditor blogId={blogId} />
       </div>
     </div>

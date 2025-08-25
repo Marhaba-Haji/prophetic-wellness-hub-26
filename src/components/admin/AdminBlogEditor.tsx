@@ -22,6 +22,27 @@ import { BlogPost } from "@/types/supabase-types";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
+// Custom styles for ReactQuill to prevent overflow
+const quillStyles = `
+  .quill {
+    max-width: 100%;
+    overflow: hidden;
+  }
+  .ql-container {
+    max-width: 100%;
+    overflow: hidden;
+  }
+  .ql-editor {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+  .ql-toolbar {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+`;
+
 interface AdminBlogEditorProps {
   blogId?: string;
 }
@@ -260,36 +281,39 @@ const AdminBlogEditor = ({ blogId }: AdminBlogEditorProps) => {
   };
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-xl">
-          {blogId ? "Edit Blog Post" : "Create New Blog Post"}
-        </CardTitle>
-        <div className="flex gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => setPreviewMode((p) => !p)}
-          >
-            {previewMode ? "Edit" : "Preview"}
-          </Button>
-          <Button
-            type="button"
-            onClick={handleSave}
-            disabled={loading}
-            className="bg-brand-green hover:bg-brand-green-dark text-white"
-          >
-            {loading ? "Saving..." : "Save"}
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
+    <>
+      <style dangerouslySetInnerHTML={{ __html: quillStyles }} />
+      <Card className="max-w-6xl mx-auto">
+        <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <CardTitle className="text-lg sm:text-xl">
+            {blogId ? "Edit Blog Post" : "Create New Blog Post"}
+          </CardTitle>
+          <div className="flex gap-2 w-full sm:w-auto">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setPreviewMode((p) => !p)}
+              className="flex-1 sm:flex-none"
+            >
+              {previewMode ? "Edit" : "Preview"}
+            </Button>
+            <Button
+              type="button"
+              onClick={handleSave}
+              disabled={loading}
+              className="bg-brand-green hover:bg-brand-green-dark text-white flex-1 sm:flex-none"
+            >
+              {loading ? "Saving..." : "Save"}
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent className="max-w-full overflow-hidden">
         <Tabs defaultValue="content" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="content">Content</TabsTrigger>
-            <TabsTrigger value="seo">SEO</TabsTrigger>
-            <TabsTrigger value="social">Social Media</TabsTrigger>
-            <TabsTrigger value="advanced">Advanced</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-1">
+            <TabsTrigger value="content" className="text-xs md:text-sm">Content</TabsTrigger>
+            <TabsTrigger value="seo" className="text-xs md:text-sm">SEO</TabsTrigger>
+            <TabsTrigger value="social" className="text-xs md:text-sm">Social Media</TabsTrigger>
+            <TabsTrigger value="advanced" className="text-xs md:text-sm">Advanced</TabsTrigger>
           </TabsList>
 
           <TabsContent value="content" className="space-y-4 mt-6">
@@ -401,23 +425,26 @@ const AdminBlogEditor = ({ blogId }: AdminBlogEditorProps) => {
             <div className="grid gap-2">
               <Label htmlFor="content">Content *</Label>
               {!previewMode ? (
-                <ReactQuill
-                  theme="snow"
-                  value={content}
-                  onChange={setContent}
-                  modules={modules}
-                  formats={formats}
-                  style={{ height: "400px", marginBottom: "50px" }}
-                />
+                <div className="max-w-full overflow-hidden">
+                  <ReactQuill
+                    theme="snow"
+                    value={content}
+                    onChange={setContent}
+                    modules={modules}
+                    formats={formats}
+                    style={{ height: "400px", marginBottom: "50px" }}
+                    className="max-w-full"
+                  />
+                </div>
               ) : (
                 <div
-                  className="min-h-[400px] p-4 border rounded-md bg-white prose prose-sm max-w-none"
+                  className="min-h-[400px] p-4 border rounded-md bg-white prose prose-sm max-w-none overflow-hidden"
                   dangerouslySetInnerHTML={{ __html: content }}
                 />
               )}
             </div>
 
-            <div className="flex items-center space-x-4 pt-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4">
               <div className="flex items-center space-x-2">
                 <Label htmlFor="published">Published</Label>
                 <Switch
@@ -643,6 +670,7 @@ const AdminBlogEditor = ({ blogId }: AdminBlogEditorProps) => {
         </Tabs>
       </CardContent>
     </Card>
+    </>
   );
 };
 
