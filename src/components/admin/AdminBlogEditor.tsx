@@ -22,7 +22,7 @@ import { BlogPost } from "@/types/supabase-types";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-// Custom styles for ReactQuill to prevent overflow and fix toolbar issues
+// Custom styles for ReactQuill to prevent overflow
 const quillStyles = `
   .quill {
     max-width: 100%;
@@ -36,39 +36,10 @@ const quillStyles = `
     max-width: 100%;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    min-height: 300px;
   }
   .ql-toolbar {
     max-width: 100%;
     overflow-x: auto;
-    border-bottom: 1px solid #ccc !important;
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 1000 !important;
-    background: white !important;
-    display: flex !important;
-    flex-wrap: wrap !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-  .ql-toolbar.ql-snow {
-    border: 1px solid #ccc !important;
-    box-sizing: border-box !important;
-    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif !important;
-    padding: 8px !important;
-  }
-  .ql-toolbar .ql-picker-label {
-    pointer-events: auto !important;
-  }
-  .ql-snow .ql-toolbar button,
-  .ql-snow .ql-toolbar .ql-picker-label {
-    display: inline-block !important;
-    visibility: visible !important;
-  }
-  .ql-snow .ql-picker.ql-expanded .ql-picker-options {
-    z-index: 1001 !important;
-    background: white !important;
-    border: 1px solid #ccc !important;
   }
 `;
 
@@ -121,35 +92,19 @@ const AdminBlogEditor = ({ blogId }: AdminBlogEditorProps) => {
   const [initialLoad, setInitialLoad] = useState(true);
   const navigate = useNavigate();
 
-  // Rich text editor modules with improved toolbar configuration
+  // Rich text editor modules
   const modules = {
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-        ["bold", "italic", "underline", "strike"],
-        [{ color: [] }, { background: [] }],
-        [{ list: "ordered" }, { list: "bullet" }],
-        [{ indent: "-1" }, { indent: "+1" }],
-        [{ align: [] }],
-        ["link", "image", "video"],
-        ["blockquote", "code-block"],
-        ["clean"],
-      ],
-      handlers: {
-        // Custom handlers to prevent toolbar hiding
-        header: function(value: any) {
-          this.quill.format('header', value);
-          // Force toolbar to remain visible
-          setTimeout(() => {
-            const toolbar = document.querySelector('.ql-toolbar');
-            if (toolbar) {
-              (toolbar as HTMLElement).style.display = 'flex';
-              (toolbar as HTMLElement).style.visibility = 'visible';
-            }
-          }, 10);
-        }
-      }
-    },
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ color: [] }, { background: [] }],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ indent: "-1" }, { indent: "+1" }],
+      [{ align: [] }],
+      ["link", "image", "video"],
+      ["blockquote", "code-block"],
+      ["clean"],
+    ],
   };
 
   const formats = [

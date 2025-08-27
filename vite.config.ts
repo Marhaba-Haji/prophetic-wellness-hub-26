@@ -1,6 +1,8 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import { configDefaults } from 'vitest/config';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -8,33 +10,27 @@ export default defineConfig({
     host: "::",
     port: 8080,
   },
-  plugins: [
-    react({
-      jsxRuntime: 'automatic'
-    })
-  ],
-  build: {
-    target: 'esnext',
-    minify: false,
-    rollupOptions: {
-      onwarn: () => {},
-    }
-  },
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
   esbuild: {
-    target: 'esnext',
+    target: 'es2020',
     jsx: 'automatic'
   },
-  define: {
-    'process.env': {},
-    global: 'globalThis'
+  build: {
+    target: 'es2020',
+    rollupOptions: {
+      // Ensure proper module resolution
+    }
   },
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'react-quill', 'quill'],
-    force: true
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.ts',
+    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+    exclude: [...configDefaults.exclude, 'e2e/*']
   }
 });
