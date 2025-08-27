@@ -10,7 +10,11 @@ export default defineConfig({
     host: "::",
     port: 8080,
   },
-  plugins: [react()],
+  plugins: [
+    react({
+      jsxRuntime: 'automatic'
+    })
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -35,5 +39,8 @@ export default defineConfig({
   },
   define: {
     'process.env': {}
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom']
   }
 });
