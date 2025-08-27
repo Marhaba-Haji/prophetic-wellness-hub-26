@@ -32,5 +32,8 @@ export default defineConfig({
     setupFiles: './src/setupTests.ts',
     include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
     exclude: [...configDefaults.exclude, 'e2e/*']
+  },
+  define: {
+    'process.env': {}
   }
 });
