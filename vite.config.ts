@@ -15,6 +15,12 @@ export default defineConfig({
       jsxRuntime: 'automatic'
     })
   ],
+  build: {
+    target: 'es2020',
+    rollupOptions: {
+      // Ensure proper module resolution
+    }
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
