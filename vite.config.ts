@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
 // https://vitejs.dev/config/
@@ -25,22 +25,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  esbuild: {
-    target: 'esnext',
-    jsx: 'automatic',
-    loader: 'tsx',
-    include: /\.(tsx?|jsx?)$/,
-    exclude: [],
-  },
+  esbuild: false, // Disable esbuild completely
   define: {
     'process.env': {},
     global: 'globalThis'
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-quill', 'quill'],
-    force: true,
-    esbuildOptions: {
-      target: 'esnext'
-    }
+    force: true
   }
 });
