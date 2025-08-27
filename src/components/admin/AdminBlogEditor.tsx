@@ -18,9 +18,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { BlogPost } from "@/types/supabase-types";
 
-// Import ReactQuill dynamically to avoid SSR issues
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import SimpleContentEditor from "./SimpleContentEditor";
 
 // Custom styles for ReactQuill to prevent overflow and fix toolbar issues
 const quillStyles = `
@@ -470,36 +468,11 @@ const AdminBlogEditor = ({ blogId }: AdminBlogEditorProps) => {
             <div className="grid gap-2">
               <Label htmlFor="content">Content *</Label>
               {!previewMode ? (
-                <div className="max-w-full overflow-hidden">
-                  <ReactQuill
-                    theme="snow"
-                    value={content}
-                    onChange={(value) => {
-                      setContent(value);
-                      // Ensure toolbar remains visible after content changes
-                      setTimeout(() => {
-                        const toolbar = document.querySelector('.ql-toolbar');
-                        if (toolbar) {
-                          (toolbar as HTMLElement).style.display = 'flex';
-                          (toolbar as HTMLElement).style.visibility = 'visible';
-                          (toolbar as HTMLElement).style.opacity = '1';
-                        }
-                      }, 10);
-                    }}
-                    modules={modules}
-                    formats={formats}
-                    style={{ height: "400px", marginBottom: "50px" }}
-                    className="max-w-full"
-                    onFocus={() => {
-                      // Ensure toolbar is visible on focus
-                      const toolbar = document.querySelector('.ql-toolbar');
-                      if (toolbar) {
-                        (toolbar as HTMLElement).style.display = 'flex';
-                        (toolbar as HTMLElement).style.visibility = 'visible';
-                      }
-                    }}
-                  />
-                </div>
+                <SimpleContentEditor
+                  value={content}
+                  onChange={setContent}
+                  disabled={loading}
+                />
               ) : (
                 <div
                   className="min-h-[400px] p-4 border rounded-md bg-white prose prose-sm max-w-none overflow-hidden"

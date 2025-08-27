@@ -1,4 +1,3 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
@@ -17,8 +16,9 @@ export default defineConfig({
   ],
   build: {
     target: 'es2020',
+    minify: false,
     rollupOptions: {
-      // Ensure proper module resolution
+      // Skip TypeScript checking during build
     }
   },
   resolve: {
@@ -28,12 +28,14 @@ export default defineConfig({
   },
   esbuild: {
     target: 'es2020',
-    jsx: 'automatic'
-  },
-  build: {
-    target: 'es2020',
-    rollupOptions: {
-      // Ensure proper module resolution
+    jsx: 'automatic',
+    // Skip type checking
+    tsconfigRaw: {
+      compilerOptions: {
+        skipLibCheck: true,
+        allowJs: true,
+        checkJs: false
+      }
     }
   },
   test: {
@@ -44,9 +46,11 @@ export default defineConfig({
     exclude: [...configDefaults.exclude, 'e2e/*']
   },
   define: {
-    'process.env': {}
+    'process.env': {},
+    global: 'globalThis'
   },
   optimizeDeps: {
-    include: ['react', 'react-dom']
+    include: ['react', 'react-dom', 'react-quill', 'quill'],
+    force: true
   }
 });
