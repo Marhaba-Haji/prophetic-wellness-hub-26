@@ -18,7 +18,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { BlogPost } from "@/types/supabase-types";
 
-import SimpleContentEditor from "./SimpleContentEditor";
+// Import ReactQuill dynamically to avoid SSR issues
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 // Custom styles for ReactQuill to prevent overflow and fix toolbar issues
 const quillStyles = `
@@ -468,11 +470,17 @@ const AdminBlogEditor = ({ blogId }: AdminBlogEditorProps) => {
             <div className="grid gap-2">
               <Label htmlFor="content">Content *</Label>
               {!previewMode ? (
-                <SimpleContentEditor
-                  value={content}
-                  onChange={setContent}
-                  disabled={loading}
-                />
+                <div className="max-w-full overflow-hidden">
+                  <ReactQuill
+                    theme="snow"
+                    value={content}
+                    onChange={setContent}
+                    modules={modules}
+                    formats={formats}
+                    style={{ height: "400px", marginBottom: "50px" }}
+                    className="max-w-full"
+                  />
+                </div>
               ) : (
                 <div
                   className="min-h-[400px] p-4 border rounded-md bg-white prose prose-sm max-w-none overflow-hidden"

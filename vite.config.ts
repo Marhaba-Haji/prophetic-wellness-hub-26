@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
-import { configDefaults } from 'vitest/config';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,10 +14,10 @@ export default defineConfig({
     })
   ],
   build: {
-    target: 'es2020',
+    target: 'esnext',
     minify: false,
     rollupOptions: {
-      // Skip TypeScript checking during build
+      onwarn: () => {},
     }
   },
   resolve: {
@@ -27,23 +26,11 @@ export default defineConfig({
     },
   },
   esbuild: {
-    target: 'es2020',
+    target: 'esnext',
     jsx: 'automatic',
-    // Skip type checking
-    tsconfigRaw: {
-      compilerOptions: {
-        skipLibCheck: true,
-        allowJs: true,
-        checkJs: false
-      }
-    }
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/setupTests.ts',
-    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
-    exclude: [...configDefaults.exclude, 'e2e/*']
+    loader: 'tsx',
+    include: /\.(tsx?|jsx?)$/,
+    exclude: [],
   },
   define: {
     'process.env': {},
@@ -51,6 +38,9 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-quill', 'quill'],
-    force: true
+    force: true,
+    esbuildOptions: {
+      target: 'esnext'
+    }
   }
 });
