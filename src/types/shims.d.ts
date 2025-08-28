@@ -57,3 +57,13 @@ declare module 'react-router/dom' {
   const content: any;
   export = content;
 }
+
+declare module '@tanstack/*' {
+  const content: any;
+  export = content;
+}
+
+declare module 'react-quill' {
+  const ReactQuill: any;
+  export default ReactQuill;
+}

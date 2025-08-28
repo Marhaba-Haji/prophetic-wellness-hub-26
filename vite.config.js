@@ -14,6 +14,7 @@ export default defineConfig(({ command, mode }) => {
     },
     plugins: [
       react({
+        include: /\.(jsx|js|tsx|ts)$/,
         babel: {
           presets: [
             ["@babel/preset-react", { 
@@ -29,7 +30,7 @@ export default defineConfig(({ command, mode }) => {
         "@": path.resolve(process.cwd(), "./src"),
       },
     },
-    esbuild: false, // Completely disable esbuild to avoid TypeScript
+    esbuild: false,
     build: {
       target: 'es2020',
       minify: mode === 'production' ? 'terser' : false,

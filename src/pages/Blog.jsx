@@ -9,7 +9,7 @@ import { BlogPost } from "@/types/supabase-types";
 import PageSEO from "@/components/SEO/PageSEO";
 
 const Blog = () => {
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [blogPosts, setBlogPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 9;
@@ -39,7 +39,7 @@ const Blog = () => {
     }
   };
 
-  const formatDate = (dateString: string | null) => {
+  const formatDate = (dateString) => {
     if (!dateString) return "Recently";
     try {
       return new Date(dateString).toLocaleDateString("en-US", {
@@ -58,6 +58,8 @@ const Blog = () => {
         title="Blog - RevivoHeal Bangalore | Hijama Therapy Articles & Health Tips"
         description="Read our latest articles on Hijama cupping therapy, traditional healing methods, and wellness tips from certified professionals at RevivoHeal Bangalore."
         keywords="hijama therapy, cupping therapy, traditional healing, wellness articles, health tips, bangalore"
+        image="https://images.unsplash.com/photo-1584515933487-779824d29309?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+        url={`${window.location.origin}/blog`}
       />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">

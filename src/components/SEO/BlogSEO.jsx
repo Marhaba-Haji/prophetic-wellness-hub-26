@@ -2,11 +2,7 @@ import React from "react";
 import { DynamicSEOHead, useDynamicSEO } from "@/hooks/useDynamicSEO";
 import { useBlogSEO } from "@/hooks/useBlogSEO";
 
-interface BlogSEOProps {
-  blogSlug: string;
-}
-
-const BlogSEO: React.FC<BlogSEOProps> = ({ blogSlug }) => {
+const BlogSEO = ({ blogSlug }) => {
   const blogSEO = useBlogSEO(blogSlug);
 
   useDynamicSEO({

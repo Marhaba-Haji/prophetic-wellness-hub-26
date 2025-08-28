@@ -22,10 +22,10 @@ import {
 import { CheckCircle, XCircle, CheckSquare, RotateCw } from "lucide-react";
 
 const AdminAppointments = () => {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [openMessageId, setOpenMessageId] = useState<string | null>(null);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [openMessageId, setOpenMessageId] = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
   const allSelected =
     appointments.length > 0 && selectedIds.length === appointments.length;
 
@@ -38,7 +38,7 @@ const AdminAppointments = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from("appointments")
-        .select<string, Appointment>("*")
+        .select("*")
         .order("date", { ascending: false })
         .order("time", { ascending: true });
 
@@ -53,11 +53,11 @@ const AdminAppointments = () => {
     }
   };
 
-  const updateAppointmentStatus = async (id: string, status: string) => {
+  const updateAppointmentStatus = async (id, status) => {
     try {
       const { error } = await supabase
         .from("appointments")
-        .update<Partial<Appointment>>({ status })
+        .update({ status })
         .eq("id", id);
 
       if (error) throw error;
@@ -76,7 +76,7 @@ const AdminAppointments = () => {
     }
   };
 
-  const getStatusBadgeClass = (status: string) => {
+  const getStatusBadgeClass = (status) => {
     switch (status) {
       case "pending":
         return "bg-yellow-100 text-yellow-800";
@@ -91,7 +91,7 @@ const AdminAppointments = () => {
     }
   };
 
-  const handleSelect = (id: string) => {
+  const handleSelect = (id) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     );
@@ -102,7 +102,7 @@ const AdminAppointments = () => {
     else setSelectedIds(appointments.map((a) => a.id));
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id) => {
     console.log("Delete clicked", id);
     if (!window.confirm("Delete this appointment?")) return;
     try {
