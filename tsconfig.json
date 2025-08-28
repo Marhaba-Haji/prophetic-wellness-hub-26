@@ -45,7 +45,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true
-  },
+  }
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx"
