@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Layout from "@/components/layout/Layout";
-import BlogSEO from "@/components/SEO/BlogSEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, Tag, Clock } from "lucide-react";
@@ -244,29 +244,63 @@ const BlogDetail = () => {
 
   const validImageUrl = getValidImageUrl(blog.featured_image);
   const currentUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/blog/${blog.slug}`;
+  
+  // SEO values with fallbacks
+  const seoTitle = blog.meta_title || blog.og_title || blog.title || "Blog Post - RevivoHeal Bangalore";
+  const seoDescription = blog.meta_description || blog.og_description || blog.excerpt || "Read our latest blog post about hijama cupping therapy and traditional healing.";
+  const seoKeywords = blog.meta_keywords || blog.tags?.join(", ") || "hijama, cupping therapy, traditional healing, bangalore";
+  const seoImage = getValidImageUrl(blog.og_image) || validImageUrl;
 
-  console.log("SEO Debug - Blog data:", {
-    meta_title: blog.meta_title,
-    title: blog.title,
-    meta_description: blog.meta_description,
-    excerpt: blog.excerpt,
-    og_title: blog.og_title,
-    og_description: blog.og_description,
-    featured_image: blog.featured_image,
-    og_image: blog.og_image,
+  console.log("SEO Debug - Final SEO values:", {
+    seoTitle,
+    seoDescription,
+    seoKeywords,
+    seoImage,
+    currentUrl,
   });
 
   return (
-    <Layout disableDefaultSEO>
-      <BlogSEO blogSlug={slug || ""} />
-      {blog.schema_markup && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: blog.schema_markup,
-          }}
-        />
-      )}
+    <>
+      {/* Direct meta tag injection to ensure SEO works */}
+      <Helmet>
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDescription} />
+        <meta name="keywords" content={seoKeywords} />
+        <link rel="canonical" href={currentUrl} />
+
+        {/* Open Graph Meta Tags */}
+        <meta property="og:title" content={seoTitle} />
+        <meta property="og:description" content={seoDescription} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={currentUrl} />
+        {seoImage && <meta property="og:image" content={seoImage} />}
+        <meta property="og:site_name" content="RevivoHeal Bangalore" />
+
+        {/* Article specific Open Graph tags */}
+        {blog.author && <meta property="article:author" content={blog.author} />}
+        {blog.published_date && <meta property="article:published_time" content={blog.published_date} />}
+        {blog.created_at && <meta property="article:modified_time" content={blog.created_at} />}
+        {blog.category && <meta property="article:section" content={blog.category} />}
+        {blog.tags && blog.tags.map((tag, index) => (
+          <meta key={`tag-${index}`} property="article:tag" content={tag} />
+        ))}
+
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={seoTitle} />
+        <meta name="twitter:description" content={seoDescription} />
+        {seoImage && <meta name="twitter:image" content={seoImage} />}
+
+        {/* Additional SEO Meta Tags */}
+        <meta name="robots" content="index, follow" />
+        
+        {/* Schema markup injection */}
+        <script type="application/ld+json">
+          {generateSchemaMarkup()}
+        </script>
+      </Helmet>
+
+      <Layout disableDefaultSEO={true}>
 
       <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
@@ -435,7 +469,8 @@ const BlogDetail = () => {
           </div>
         </div>
       </div>
-    </Layout>
+      </Layout>
+    </>
   );
 };
 
