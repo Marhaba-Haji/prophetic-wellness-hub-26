@@ -10,13 +10,7 @@ export default defineConfig({
   plugins: [
     react({
       include: ["**/*.{jsx,js}"],
-      exclude: ["node_modules/**", "**/*.{tsx,ts}", "**/*.d.ts", "**/*.test.*"],
-      babel: {
-        presets: [
-          ["@babel/preset-env", { targets: "defaults" }],
-          ["@babel/preset-react", { runtime: "automatic" }]
-        ],
-      },
+      exclude: ["node_modules/**", "**/*.{tsx,ts}", "**/*.d.ts", "**/*.test.*"]
     }),
   ],
   optimizeDeps: {
@@ -26,7 +20,6 @@ export default defineConfig({
       jsx: "automatic",
     },
   },
-  esbuild: false,
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
