@@ -11,6 +11,12 @@ export default defineConfig({
     react({
       include: ["**/*.{jsx,js}"],
       exclude: ["node_modules/**", "**/*.{tsx,ts}", "**/*.d.ts", "**/*.test.*"],
+      babel: {
+        presets: [
+          ["@babel/preset-env", { targets: "defaults" }],
+          ["@babel/preset-react", { runtime: "automatic" }]
+        ],
+      },
     }),
   ],
   optimizeDeps: {

@@ -1,28 +1,17 @@
-export const generatePageTitle = (
-  pageTitle: string,
-  siteName: string = "RevivoHeal Bangalore",
-): string => {
+export const generatePageTitle = (pageTitle, siteName = "RevivoHeal Bangalore") => {
   return `${pageTitle} - ${siteName}`;
 };
 
-export const generateBlogTitle = (
-  blogTitle: string,
-  siteName: string = "RevivoHeal Bangalore",
-): string => {
+export const generateBlogTitle = (blogTitle, siteName = "RevivoHeal Bangalore") => {
   return `${blogTitle} | ${siteName}`;
 };
 
-export const truncateDescription = (
-  description: string,
-  maxLength: number = 160,
-): string => {
+export const truncateDescription = (description, maxLength = 160) => {
   if (description.length <= maxLength) return description;
   return description.substring(0, maxLength - 3) + "...";
 };
 
-export const generateBreadcrumbSchema = (
-  breadcrumbs: Array<{ name: string; url: string }>,
-) => {
+export const generateBreadcrumbSchema = (breadcrumbs) => {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -35,15 +24,7 @@ export const generateBreadcrumbSchema = (
   };
 };
 
-export const generateArticleSchema = (article: {
-  title: string;
-  description: string;
-  author: string;
-  publishedDate?: string;
-  modifiedDate?: string;
-  image?: string;
-  url: string;
-}) => {
+export const generateArticleSchema = (article) => {
   return {
     "@context": "https://schema.org",
     "@type": "Article",

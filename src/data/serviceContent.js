@@ -1,5 +1,5 @@
 
-export const serviceContent: Record<string, any> = {
+export const serviceContent = {
   "dry-cupping": {
     id: "dry-cupping",
     title: "Dry Cupping Therapy",
