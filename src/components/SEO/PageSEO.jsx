@@ -1,16 +1,7 @@
 import React from "react";
 import { DynamicSEOHead, useDynamicSEO } from "@/hooks/useDynamicSEO";
 
-interface PageSEOProps {
-  title: string;
-  description: string;
-  image?: string;
-  url?: string;
-  type?: string;
-  keywords?: string;
-}
-
-const PageSEO: React.FC<PageSEOProps> = ({
+const PageSEO = ({
   title,
   description,
   image,

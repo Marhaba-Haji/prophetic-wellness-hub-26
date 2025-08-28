@@ -2,11 +2,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
-// Disable TypeScript checking entirely
+// Force completely bypass TypeScript
 process.env.TSC_COMPILE_ON_ERROR = 'true';
 process.env.SKIP_TYPE_CHECK = 'true';
 
-// https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   return {
     server: {
@@ -16,7 +15,12 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       react({
         babel: {
-          plugins: []
+          presets: [
+            ["@babel/preset-react", { 
+              runtime: "automatic",
+              development: mode === 'development'
+            }]
+          ]
         }
       })
     ],
@@ -25,32 +29,24 @@ export default defineConfig(({ command, mode }) => {
         "@": path.resolve(process.cwd(), "./src"),
       },
     },
-    esbuild: false, // Completely disable esbuild TypeScript processing
+    esbuild: false, // Completely disable esbuild to avoid TypeScript
     build: {
       target: 'es2020',
-      minify: mode === 'production' ? 'esbuild' : false,
+      minify: mode === 'production' ? 'terser' : false,
       rollupOptions: {
-        onwarn: () => {}, // Suppress all warnings
-        external: (id) => {
-          // Skip all TypeScript definition files
-          return id.includes('.d.ts');
-        }
+        onwarn: () => {},
       }
     },
     define: {
       __DEV__: JSON.stringify(mode === 'development'),
-      'process.env.NODE_ENV': JSON.stringify(mode || 'development')
+      'process.env.NODE_ENV': JSON.stringify(mode || 'development'),
+      'import.meta.env.DEV': JSON.stringify(mode === 'development'),
+      'import.meta.env.PROD': JSON.stringify(mode === 'production'),
+      'import.meta.env.MODE': JSON.stringify(mode),
+      'import.meta.env.SSR': 'false'
     },
     optimizeDeps: {
-      esbuildOptions: {
-        loader: {
-          '.tsx': 'jsx',
-          '.ts': 'jsx',
-          '.js': 'jsx',
-          '.jsx': 'jsx'
-        },
-        target: 'es2020'
-      }
+      exclude: ['@types/*', '**/*.d.ts']
     }
   };
 });
