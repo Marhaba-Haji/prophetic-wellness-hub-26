@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
+import BlogSEO from "@/components/SEO/BlogSEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, Tag, Clock } from "lucide-react";
@@ -231,13 +231,6 @@ const BlogDetail = () => {
   if (!blog) {
     return (
       <Layout>
-        <Helmet>
-          <title>Blog post not found - Hijama Healing</title>
-          <meta
-            name="description"
-            content="The requested blog post could not be found."
-          />
-        </Helmet>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-800 mb-4">
@@ -265,100 +258,15 @@ const BlogDetail = () => {
 
   return (
     <Layout>
-      <Helmet>
-        {/* Basic Meta Tags */}
-        <title>{blog.meta_title || `${blog.title} - Hijama Healing`}</title>
-        <meta
-          name="description"
-          content={
-            blog.meta_description ||
-            blog.excerpt ||
-            `Read about ${blog.title} on Hijama Healing`
-          }
-        />
-        {blog.meta_keywords && (
-          <meta name="keywords" content={blog.meta_keywords} />
-        )}
-        {blog.canonical_url && (
-          <link rel="canonical" href={blog.canonical_url} />
-        )}
-        {!blog.canonical_url && <link rel="canonical" href={currentUrl} />}
-        {blog.robots_meta && <meta name="robots" content={blog.robots_meta} />}
-        {!blog.robots_meta && <meta name="robots" content="index, follow" />}
-
-        {/* Open Graph Meta Tags */}
-        <meta
-          property="og:title"
-          content={blog.og_title || blog.meta_title || blog.title}
-        />
-        <meta
-          property="og:description"
-          content={
-            blog.og_description ||
-            blog.meta_description ||
-            blog.excerpt ||
-            `Read about ${blog.title} on Hijama Healing`
-          }
-        />
-        <meta property="og:type" content={blog.og_type || "article"} />
-        <meta property="og:url" content={currentUrl} />
-        {(blog.og_image || validImageUrl) && (
-          <meta
-            property="og:image"
-            content={blog.og_image || validImageUrl || ""}
-          />
-        )}
-        <meta property="og:site_name" content="Hijama Healing" />
-
-        {/* Twitter Card Meta Tags */}
-        <meta
-          name="twitter:card"
-          content={blog.twitter_card || "summary_large_image"}
-        />
-        <meta
-          name="twitter:title"
-          content={blog.twitter_title || blog.meta_title || blog.title}
-        />
-        <meta
-          name="twitter:description"
-          content={
-            blog.twitter_description ||
-            blog.meta_description ||
-            blog.excerpt ||
-            `Read about ${blog.title} on Hijama Healing`
-          }
-        />
-        {(blog.twitter_image || blog.og_image || validImageUrl) && (
-          <meta
-            name="twitter:image"
-            content={blog.twitter_image || blog.og_image || validImageUrl || ""}
-          />
-        )}
-
-        {/* Article Specific Meta Tags */}
-        <meta property="article:author" content={blog.author} />
-        {blog.published_date && (
-          <meta
-            property="article:published_time"
-            content={blog.published_date}
-          />
-        )}
-        {blog.category && (
-          <meta property="article:section" content={blog.category} />
-        )}
-        {blog.tags &&
-          blog.tags.map((tag, index) => (
-            <meta key={index} property="article:tag" content={tag} />
-          ))}
-
-        {/* Schema Markup */}
+      <BlogSEO blogSlug={slug || ""} />
+      {blog.schema_markup && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: blog.schema_markup || generateSchemaMarkup(),
+            __html: blog.schema_markup,
           }}
         />
-      </Helmet>
+      )}
 
       <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
