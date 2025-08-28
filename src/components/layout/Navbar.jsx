@@ -120,7 +120,7 @@ const NavLinks = () => (
     </Link>
   </>
 );
-const MobileNavLinks = ({ closeMenu }: { closeMenu: () => void }) => (
+const MobileNavLinks = ({ closeMenu }) => (
   <>
     <Link
       to="/"

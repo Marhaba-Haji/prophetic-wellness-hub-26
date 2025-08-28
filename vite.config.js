@@ -12,9 +12,9 @@ export default defineConfig({
       include: /\.(jsx|js)$/,
       exclude: /\.(tsx|ts|d\.ts)$/,
       babel: {
-        parserOpts: {
-          plugins: ['jsx']
-        }
+        presets: [
+          ['@babel/preset-react', { runtime: 'automatic' }]
+        ]
       }
     })
   ],
