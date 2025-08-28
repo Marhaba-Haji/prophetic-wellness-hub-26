@@ -46,10 +46,6 @@
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true
   }
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
-  "exclude": ["node_modules", "**/*.d.ts", "**/*.test.*"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
