@@ -29,13 +29,17 @@ export const DynamicSEOHead = ({ seoData }: { seoData: SEOData }) => {
 
   return (
     <Helmet>
-      {/* Basic Meta Tags - Override universal ones */}
+      {/* Viewport and essential meta tags */}
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="theme-color" content="#16a34a" />
+      
+      {/* Page-specific meta tags that override defaults */}
       <title>{seoData.title}</title>
       <meta name="description" content={seoData.description} />
       {seoData.keywords && <meta name="keywords" content={seoData.keywords} />}
       {seoData.author && <meta name="author" content={seoData.author} />}
 
-      {/* Open Graph Meta Tags - Override universal ones */}
+      {/* Open Graph Meta Tags */}
       <meta property="og:title" content={seoData.title} />
       <meta property="og:description" content={seoData.description} />
       <meta property="og:type" content={seoData.type || "website"} />
@@ -43,7 +47,7 @@ export const DynamicSEOHead = ({ seoData }: { seoData: SEOData }) => {
       {seoData.image && <meta property="og:image" content={seoData.image} />}
       <meta property="og:site_name" content="RevivoHeal Bangalore" />
 
-      {/* Twitter Card Meta Tags - Override universal ones */}
+      {/* Twitter Card Meta Tags */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={seoData.title} />
       <meta name="twitter:description" content={seoData.description} />
@@ -63,7 +67,7 @@ export const DynamicSEOHead = ({ seoData }: { seoData: SEOData }) => {
         <meta property="article:author" content={seoData.author} />
       )}
 
-      {/* Additional SEO Meta Tags - Override universal ones */}
+      {/* SEO Meta Tags */}
       <meta name="robots" content="index, follow" />
       <link rel="canonical" href={seoData.url || currentUrl} />
     </Helmet>

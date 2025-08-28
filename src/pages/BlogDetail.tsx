@@ -257,7 +257,7 @@ const BlogDetail = () => {
   });
 
   return (
-    <Layout>
+    <Layout disableDefaultSEO>
       <BlogSEO blogSlug={slug || ""} />
       {blog.schema_markup && (
         <script

@@ -53,11 +53,7 @@ const Blog = () => {
   };
 
   return (
-    <Layout
-      title="Blog - RevivoHeal Bangalore | Hijama Therapy Articles & Health Tips"
-      description="Read our latest articles on Hijama cupping therapy, traditional healing methods, and wellness tips from certified professionals at RevivoHeal Bangalore."
-      keywords="hijama therapy, cupping therapy, traditional healing, wellness articles, health tips, bangalore"
-    >
+    <Layout disableDefaultSEO>
       <PageSEO
         title="Blog - RevivoHeal Bangalore | Hijama Therapy Articles & Health Tips"
         description="Read our latest articles on Hijama cupping therapy, traditional healing methods, and wellness tips from certified professionals at RevivoHeal Bangalore."
