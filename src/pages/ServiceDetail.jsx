@@ -19,7 +19,7 @@ import {
 import NotFound from "./NotFound";
 
 const ServiceDetail = () => {
-  const { serviceId } = useParams<{ serviceId: string }>();
+  const { serviceId } = useParams();
 
   if (!serviceId || !serviceContent[serviceId]) {
     return <NotFound />;

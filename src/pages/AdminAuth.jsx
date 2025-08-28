@@ -26,7 +26,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Admin } from "@/types/supabase-types";
 
 // Login form schema
 const loginSchema = z.object({
@@ -49,35 +48,13 @@ const registerSchema = z
     path: ["confirmPassword"],
   });
 
-type LoginFormValues = z.infer<typeof loginSchema>;
-type RegisterFormValues = z.infer<typeof registerSchema>;
-
-// Interface for the response from register_admin_endpoint
-interface AdminRegistrationResponse {
-  success: boolean;
-  user_id?: string;
-  error?: string;
-}
-
-// Type guard to check if the response matches our expected interface
-function isAdminRegistrationResponse(
-  data: any,
-): data is AdminRegistrationResponse {
-  return (
-    typeof data === "object" &&
-    data !== null &&
-    "success" in data &&
-    typeof data.success === "boolean"
-  );
-}
-
 const AdminAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
   const navigate = useNavigate();
 
   // Login form
-  const loginForm = useForm<LoginFormValues>({
+  const loginForm = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -86,7 +63,7 @@ const AdminAuth = () => {
   });
 
   // Register form
-  const registerForm = useForm<RegisterFormValues>({
+  const registerForm = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
@@ -108,7 +85,7 @@ const AdminAuth = () => {
           // Check if the user is in the admins table
           const { data: adminData, error } = await supabase
             .from("admins")
-            .select<string, Admin>("*")
+            .select("*")
             .eq("user_id", session.user.id)
             .single();
 
@@ -125,7 +102,7 @@ const AdminAuth = () => {
     checkAdminStatus();
   }, [navigate]);
 
-  const handleLogin = async (values: LoginFormValues) => {
+  const handleLogin = async (values) => {
     setIsLoading(true);
 
     try {
@@ -145,7 +122,7 @@ const AdminAuth = () => {
           // If not super admin, check if they're in the admins table
           const { data: adminData, error: adminError } = await supabase
             .from("admins")
-            .select<string, Admin>("*")
+            .select("*")
             .eq("user_id", data.user.id)
             .single();
 
@@ -163,7 +140,7 @@ const AdminAuth = () => {
         );
         navigate("/admin/dashboard");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Login error:", error);
       toast.error(
         error.message || "Failed to login. Please check your credentials.",
@@ -173,7 +150,7 @@ const AdminAuth = () => {
     }
   };
 
-  const handleRegister = async (values: RegisterFormValues) => {
+  const handleRegister = async (values) => {
     setIsLoading(true);
 
     try {
@@ -209,7 +186,7 @@ const AdminAuth = () => {
       setActiveTab("login");
       loginForm.reset({ email: values.email, password: "" });
       registerForm.reset();
-    } catch (error: any) {
+    } catch (error) {
       console.error("Registration error:", error);
       toast.error(error.message || "Failed to register admin account");
     } finally {

@@ -8,23 +8,23 @@ import { HelmetProvider } from "@/components/providers/HelmetProvider";
 import ScrollToTop from "@/components/ScrollToTop";
 
 // Import pages
-import Index from "./pages/Index";
-import About from "./pages/About";
-import Benefits from "./pages/Benefits";
-import Contact from "./pages/Contact";
-import BookingSuccess from "./pages/BookingSuccess";
+import Index from "./pages/Index.jsx";
+import About from "./pages/About.jsx";
+import Benefits from "./pages/Benefits.jsx";
+import Contact from "./pages/Contact.jsx";
+import BookingSuccess from "./pages/BookingSuccess.jsx";
 import NotFound from "./pages/NotFound.jsx";
-import AdminAuth from "./pages/AdminAuth";
+import AdminAuth from "./pages/AdminAuth.jsx";
 import AdminDashboard from "./pages/admin/Dashboard";
 import BlogEditor from "./pages/admin/BlogEditor.jsx";
 import Blog from "./pages/Blog.jsx";
-import BlogDetail from "./pages/BlogDetail";
-import BookingAppointment from "./pages/BookingAppointment";
-import Services from "./pages/Services";
-import ServiceDetail from "./pages/ServiceDetail";
-import Terms from "./pages/Terms";
-import Privacy from "./pages/Privacy";
-import Refund from "./pages/Refund";
+import BlogDetail from "./pages/BlogDetail.jsx";
+import BookingAppointment from "./pages/BookingAppointment.jsx";
+import Services from "./pages/Services.jsx";
+import ServiceDetail from "./pages/ServiceDetail.jsx";
+import Terms from "./pages/Terms.jsx";
+import Privacy from "./pages/Privacy.jsx";
+import Refund from "./pages/Refund.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {

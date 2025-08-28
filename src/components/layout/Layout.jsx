@@ -21,10 +21,10 @@ const Layout = ({
   disableDefaultSEO = false,
   title = "RevivoHeal Bangalore | Centre for Pain Relief & Healing",
   description = "Experience pain relief at RevivoHeal Bangalore with Hijama cupping and traditional massage therapies.",
-  canonical,
-  image,
+  canonical = null,
+  image = null,
   type = "website",
-  keywords,
+  keywords = null,
 }) => {
   const currentUrl = typeof window !== "undefined" ? window.location.href : "";
   const canonicalUrl = canonical || currentUrl;

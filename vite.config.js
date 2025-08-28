@@ -9,26 +9,44 @@ export default defineConfig({
   },
   plugins: [
     react({
-      include: /\.(jsx|js)$/,
-      exclude: /\.(tsx|ts|d\.ts)$/,
+      include: ["**/*.{jsx,js}", "**/src/**/*.{jsx,js}"],
+      exclude: ["node_modules/**", "**/*.{tsx,ts}", "**/*.d.ts"],
       babel: {
         presets: [
-          ['@babel/preset-react', { runtime: 'automatic' }]
-        ]
-      }
-    })
+          ["@babel/preset-env", { targets: "defaults" }],
+          ["@babel/preset-react", { runtime: "automatic" }]
+        ],
+        plugins: [
+          ["@babel/plugin-transform-react-jsx", { runtime: "automatic" }]
+        ],
+      },
+    }),
   ],
+  optimizeDeps: {
+    exclude: ["lucide-react"],
+    esbuildOptions: {
+      target: "es2020",
+      jsx: "automatic",
+    },
+  },
+  esbuild: {
+    loader: "jsx",
+    include: /src\/.*\.[j]sx?$/,
+    exclude: /node_modules/,
+    jsx: "automatic",
+    target: "es2020",
+  },
   resolve: {
     alias: {
-      "@": path.resolve(process.cwd(), "./src"),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
   define: {
+    "process.env": process.env,
     global: "globalThis",
   },
-  esbuild: false,
   build: {
-    target: 'esnext',
+    target: 'es2020',
     sourcemap: false
   }
 });

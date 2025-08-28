@@ -7,26 +7,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, Tag, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { BlogPost } from "@/types/supabase-types";
 import { toast } from "@/components/ui/sonner";
-
-// Simplified interface for recent and related posts
-interface SimpleBlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  published_date: string | null;
-  featured_image: string | null;
-  category?: string | null;
-}
 
 const BlogDetail = () => {
   const router = useNavigate();
   const location = useLocation();
   const { slug } = useParams();
-  const [blog, setBlog] = useState<BlogPost | null>(null);
-  const [recentPosts, setRecentPosts] = useState<SimpleBlogPost[]>([]);
-  const [relatedPosts, setRelatedPosts] = useState<SimpleBlogPost[]>([]);
+  const [blog, setBlog] = useState(null);
+  const [recentPosts, setRecentPosts] = useState([]);
+  const [relatedPosts, setRelatedPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
@@ -104,7 +93,7 @@ const BlogDetail = () => {
     }
   };
 
-  const formatDate = (dateString: string | null) => {
+  const formatDate = (dateString) => {
     if (!dateString) return "Recently";
     try {
       return new Date(dateString).toLocaleDateString("en-US", {
@@ -117,7 +106,7 @@ const BlogDetail = () => {
     }
   };
 
-  const fixImgBBUrl = (url: string) => {
+  const fixImgBBUrl = (url) => {
     console.log("Original URL:", url);
 
     // If it's already a proper direct ImgBB URL, return as is
@@ -153,7 +142,7 @@ const BlogDetail = () => {
     return url;
   };
 
-  const getValidImageUrl = (url: string | null) => {
+  const getValidImageUrl = (url) => {
     if (!url) {
       console.log("No URL provided");
       return null;

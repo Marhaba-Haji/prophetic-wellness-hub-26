@@ -75,14 +75,13 @@ const BookingAppointment = () => {
   const [notes, setNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
-  const [availableSlots, setAvailableSlots] =
-    useState<string[]>(availableTimes);
+  const [availableSlots, setAvailableSlots] = useState(availableTimes);
 
   const navigate = useNavigate();
   const { toast: uiToast } = useToast();
 
   // Check appointment availability
-  const checkAvailability = async (selectedDate: string) => {
+  const checkAvailability = async (selectedDate) => {
     setIsCheckingAvailability(true);
     try {
       console.log("Checking availability for date:", selectedDate);
@@ -142,7 +141,7 @@ const BookingAppointment = () => {
     }
   }, [availableSlots, time]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
