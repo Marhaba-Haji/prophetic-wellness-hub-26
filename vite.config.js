@@ -9,7 +9,13 @@ export default defineConfig({
   },
   plugins: [
     react({
-      include: /\.(jsx|js|tsx|ts)$/,
+      include: /\.(jsx|js)$/,
+      exclude: /\.(tsx|ts|d\.ts)$/,
+      babel: {
+        parserOpts: {
+          plugins: ['jsx']
+        }
+      }
     })
   ],
   resolve: {
@@ -20,11 +26,7 @@ export default defineConfig({
   define: {
     global: "globalThis",
   },
-  esbuild: {
-    target: "esnext",
-    jsx: "automatic",
-    jsxImportSource: "react"
-  },
+  esbuild: false,
   build: {
     target: 'esnext',
     sourcemap: false
