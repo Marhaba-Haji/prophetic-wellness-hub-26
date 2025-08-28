@@ -9,8 +9,8 @@ export default defineConfig({
   },
   plugins: [
     react({
-      include: ["**/*.{jsx,js}", "**/src/**/*.{jsx,js}"],
-      exclude: ["node_modules/**", "**/*.{tsx,ts}", "**/*.d.ts"],
+      include: ["**/*.{jsx,js}"],
+      exclude: ["node_modules/**", "**/*.{tsx,ts}", "**/*.d.ts", "**/*.test.*"],
       babel: {
         presets: [
           ["@babel/preset-env", { targets: "defaults" }],
@@ -29,13 +29,7 @@ export default defineConfig({
       jsx: "automatic",
     },
   },
-  esbuild: {
-    loader: "jsx",
-    include: /src\/.*\.[j]sx?$/,
-    exclude: /node_modules/,
-    jsx: "automatic",
-    target: "es2020",
-  },
+  esbuild: false, // Disable esbuild TypeScript processing completely
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
