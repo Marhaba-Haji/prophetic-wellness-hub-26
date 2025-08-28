@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+// Tabs component removed for now
 import { toast } from "@/components/ui/sonner";
 import AdminAppointments from "@/components/admin/AdminAppointments";
 import AdminContacts from "@/components/admin/AdminContacts";
@@ -19,11 +19,9 @@ import {
 import { Admin } from "@/types/supabase-types";
 
 const AdminDashboard = () => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeModule, setActiveModule] = useState<
-    "appointments" | "contacts" | "blogs"
-  >("appointments");
+  const [activeModule, setActiveModule] = useState("appointments");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const navigate = useNavigate();
 
@@ -49,7 +47,7 @@ const AdminDashboard = () => {
           // If not super admin, check if they're in the admins table
           const { data: adminData, error: adminError } = await supabase
             .from("admins")
-            .select<string, Admin>("*")
+            .select("*")
             .eq("user_id", session.user.id)
             .single();
 

@@ -3,17 +3,11 @@ import { Phone } from "lucide-react";
 import { Button } from "./button";
 import { cn } from "@/lib/utils";
 
-interface WhatsAppChatProps {
-  phoneNumber: string;
-  message?: string;
-  className?: string;
-}
-
 export const WhatsAppChat = ({
   phoneNumber,
   message = "I'm looking for pain management service and would like to book an appointment for the therapy. Please call me!",
   className,
-}: WhatsAppChatProps) => {
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = () => {

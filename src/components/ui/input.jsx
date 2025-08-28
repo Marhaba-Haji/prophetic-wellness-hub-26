@@ -2,14 +2,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
-  error?: boolean;
-  helperText?: string;
-}
-
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, error, helperText, ...props }, ref) => {
+const Input = React.forwardRef(({ className, type, error, helperText, ...props }, ref) => {
     const inputId = React.useId();
 
     return (

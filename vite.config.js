@@ -11,15 +11,6 @@ export default defineConfig({
     react({
       include: ["**/*.{jsx,js}"],
       exclude: ["node_modules/**", "**/*.{tsx,ts}", "**/*.d.ts", "**/*.test.*"],
-      babel: {
-        presets: [
-          ["@babel/preset-env", { targets: "defaults" }],
-          ["@babel/preset-react", { runtime: "automatic" }]
-        ],
-        plugins: [
-          ["@babel/plugin-transform-react-jsx", { runtime: "automatic" }]
-        ],
-      },
     }),
   ],
   optimizeDeps: {
@@ -29,7 +20,7 @@ export default defineConfig({
       jsx: "automatic",
     },
   },
-  esbuild: false, // Disable esbuild TypeScript processing completely
+  esbuild: false,
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
