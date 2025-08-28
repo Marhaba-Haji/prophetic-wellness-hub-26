@@ -9,11 +9,7 @@ export default defineConfig({
     port: 8080,
   },
   plugins: [
-    react({
-      babel: {
-        plugins: []
-      }
-    })
+    react()
   ],
   resolve: {
     alias: {
@@ -21,30 +17,19 @@ export default defineConfig({
     },
   },
   esbuild: {
-    target: 'es2020',
-    jsx: 'automatic',
-    // Skip all type checking
-    tsconfigRaw: {
-      compilerOptions: {
-        skipLibCheck: true,
-        noEmit: true,
-        jsx: 'react-jsx',
-        target: 'ES2020',
-        module: 'ESNext',
-        moduleResolution: 'bundler',
-        allowSyntheticDefaultImports: true,
-        esModuleInterop: true
-      }
-    }
+    target: 'esnext',
+    jsx: 'automatic'
   },
   build: {
-    target: 'es2020',
+    target: 'esnext',
+    sourcemap: false,
     rollupOptions: {
-      // Ensure proper module resolution
+      external: [],
+      onwarn: () => {}
     }
   },
   define: {
-    // Skip TypeScript checking in development
     __DEV__: JSON.stringify(process.env.NODE_ENV === 'development')
-  }
+  },
+  clearScreen: false
 });

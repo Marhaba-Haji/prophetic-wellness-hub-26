@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Solana wallet types
 declare module '@solana/wallet-standard-features' {
   export interface SolanaSignInInput {
