@@ -2,6 +2,21 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
+// Plugin to completely disable TypeScript processing
+const noTypeScript = () => ({
+  name: 'no-typescript',
+  config(config) {
+    // Force all TS files to be treated as JS
+    config.esbuild = {
+      loader: 'jsx',
+      include: /\.(jsx?|tsx?)$/,
+      exclude: [],
+      target: 'es2020',
+      jsx: 'automatic'
+    };
+  }
+});
+
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
@@ -9,7 +24,12 @@ export default defineConfig({
     port: 8080,
   },
   plugins: [
-    react()
+    noTypeScript(),
+    react({
+      babel: {
+        plugins: []
+      }
+    })
   ],
   resolve: {
     alias: {
@@ -17,19 +37,23 @@ export default defineConfig({
     },
   },
   esbuild: {
-    target: 'esnext',
+    loader: 'jsx',
+    include: /\.(jsx?|tsx?)$/,
+    target: 'es2020',
     jsx: 'automatic'
   },
   build: {
-    target: 'esnext',
-    sourcemap: false,
-    rollupOptions: {
-      external: [],
-      onwarn: () => {}
-    }
+    target: 'es2020'
   },
   define: {
     __DEV__: JSON.stringify(process.env.NODE_ENV === 'development')
   },
-  clearScreen: false
+  optimizeDeps: {
+    esbuildOptions: {
+      loader: {
+        '.tsx': 'jsx',
+        '.ts': 'jsx'
+      }
+    }
+  }
 });
