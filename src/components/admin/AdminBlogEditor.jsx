@@ -43,11 +43,7 @@ const quillStyles = `
   }
 `;
 
-interface AdminBlogEditorProps {
-  blogId?: string;
-}
-
-const AdminBlogEditor = ({ blogId }: AdminBlogEditorProps) => {
+const AdminBlogEditor = ({ blogId }) => {
   // Basic fields
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
@@ -55,7 +51,7 @@ const AdminBlogEditor = ({ blogId }: AdminBlogEditorProps) => {
   const [content, setContent] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [category, setCategory] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState([]);
   const [featuredImage, setFeaturedImage] = useState("");
   const [featuredImageAlt, setFeaturedImageAlt] = useState("");
   const [published, setPublished] = useState(false);
@@ -133,7 +129,7 @@ const AdminBlogEditor = ({ blogId }: AdminBlogEditorProps) => {
     }
   }, [blogId, initialLoad]);
 
-  const fetchBlog = async (id: string) => {
+  const fetchBlog = async (id) => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -200,7 +196,7 @@ const AdminBlogEditor = ({ blogId }: AdminBlogEditorProps) => {
 
     setLoading(true);
     try {
-      const blogPost: Omit<BlogPost, "id" | "created_at"> = {
+      const blogPost = {
         title,
         slug,
         author,

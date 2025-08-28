@@ -6,7 +6,7 @@ import { toast } from "@/components/ui/sonner";
 import { BlogPost } from "@/types/supabase-types";
 
 const BlogEditor = () => {
-  const { blogId } = useParams<{ blogId: string }>();
+  const { blogId } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
