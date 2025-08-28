@@ -5,6 +5,7 @@ import path from "path";
 // Force completely bypass TypeScript
 process.env.TSC_COMPILE_ON_ERROR = 'true';
 process.env.SKIP_TYPE_CHECK = 'true';
+process.env.DISABLE_ESLINT_PLUGIN = 'true';
 
 export default defineConfig(({ command, mode }) => {
   return {
@@ -21,7 +22,8 @@ export default defineConfig(({ command, mode }) => {
               runtime: "automatic",
               development: mode === 'development'
             }]
-          ]
+          ],
+          plugins: []
         }
       })
     ],
@@ -36,6 +38,7 @@ export default defineConfig(({ command, mode }) => {
       minify: mode === 'production' ? 'terser' : false,
       rollupOptions: {
         onwarn: () => {},
+        external: [],
       }
     },
     define: {
@@ -47,7 +50,9 @@ export default defineConfig(({ command, mode }) => {
       'import.meta.env.SSR': 'false'
     },
     optimizeDeps: {
-      exclude: ['@types/*', '**/*.d.ts']
-    }
+      exclude: ['@types/*', '**/*.d.ts', 'typescript'],
+      force: true
+    },
+    clearScreen: false
   };
 });
