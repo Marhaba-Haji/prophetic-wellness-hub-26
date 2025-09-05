@@ -106,14 +106,14 @@ const womenBenefits = [
 ];
 
 const Benefits = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef(null);
   const [startX, setStartX] = useState(0);
   const [scrolling, setScrolling] = useState(false);
   const [autoScrollActive, setAutoScrollActive] = useState(true);
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
-    let scrollInterval: NodeJS.Timeout | null = null;
+    let scrollInterval = null;
 
     // Start auto-scrolling with even faster speed (12.75ms instead of 15ms - 15% faster)
     if (autoScrollActive && scrollContainer) {
@@ -137,7 +137,7 @@ const Benefits = () => {
     };
   }, [autoScrollActive]);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleMouseDown = (e) => {
     if (scrollRef.current) {
       setStartX(e.pageX - scrollRef.current.offsetLeft);
       setScrolling(true);
@@ -145,7 +145,7 @@ const Benefits = () => {
     }
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleMouseMove = (e) => {
     if (!scrolling) return;
 
     if (scrollRef.current) {

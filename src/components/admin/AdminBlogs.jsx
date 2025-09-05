@@ -18,9 +18,9 @@ import { format } from "date-fns";
 import { BlogPost } from "@/types/supabase-types";
 
 const AdminBlogs = () => {
-  const [blogs, setBlogs] = useState<BlogPost[]>([]);
+  const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
+  const [selectedBlog, setSelectedBlog] = useState(null);
 
   useEffect(() => {
     fetchBlogs();
@@ -35,7 +35,7 @@ const AdminBlogs = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setBlogs((data as BlogPost[]) || []);
+      setBlogs(data || []);
     } catch (error) {
       console.error("Error fetching blogs:", error);
       toast.error("Failed to fetch blogs");
@@ -45,7 +45,7 @@ const AdminBlogs = () => {
     }
   };
 
-  const handleStatusToggle = async (id: string, currentStatus: boolean) => {
+  const handleStatusToggle = async (id, currentStatus) => {
     try {
       setSelectedBlog(id);
       const { error } = await supabase
@@ -83,7 +83,7 @@ const AdminBlogs = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id) => {
     if (
       !confirm(
         "Are you sure you want to delete this blog post? This action cannot be undone.",
@@ -108,7 +108,7 @@ const AdminBlogs = () => {
     }
   };
 
-  const formatDate = (dateString: string | null | undefined) => {
+  const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     try {
       return format(new Date(dateString), "MMM dd, yyyy");

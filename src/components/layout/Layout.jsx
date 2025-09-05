@@ -5,18 +5,18 @@ import Footer from "./Footer";
 import { WhatsAppChat } from "@/components/ui/whatsapp-chat";
 import { ClientOnly } from "@/components/ui/ClientOnlyComponent";
 
-interface LayoutProps {
-  children: React.ReactNode;
-  disableDefaultSEO?: boolean;
-  title?: string;
-  description?: string;
-  canonical?: string;
-  image?: string;
-  type?: string;
-  keywords?: string;
-}
+// interface LayoutProps {
+//   children: React.ReactNode;
+//   disableDefaultSEO?: boolean;
+//   title?: string;
+//   description?: string;
+//   canonical?: string;
+//   image?: string;
+//   type?: string;
+//   keywords?: string;
+// }
 
-const Layout: React.FC<LayoutProps> = ({
+const Layout = ({
   children,
   disableDefaultSEO = false,
   title = "RevivoHeal Bangalore | Centre for Pain Relief & Healing",

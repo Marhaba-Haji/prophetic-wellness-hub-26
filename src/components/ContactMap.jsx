@@ -3,9 +3,9 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const ContactMap = () => {
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState<string>("");
+  const mapContainer = useRef(null);
+  const map = useRef(null);
+  const [mapboxToken, setMapboxToken] = useState("");
 
   useEffect(() => {
     if (!mapContainer.current || !mapboxToken) return;
@@ -14,7 +14,7 @@ const ContactMap = () => {
     mapboxgl.accessToken = mapboxToken;
 
     // Define coordinates as tuples with exactly two elements [lng, lat]
-    const bangaloreCoordinates: [number, number] = [77.6107, 13.0031]; // Bangalore coordinates
+    const bangaloreCoordinates = [77.6107, 13.0031]; // Bangalore coordinates
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -24,7 +24,7 @@ const ContactMap = () => {
     });
 
     // Add marker at Frazer Town
-    const frazerTownCoordinates: [number, number] = [77.6128, 13.0061]; // Approximate coordinates for Frazer Town
+    const frazerTownCoordinates = [77.6128, 13.0061]; // Approximate coordinates for Frazer Town
 
     new mapboxgl.Marker({ color: "#1E6F5C" })
       .setLngLat(frazerTownCoordinates)

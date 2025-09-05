@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Calendar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { BlogPost } from "@/types/supabase-types";
+// import { BlogPost } from "@/types/supabase-types";
 import { ClientOnly } from "@/components/ui/ClientOnlyComponent";
 
 const BlogPreview = () => {
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [blogPosts, setBlogPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const BlogPreview = () => {
     }
   };
 
-  const formatDate = (dateString: string | null) => {
+  const formatDate = (dateString) => {
     if (!dateString) return "Recently";
     try {
       return new Date(dateString).toLocaleDateString("en-US", {
