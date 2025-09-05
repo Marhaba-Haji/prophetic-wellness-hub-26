@@ -9,8 +9,7 @@ export default defineConfig({
   },
   plugins: [
     react({
-      include: /\.(jsx|js)$/,
-      exclude: /\.(tsx|ts|d\.ts)$/,
+      include: /\.(jsx|js|tsx|ts)$/,
       babel: {
         presets: [
           ['@babel/preset-react', { runtime: 'automatic' }]
@@ -22,6 +21,7 @@ export default defineConfig({
     alias: {
       "@": path.resolve(process.cwd(), "./src"),
     },
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
   },
   define: {
     global: "globalThis",

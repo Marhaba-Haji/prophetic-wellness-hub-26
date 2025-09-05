@@ -1,6 +1,7 @@
 import React from "react";
 import Layout from "@/components/layout/Layout";
 import Hero from "@/components/home/Hero";
+import MainServices from "@/components/home/MainServices";
 import Benefits from "@/components/home/Benefits";
 import Services from "@/components/home/Services";
 import Testimonials from "@/components/home/Testimonials";
@@ -12,6 +13,7 @@ const Index = () => {
   return (
     <Layout>
       <Hero />
+      <MainServices />
       <Benefits />
       <Services />
       <CuppingInfo />

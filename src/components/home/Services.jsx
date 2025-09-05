@@ -74,7 +74,7 @@ const Services = () => {
         </div>
 
         <div className="text-center mt-12">
-          <Link to="/services">
+          <Link to="/cupping-therapy">
             <Button className="gold-gradient text-white hover:opacity-90 transition-opacity rounded-full px-8 py-6 text-lg font-medium shadow-md hover:shadow-lg">
               View All Services
             </Button>

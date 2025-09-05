@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Heart, Calendar } from "lucide-react";
+import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 const Hero = () => {
   return (
@@ -19,25 +19,17 @@ const Hero = () => {
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand-green mb-6 leading-tight animate-fade-in">
             Experience the Healing Power of{" "}
-            <span className="text-brand-gold">Traditional Medicine</span>
+            <span className="text-brand-gold">Traditional Alternate Medicine</span>
           </h1>
           <div className="h-0.5 w-24 bg-brand-gold mx-auto mb-6"></div>
           <p className="text-lg md:text-xl text-gray-700 mb-8">
-            Cupping & massage therapy for pain relief, improved circulation, and
-            overall wellness in a professional, hygienic environment.
+            Comprehensive healing through Unani medicine, Cupping therapy, and Acupressure 
+            for pain relief, wellness, and natural healing in a professional, hygienic environment.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <div className="flex justify-center">
             <Link to="/booking">
               <Button className="gold-gradient text-white text-lg px-8 py-6 hover:opacity-90 transition-opacity rounded-full">
                 <Heart className="h-5 w-5 mr-2" /> Book Appointment
-              </Button>
-            </Link>
-            <Link to="/services">
-              <Button
-                variant="outline"
-                className="text-lg px-8 py-6 border-brand-green text-brand-green hover:bg-brand-green hover:text-white rounded-full"
-              >
-                <Calendar className="h-5 w-5 mr-2" /> View Services
               </Button>
             </Link>
           </div>

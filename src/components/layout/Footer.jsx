@@ -70,7 +70,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/services"
+                  to="/cupping-therapy"
                   className="text-gray-200 hover:text-brand-gold flex items-center"
                 >
                   <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>

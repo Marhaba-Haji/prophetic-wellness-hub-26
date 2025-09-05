@@ -22,6 +22,8 @@ import BlogDetail from "./pages/BlogDetail";
 import BookingAppointment from "./pages/BookingAppointment";
 import Services from "./pages/Services";
 import ServiceDetail from "./pages/ServiceDetail";
+import UnaniHealthCare from "./pages/UnaniHealthCare";
+import AcupressureTherapy from "./pages/AcupressureTherapy";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Refund from "./pages/Refund";
@@ -46,8 +48,10 @@ function App() {
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />
               <Route path="/benefits" element={<Benefits />} />
-              <Route path="/services" element={<Services />} />
+              <Route path="/cupping-therapy" element={<Services />} />
               <Route path="/service/:serviceId" element={<ServiceDetail />} />
+              <Route path="/unani-healthcare" element={<UnaniHealthCare />} />
+              <Route path="/acupressure-therapy" element={<AcupressureTherapy />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogDetail />} />

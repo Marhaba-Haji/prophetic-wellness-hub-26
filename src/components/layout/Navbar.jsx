@@ -95,10 +95,22 @@ const NavLinks = () => (
       About Us
     </Link>
     <Link
-      to="/services"
+      to="/unani-healthcare"
       className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200"
     >
-      Services
+      Unani
+    </Link>
+    <Link
+      to="/cupping-therapy"
+      className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200"
+    >
+      Cupping
+    </Link>
+    <Link
+      to="/acupressure-therapy"
+      className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200"
+    >
+      Acupressure
     </Link>
     <Link
       to="/benefits"
@@ -137,11 +149,25 @@ const MobileNavLinks = ({ closeMenu }) => (
       About Us
     </Link>
     <Link
-      to="/services"
+      to="/unani-healthcare"
       className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold"
       onClick={closeMenu}
     >
-      Services
+      Unani
+    </Link>
+    <Link
+      to="/cupping-therapy"
+      className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold"
+      onClick={closeMenu}
+    >
+      Cupping
+    </Link>
+    <Link
+      to="/acupressure-therapy"
+      className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold"
+      onClick={closeMenu}
+    >
+      Acupressure
     </Link>
     <Link
       to="/benefits"
