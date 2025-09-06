@@ -164,7 +164,7 @@ const ServicesPage = () => {
     <Layout>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 className="text-3xl md:text-5xl font-bold text-brand-green mb-2 text-center">
-          Our Services
+          Cupping Therapy Services in Bangalore
         </h1>
         <div className="h-1 w-24 bg-brand-gold mx-auto mb-8"></div>
         <div className="max-w-4xl mx-auto mb-12">

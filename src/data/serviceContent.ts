@@ -2,7 +2,7 @@
 export const serviceContent: Record<string, any> = {
   "dry-cupping": {
     id: "dry-cupping",
-    title: "Dry Cupping Therapy",
+    title: "Dry Cupping Therapy Services in Bangalore",
     shortDescription: "Traditional healing technique using suction cups to improve circulation and relieve pain without puncturing the skin.",
     longDescription: "Dry cupping is an ancient therapeutic practice that uses specially designed cups to create suction on the skin. This gentle yet effective treatment improves blood circulation, reduces muscle tension, and promotes natural healing without any incisions or blood removal. Our certified practitioners use modern, sterile equipment to ensure a safe and comfortable experience.",
     duration: "45-60 minutes",
@@ -43,7 +43,7 @@ export const serviceContent: Record<string, any> = {
       "Avoid alcohol and caffeine for 24 hours",
       "Take warm showers, avoid hot baths for 48 hours"
     ],
-    seoTitle: "Dry Cupping Therapy in Bangalore | Professional Cupping Treatment | RevivoHeal",
+    seoTitle: "Dry Cupping Therapy Services in Bangalore | Professional Cupping Treatment | RevivoHeal",
     seoDescription: "Experience effective dry cupping therapy in Bangalore at RevivoHeal. Professional treatment for pain relief, improved circulation, and natural healing. Book your session today.",
     keywords: "dry cupping Bangalore, cupping therapy, pain relief, muscle tension, circulation improvement, traditional healing, RevivoHeal"
   },
@@ -191,7 +191,7 @@ export const serviceContent: Record<string, any> = {
   },
   "wet-cupping": {
     id: "wet-cupping",
-    title: "Wet Cupping (Hijama)",
+    title: "Wet Cupping (Hijama) Services in Bangalore",
     shortDescription: "Traditional Islamic therapeutic practice combining cupping with controlled bloodletting for detoxification and healing.",
     longDescription: "Wet cupping, known as Hijama in Arabic, is a traditional therapeutic practice that combines the benefits of cupping with controlled bloodletting. This ancient healing method helps remove toxins from the body, improves blood circulation, and treats various health conditions. Our certified Hijama practitioners follow strict hygiene protocols and use sterile, disposable equipment.",
     duration: "60-75 minutes",
@@ -233,7 +233,7 @@ export const serviceContent: Record<string, any> = {
       "Follow dietary recommendations",
       "Schedule follow-up if needed"
     ],
-    seoTitle: "Wet Cupping Hijama Bangalore | Traditional Islamic Healing | RevivoHeal",
+    seoTitle: "Wet Cupping (Hijama) Services in Bangalore | Traditional Islamic Healing | RevivoHeal",
     seoDescription: "Authentic wet cupping (Hijama) therapy in Bangalore at RevivoHeal. Traditional Islamic healing for detoxification, pain relief, and wellness. Certified practitioners.",
     keywords: "wet cupping Bangalore, Hijama therapy, Islamic medicine, detoxification, bloodletting therapy, traditional healing, RevivoHeal"
   },
