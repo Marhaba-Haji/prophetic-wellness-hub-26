@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "auto-contact": "node scripts/auto-contact-filler.js",
-    "test-auto-contact": "node scripts/test-auto-contact.js"
+    "test-auto-contact": "node scripts/test-auto-contact.js",
+    "sitemap": "vite-node -r dotenv/config scripts/generate-sitemap.ts"
   },
   "dependencies": {
     "@babel/plugin-transform-typescript": "^7.28.0",
