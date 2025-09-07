@@ -330,5 +330,53 @@ export const serviceContent: Record<string, any> = {
     seoTitle: "Steam Bath Therapy Bangalore | Detox & Relaxation | RevivoHeal",
     seoDescription: "Experience a revitalizing steam bath in Bangalore at RevivoHeal. Our therapy helps detoxify the body, improve skin health, and promote deep relaxation. Book your session today.",
     keywords: "steam bath Bangalore, steam therapy, detoxification, relaxation, skin health, respiratory relief, wellness treatment, RevivoHeal"
+  },
+  "oil-massage": {
+    id: "oil-massage",
+    title: "Therapeutic Oil Massage in Bangalore",
+    shortDescription: "A relaxing and rejuvenating massage using medicated oils to nourish the body, relieve stress, and improve overall well-being.",
+    longDescription: "Our therapeutic oil massage is a traditional healing practice that involves the application of warm, medicated oils to the entire body. This treatment is designed to deeply nourish the tissues, relax the nervous system, and promote a sense of profound tranquility. Our experienced therapists use a combination of gentle and firm strokes to improve circulation, release muscle tension, and restore balance to the body and mind.",
+    duration: "60-90 minutes",
+    price: "₹2,000",
+    benefits: [
+      "Deep relaxation and stress reduction",
+      "Improved blood circulation",
+      "Nourishment of skin and tissues",
+      "Relief from muscle stiffness and pain",
+      "Enhanced flexibility and joint mobility",
+      "Detoxification of the body",
+      "Improved sleep quality",
+      "Calms the nervous system"
+    ],
+    process: [
+      "Consultation to select the appropriate medicated oil",
+      "Preparation of a warm and comfortable environment",
+      "Application of warm oil to the entire body",
+      "Systematic massage with rhythmic strokes",
+      "Focus on areas of tension and stiffness",
+      "Rest period to allow oil absorption",
+      "Post-massage steam or warm shower guidance"
+    ],
+    conditions: [
+      "General stress and anxiety",
+      "Muscle aches and pains",
+      "Dry skin and poor circulation",
+      "Insomnia and sleep disturbances",
+      "Joint stiffness and arthritis",
+      "Fatigue and low energy levels",
+      "Headaches and migraines",
+      "Overall wellness and rejuvenation"
+    ],
+    aftercare: [
+      "Rest for some time after the massage",
+      "Take a warm shower to rinse off excess oil",
+      "Drink plenty of warm water",
+      "Avoid heavy meals for a few hours",
+      "Keep yourself warm and avoid cold drafts",
+      "Continue to relax and avoid strenuous activities"
+    ],
+    seoTitle: "Therapeutic Oil Massage in Bangalore | Ayurvedic Massage | RevivoHeal",
+    seoDescription: "Indulge in a therapeutic oil massage in Bangalore at RevivoHeal. Experience deep relaxation, stress relief, and rejuvenation with our traditional Ayurvedic treatments.",
+    keywords: "oil massage Bangalore, Ayurvedic massage, therapeutic massage, stress relief, relaxation, body massage, RevivoHeal"
   }
 };
