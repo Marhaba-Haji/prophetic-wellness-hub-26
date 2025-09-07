@@ -100,45 +100,21 @@ const acupressureServices = [
 ];
 
 const AcupressureTherapy = () => {
+  const [selectedCategory, setSelectedCategory] = React.useState("All Treatments");
   const categories = [...new Set(acupressureServices.map(service => service.category))];
 
+  const filteredServices = selectedCategory === "All Treatments"
+    ? acupressureServices
+    : acupressureServices.filter(service => service.category === selectedCategory);
+
   return (
-    <Layout>
-      {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden bg-gradient-to-br from-brand-green/5 to-brand-gold/5">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="mb-6 inline-block">
-              <div className="h-16 w-16 mx-auto rounded-full bg-gradient-to-r from-brand-green to-brand-gold p-3 shadow-lg">
-                <Hand className="h-full w-full text-white" />
-              </div>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand-green mb-6">
-              Acupressure Therapy
-            </h1>
-            <div className="h-1 w-32 bg-brand-gold mx-auto mb-6"></div>
-            <p className="text-xl text-gray-700 mb-8 leading-relaxed">
-              Experience the ancient healing power of acupressure therapy. Our specialized treatments use finger pressure 
-              on specific meridian points to restore energy flow, relieve pain, and promote natural healing throughout your body.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link to="/booking">
-                <Button className="gold-gradient text-white text-lg px-8 py-6 hover:opacity-90 transition-opacity rounded-full">
-                  <Calendar className="h-5 w-5 mr-2" /> Book Consultation
-                </Button>
-              </Link>
-              <Link to="/cupping-therapy">
-                <Button
-                  variant="outline"
-                  className="text-lg px-8 py-6 border-brand-green text-brand-green hover:bg-brand-green hover:text-white rounded-full"
-                >
-                  <ArrowRight className="h-5 w-5 mr-2" /> View Cupping Therapy
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+    <Layout
+      title="Acupressure Therapy"
+      description="Experience the ancient healing power of acupressure therapy. Our specialized treatments use finger pressure on specific meridian points to restore energy flow, relieve pain, and promote natural healing throughout your body."
+      canonical="https://propheticwellness.in/acupressure-therapy"
+      image="/lovable-uploads/lovable-logo.png"
+      keywords="acupressure, therapy, prophetic wellness, healing, pain relief"
+    >
 
       {/* Services Section */}
       <section className="py-20 bg-white">
@@ -152,18 +128,27 @@ const AcupressureTherapy = () => {
             </h2>
             <div className="h-1 w-24 bg-brand-gold mx-auto mb-6"></div>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-              Our experienced practitioners provide targeted acupressure treatments for various health conditions. 
+              Our experienced practitioners provide targeted acupressure treatments for various health conditions.
               Each session is customized to address your specific needs and promote optimal healing.
             </p>
           </div>
 
           {/* Category Filter */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
-            <Badge variant="outline" className="px-4 py-2 text-sm border-brand-green text-brand-green hover:bg-brand-green hover:text-white cursor-pointer">
+            <Badge
+              variant={selectedCategory === "All Treatments" ? "default" : "outline"}
+              className="px-4 py-2 text-sm border-brand-green text-brand-green hover:bg-brand-green hover:text-white cursor-pointer"
+              onClick={() => setSelectedCategory("All Treatments")}
+            >
               All Treatments
             </Badge>
             {categories.map((category) => (
-              <Badge key={category} variant="outline" className="px-4 py-2 text-sm border-brand-green text-brand-green hover:bg-brand-green hover:text-white cursor-pointer">
+              <Badge
+                key={category}
+                variant={selectedCategory === category ? "default" : "outline"}
+                className="px-4 py-2 text-sm border-brand-green text-brand-green hover:bg-brand-green hover:text-white cursor-pointer"
+                onClick={() => setSelectedCategory(category)}
+              >
                 {category}
               </Badge>
             ))}
@@ -171,7 +156,7 @@ const AcupressureTherapy = () => {
 
           {/* Services Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {acupressureServices.map((service, index) => (
+            {filteredServices.map((service, index) => (
               <Card key={index} className="group h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border-0 shadow-md">
                 <div className={`bg-gradient-to-br ${service.bgColor} p-6 text-center relative overflow-hidden`}>
                   {/* Decorative background pattern */}
@@ -294,3 +279,4 @@ const AcupressureTherapy = () => {
 };
 
 export default AcupressureTherapy;
+
