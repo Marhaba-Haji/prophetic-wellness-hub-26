@@ -33,13 +33,13 @@ const Layout: React.FC<LayoutProps> = ({
       {!disableDefaultSEO && (
         <Helmet>
           <title>{title || "RevivoHeal Bangalore | Centre for Pain Relief & Healing"}</title>
-          <meta name="description" content={description || "Experience pain relief at RevivoHeal Bangalore with Hijama cupping and traditional massage therapies."} />
+          <meta name="description" content={description || "Discover Revivoheal, where ancient Greek and Arabian Unani medicine meets the healing touch of Hijama cupping and Chinese acupressure—restoring balance, detoxifying the body, and promoting natural wellness."} />
           {keywords && <meta name="keywords" content={keywords} />}
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <meta name="theme-color" content="#16a34a" />
           
           <meta property="og:title" content={title || "RevivoHeal Bangalore | Centre for Pain Relief & Healing"} />
-          <meta property="og:description" content={description || "Experience pain relief at RevivoHeal Bangalore with Hijama cupping and traditional massage therapies."} />
+          <meta property="og:description" content={description || "Discover Revivoheal, where ancient Greek and Arabian Unani medicine meets the healing touch of Hijama cupping and Chinese acupressure—restoring balance, detoxifying the body, and promoting natural wellness."} />
           <meta property="og:type" content={type} />
           <meta property="og:url" content={canonical || currentUrl} />
           {image && <meta property="og:image" content={image} />}
@@ -47,7 +47,7 @@ const Layout: React.FC<LayoutProps> = ({
           
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content={title || "RevivoHeal Bangalore | Centre for Pain Relief & Healing"} />
-          <meta name="twitter:description" content={description || "Experience pain relief at RevivoHeal Bangalore with Hijama cupping and traditional massage therapies."} />
+          <meta name="twitter:description" content={description || "Discover Revivoheal, where ancient Greek and Arabian Unani medicine meets the healing touch of Hijama cupping and Chinese acupressure—restoring balance, detoxifying the body, and promoting natural wellness."} />
           {image && <meta name="twitter:image" content={image} />}
           
           <meta name="robots" content="index, follow" />
