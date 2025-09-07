@@ -283,5 +283,52 @@ export const serviceContent: Record<string, any> = {
     seoTitle: "Sports Massage Therapy Bangalore | Athletic Performance & Recovery | RevivoHeal",
     seoDescription: "Professional sports massage therapy in Bangalore at RevivoHeal. Specialized treatment for athletes, injury prevention, performance enhancement, and recovery.",
     keywords: "sports massage Bangalore, athletic massage, sports injury treatment, performance enhancement, sports recovery, massage therapy, RevivoHeal"
+  },
+  "steam-bath": {
+    id: "steam-bath",
+    title: "Revitalizing Steam Bath Therapy",
+    shortDescription: "A therapeutic steam treatment to detoxify the body, improve circulation, and promote deep relaxation.",
+    longDescription: "Our revitalizing steam bath therapy offers a holistic treatment designed to detoxify your body, enhance circulation, and provide deep relaxation. This ancient practice helps open up pores, cleanse the skin, and relieve respiratory congestion. Step into our serene steam room and let the warm, moist air melt away your stress, leaving you feeling refreshed and rejuvenated.",
+    duration: "30-45 minutes",
+    price: "₹1,200",
+    benefits: [
+      "Deep body detoxification",
+      "Improved blood circulation",
+      "Enhanced skin health and complexion",
+      "Relief from respiratory congestion",
+      "Reduced muscle tension and stiffness",
+      "Stress reduction and mental clarity",
+      "Boosted immune system function",
+      "Promotes restful sleep"
+    ],
+    process: [
+      "Initial consultation to assess health needs",
+      "Preparation in a private, comfortable steam room",
+      "Guided relaxation during the steam session",
+      "Cool-down period with hydration",
+      "Application of nourishing skin moisturizer",
+      "Post-treatment wellness recommendations"
+    ],
+    conditions: [
+      "General body detoxification",
+      "Dull or congested skin",
+      "Sinus and respiratory congestion",
+      "Muscle soreness and fatigue",
+      "Stress and anxiety",
+      "Poor circulation",
+      "Difficulty sleeping",
+      "Overall wellness enhancement"
+    ],
+    aftercare: [
+      "Hydrate well by drinking plenty of water",
+      "Avoid heavy meals immediately after the session",
+      "Allow your body to rest and relax",
+      "Moisturize your skin to retain hydration",
+      "Avoid cold showers for at least an hour",
+      "Listen to your body and avoid overexertion"
+    ],
+    seoTitle: "Steam Bath Therapy Bangalore | Detox & Relaxation | RevivoHeal",
+    seoDescription: "Experience a revitalizing steam bath in Bangalore at RevivoHeal. Our therapy helps detoxify the body, improve skin health, and promote deep relaxation. Book your session today.",
+    keywords: "steam bath Bangalore, steam therapy, detoxification, relaxation, skin health, respiratory relief, wellness treatment, RevivoHeal"
   }
 };

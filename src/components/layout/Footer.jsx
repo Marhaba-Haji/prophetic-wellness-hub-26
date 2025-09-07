@@ -185,6 +185,24 @@ const Footer = () => {
                   Steam Bath Therapy
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/unani-healthcare"
+                  className="text-gray-200 hover:text-brand-gold flex items-center"
+                >
+                  <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
+                  Unani Medicine
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/acupressure-therapy"
+                  className="text-gray-200 hover:text-brand-gold flex items-center"
+                >
+                  <span className="h-1 w-1 bg-brand-gold rounded-full mr-2"></span>
+                  Acupressure Therapy
+                </Link>
+              </li>
             </ul>
           </div>
 

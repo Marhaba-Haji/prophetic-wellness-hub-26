@@ -32,8 +32,21 @@ const ServiceDetail = () => {
       title={service.seoTitle}
       description={service.seoDescription}
       keywords={service.keywords}
+      canonical=""
+      image=""
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-sm text-gray-500 mb-4">
+          <Link to="/" className="hover:text-brand-green">
+            Home
+          </Link>
+          <span className="mx-2">/</span>
+          <Link to="/cupping-therapy" className="hover:text-brand-green">
+            Services
+          </Link>
+          <span className="mx-2">/</span>
+          <span className="text-brand-green">{service.title}</span>
+        </div>
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-brand-green mb-4">
