@@ -22,13 +22,10 @@ import { toast } from "@/components/ui/sonner";
 import { z } from "zod";
 
 const services = [
-  "Dry Cupping",
-  "Wet Cupping",
-  "Sports Injury Massage",
-  "Deep Tissue Oil Massage",
-  "Leech Therapy",
-  "Steam Bath Therapy",
-  "Personalized Diet Plans",
+  "Unani Consultation",
+  "Cupping Therapy",
+  "Accupressure Therapy",
+  "Not decided Yet",
 ];
 
 // Available time slots

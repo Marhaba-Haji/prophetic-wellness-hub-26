@@ -93,7 +93,7 @@ const Blog = () => {
                         "https://images.unsplash.com/photo-1584515933487-779824d29309?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
                       }
                       alt={post.featured_image_alt || post.title}
-                      className="w-full h-48 object-cover transition-all duration-500 group-hover:scale-105"
+                      className="w-full aspect-video sm:aspect-[1.9/1] object-cover transition-all duration-500 group-hover:scale-105"
                     />
                   </div>
                 </Link>

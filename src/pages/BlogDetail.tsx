@@ -216,9 +216,81 @@ const BlogDetail = () => {
     return JSON.stringify(schema);
   };
 
+  const createCta = (
+    title: string,
+    description: string,
+    buttonText: string,
+    link: string
+  ) => {
+    return `
+      <div class="my-8 p-4 sm:p-6 bg-brand-green/5 border border-brand-green/20 rounded-lg text-center">
+        <h3 class="text-lg sm:text-xl font-semibold text-gray-800">${title}</h3>
+        <p class="mt-2 text-sm sm:text-base text-gray-600">${description}</p>
+        <a href="${link}" class="mt-4 inline-block bg-brand-green text-white px-6 py-2 rounded-md font-medium hover:bg-brand-green/90 transition-colors">
+          ${buttonText}
+        </a>
+      </div>
+    `;
+  };
+
+  const injectCtas = (content: string) => {
+    const ctas = [
+      createCta(
+        "Experience Cupping Therapy",
+        "Discover the benefits of traditional Hijama cupping for pain relief and detoxification.",
+        "Book a Session",
+        "/booking?service=cupping"
+      ),
+      createCta(
+        "Try Acupressure Therapy",
+        "Relieve stress and improve your body's natural healing abilities with our expert therapists.",
+        "Book an Appointment",
+        "/booking"
+      ),
+      createCta(
+        "Consult with a Unani Doctor",
+        "Get a personalized consultation for holistic Unani health care from our renowned doctors.",
+        "Book a Consultation",
+        "/booking?service=unani-consultation"
+      ),
+    ];
+
+    const paragraphs = content.split("</p>");
+    let newContent = "";
+    let ctaIndex = 0;
+
+    // Aim to inject after the 1st, 3rd, and 5th paragraphs if they exist
+    const injectionPoints = [1, 3, 5];
+
+    for (let i = 0; i < paragraphs.length; i++) {
+      newContent += paragraphs[i] + "</p>";
+      if (
+        ctaIndex < ctas.length &&
+        injectionPoints.includes(i)
+      ) {
+        newContent += ctas[ctaIndex];
+        ctaIndex++;
+      }
+    }
+    
+    // If there were not enough paragraphs, append remaining CTAs at the end
+    while (ctaIndex < ctas.length) {
+      newContent += ctas[ctaIndex];
+      ctaIndex++;
+    }
+
+    return newContent;
+  };
+
   if (loading) {
     return (
-      <Layout>
+      <Layout
+        title="Loading Blog Post..."
+        description="Please wait while we load the blog post."
+        canonical=""
+        image=""
+        keywords=""
+      >
         <div className="container mx-auto px-4 py-8">
           <div className="flex justify-center items-center min-h-[400px]">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-green"></div>
@@ -230,7 +302,13 @@ const BlogDetail = () => {
 
   if (!blog) {
     return (
-      <Layout>
+      <Layout
+        title="Blog Post Not Found"
+        description="The blog post you are looking for does not exist."
+        canonical=""
+        image=""
+        keywords=""
+      >
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-800 mb-4">
@@ -241,7 +319,8 @@ const BlogDetail = () => {
       </Layout>
     );
   }
-
+  
+  const processedContent = blog ? injectCtas(blog.content) : "";
   const validImageUrl = getValidImageUrl(blog.featured_image);
   const currentUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/blog/${blog.slug}`;
   
@@ -300,7 +379,14 @@ const BlogDetail = () => {
         </script>
       </Helmet>
 
-      <Layout disableDefaultSEO={true}>
+      <Layout
+        title={seoTitle}
+        description={seoDescription}
+        canonical={currentUrl}
+        image={seoImage}
+        keywords={seoKeywords}
+        disableDefaultSEO={true}
+      >
 
       <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
@@ -338,7 +424,7 @@ const BlogDetail = () => {
                 <div
                   className="prose prose-base sm:prose-lg max-w-none prose-headings:text-left prose-p:text-left prose-li:text-left prose-blockquote:text-left prose-td:text-left"
                   style={{ textAlign: "left" }}
-                  dangerouslySetInnerHTML={{ __html: blog.content }}
+                  dangerouslySetInnerHTML={{ __html: processedContent }}
                 />
                 {/* Tags */}
                 {blog.tags && blog.tags.length > 0 && (
@@ -425,7 +511,7 @@ const BlogDetail = () => {
 
               {/* Recent Posts */}
               {recentPosts.length > 0 && (
-                <Card className="shadow-lg w-full">
+                <Card className="shadow-lg w-full hidden sm:block">
                   <CardHeader className="pb-2 sm:pb-4">
                     <CardTitle className="text-base sm:text-lg">
                       Recent Posts
