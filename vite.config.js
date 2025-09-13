@@ -17,6 +17,7 @@ export default defineConfig({
       }
     })
   ],
+  esbuild: false,
   resolve: {
     alias: {
       "@": path.resolve(process.cwd(), "./src"),

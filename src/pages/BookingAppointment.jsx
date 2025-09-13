@@ -21,12 +21,7 @@ import {
 import { toast } from "@/components/ui/sonner";
 import { z } from "zod";
 
-// Razorpay types
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
-}
+// Razorpay integration
 
 const services = [
   "Unani Consultation",
@@ -80,13 +75,13 @@ const BookingAppointment = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
   const [availableSlots, setAvailableSlots] =
-    useState<string[]>(availableTimes);
+    useState(availableTimes);
 
   const navigate = useNavigate();
   const { toast: uiToast } = useToast();
 
   // Check appointment availability
-  const checkAvailability = async (selectedDate: string) => {
+  const checkAvailability = async (selectedDate) => {
     setIsCheckingAvailability(true);
     try {
       console.log("Checking availability for date:", selectedDate);
@@ -146,7 +141,7 @@ const BookingAppointment = () => {
     }
   }, [availableSlots, time]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -172,7 +167,7 @@ const BookingAppointment = () => {
         name: "RevivoHeal Bangalore",
         description: "Consultation Fee",
         image: "/favicon.ico",
-        handler: async function (response: any) {
+        handler: async function (response) {
           try {
             // Payment successful, now create appointment
             await retryOperation(async () => {
