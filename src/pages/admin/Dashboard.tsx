@@ -7,6 +7,7 @@ import { toast } from "@/components/ui/sonner";
 import AdminAppointments from "@/components/admin/AdminAppointments";
 import AdminContacts from "@/components/admin/AdminContacts";
 import AdminBlogs from "@/components/admin/AdminBlogs";
+import AdminPayments from "@/components/admin/AdminPayments.jsx";
 import {
   Users,
   MessageSquare,
@@ -15,6 +16,7 @@ import {
   Menu,
   ChevronLeft,
   ChevronRight,
+  CreditCard,
 } from "lucide-react";
 import { Admin } from "@/types/supabase-types";
 
@@ -22,7 +24,7 @@ const AdminDashboard = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeModule, setActiveModule] = useState<
-    "appointments" | "contacts" | "blogs"
+    "appointments" | "contacts" | "blogs" | "payments"
   >("appointments");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const navigate = useNavigate();
@@ -138,6 +140,17 @@ const AdminDashboard = () => {
             </span>
           </button>
           <button
+            className={`w-full flex items-center gap-3 px-2 py-3 rounded-lg text-left transition-colors font-medium ${activeModule === "payments" ? "bg-brand-green/10 text-brand-green" : "hover:bg-gray-100 text-gray-700"}`}
+            onClick={() => setActiveModule("payments")}
+          >
+            <CreditCard className="h-5 w-5 mx-auto" />
+            <span
+              className={`transition-all duration-200 ${sidebarOpen ? "inline" : "hidden"}`}
+            >
+              Payment Analytics
+            </span>
+          </button>
+          <button
             className={`w-full flex items-center gap-3 px-2 py-3 rounded-lg text-left transition-colors font-medium ${activeModule === "blogs" ? "bg-brand-green/10 text-brand-green" : "hover:bg-gray-100 text-gray-700"}`}
             onClick={() => setActiveModule("blogs")}
           >
@@ -181,6 +194,7 @@ const AdminDashboard = () => {
         </header>
         <main className="flex-1 p-6 md:p-10 bg-gray-50 overflow-y-auto">
           {activeModule === "appointments" && <AdminAppointments />}
+          {activeModule === "payments" && <AdminPayments />}
           {activeModule === "contacts" && <AdminContacts />}
           {activeModule === "blogs" && <AdminBlogs />}
         </main>

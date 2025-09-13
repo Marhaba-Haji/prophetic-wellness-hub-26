@@ -161,11 +161,51 @@ const BookingAppointment = () => {
     }
   }, [availableSlots, time]);
 
+  // Save payment attempt to track all customer interactions
+  const savePaymentAttempt = async (formData, status = 'initiated', paymentData = null) => {
+    try {
+      const paymentAttempt = {
+        customer_name: formData.full_name,
+        customer_email: formData.email,
+        customer_phone: formData.phone,
+        service: formData.service,
+        appointment_date: formData.date,
+        appointment_time: formData.time,
+        notes: formData.notes,
+        amount: 299,
+        payment_status: status,
+        razorpay_order_id: paymentData?.order_id,
+        razorpay_payment_id: paymentData?.payment_id,
+        ip_address: await fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => d.ip).catch(() => null),
+        user_agent: navigator.userAgent
+      };
+
+      if (status === 'completed') {
+        paymentAttempt['completed_at'] = new Date().toISOString();
+      }
+
+      const { data, error } = await supabase
+        .from('payment_attempts')
+        .insert(paymentAttempt)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error saving payment attempt:', error);
+      // Don't throw error to prevent blocking the payment flow
+    }
+  };
+
   // Handle Razorpay payment
-  const handlePayment = async (appointmentData: any) => {
+  const handlePayment = async (appointmentData) => {
     setIsPaymentProcessing(true);
     
     try {
+      // Save initial payment attempt
+      await savePaymentAttempt(appointmentData, 'initiated');
+
       // Create Razorpay order via Supabase Edge Function
       const { data: orderData, error: orderError } = await supabase.functions.invoke('create-order', {
         body: {
@@ -191,8 +231,14 @@ const BookingAppointment = () => {
         description: "Consultation Fee",
         order_id: orderData.order.id,
         image: "/favicon.ico",
-        handler: async function (response: any) {
+        handler: async function (response) {
           try {
+            // Save completed payment attempt
+            await savePaymentAttempt(appointmentData, 'completed', {
+              order_id: response.razorpay_order_id,
+              payment_id: response.razorpay_payment_id
+            });
+
             // Verify payment via Supabase Edge Function
             const { data: verifyData, error: verifyError } = await supabase.functions.invoke('verify-payment', {
               body: {
@@ -227,6 +273,11 @@ const BookingAppointment = () => {
             
           } catch (error) {
             console.error("Error verifying payment:", error);
+            // Save failed payment attempt
+            await savePaymentAttempt(appointmentData, 'failed', {
+              order_id: response.razorpay_order_id,
+              payment_id: response.razorpay_payment_id
+            });
             toast.error("Payment completed but verification failed. Please contact us.");
           } finally {
             setIsPaymentProcessing(false);
@@ -242,6 +293,10 @@ const BookingAppointment = () => {
         },
         modal: {
           ondismiss: function () {
+            // Save abandoned payment attempt when user closes modal
+            savePaymentAttempt(appointmentData, 'abandoned', {
+              order_id: orderData.order.id
+            });
             setIsPaymentProcessing(false);
             toast.error("Payment cancelled");
           },
@@ -253,6 +308,8 @@ const BookingAppointment = () => {
       
     } catch (error) {
       console.error("Error creating payment order:", error);
+      // Save failed payment attempt
+      await savePaymentAttempt(appointmentData, 'failed');
       toast.error("Failed to initiate payment. Please try again.");
       setIsPaymentProcessing(false);
     }
