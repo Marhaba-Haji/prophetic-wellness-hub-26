@@ -21,8 +21,6 @@ import {
 import { toast } from "@/components/ui/sonner";
 import { z } from "zod";
 
-// Razorpay integration
-
 const services = [
   "Unani Consultation",
   "Cupping Therapy",
@@ -75,13 +73,13 @@ const BookingAppointment = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
   const [availableSlots, setAvailableSlots] =
-    useState(availableTimes);
+    useState<string[]>(availableTimes);
 
   const navigate = useNavigate();
   const { toast: uiToast } = useToast();
 
   // Check appointment availability
-  const checkAvailability = async (selectedDate) => {
+  const checkAvailability = async (selectedDate: string) => {
     setIsCheckingAvailability(true);
     try {
       console.log("Checking availability for date:", selectedDate);
@@ -141,7 +139,7 @@ const BookingAppointment = () => {
     }
   }, [availableSlots, time]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
@@ -157,77 +155,49 @@ const BookingAppointment = () => {
       };
 
       const validatedData = appointmentSchema.parse(appointmentData);
+
       setIsSubmitting(true);
 
-      // Initialize Razorpay payment
-      const options = {
-        key: "rzp_test_9jQQoWjkVDdSdQ", // Replace with your Razorpay test key
-        amount: 49900, // Amount in paise (₹499 = 49900 paise)
-        currency: "INR",
-        name: "RevivoHeal Bangalore",
-        description: "Consultation Fee",
-        image: "/favicon.ico",
-        handler: async function (response) {
-          try {
-            // Payment successful, now create appointment
-            await retryOperation(async () => {
-              const { error } = await supabase.from("appointments").insert({
-                full_name: validatedData.full_name,
-                email: validatedData.email,
-                phone: validatedData.phone,
-                date: validatedData.date,
-                time: validatedData.time,
-                service: validatedData.service,
-                notes: validatedData.notes || null,
-                status: "confirmed",
-                payment_id: response.razorpay_payment_id,
-                payment_status: "paid",
-              });
-
-              if (error) throw error;
-            });
-
-            toast.success("Payment successful! Your appointment is confirmed.");
-            
-            // Reset form
-            setFullName("");
-            setEmail("");
-            setPhone("");
-            setDate("");
-            setTime("");
-            setService("");
-            setNotes("");
-
-            navigate("/booking/success");
-          } catch (error) {
-            toast.error("Appointment booking failed. Please contact us.");
-          }
-        },
-        prefill: {
-          name: validatedData.full_name,
+      // Insert appointment with retry
+      await retryOperation(async () => {
+        const { error } = await supabase.from("appointments").insert({
+          full_name: validatedData.full_name,
           email: validatedData.email,
-          contact: validatedData.phone,
-        },
-        theme: {
-          color: "#16a34a",
-        },
-        modal: {
-          ondismiss: function() {
-            setIsSubmitting(false);
-            toast.error("Payment cancelled");
-          }
-        }
-      };
+          phone: validatedData.phone,
+          date: validatedData.date,
+          time: validatedData.time,
+          service: validatedData.service,
+          notes: validatedData.notes || null,
+          status: "pending",
+        });
 
-      const rzp = new window.Razorpay(options);
-      rzp.open();
+        if (error) throw error;
+      });
+
+      toast.success(
+        "Booking request received! We'll contact you to confirm shortly.",
+      );
+
+      // Reset form
+      setFullName("");
+      setEmail("");
+      setPhone("");
+      setDate("");
+      setTime("");
+      setService("");
+      setNotes("");
+
+      // Redirect after successful booking
+      navigate("/booking/success");
     } catch (error) {
       if (error instanceof z.ZodError) {
         const firstError = error.errors[0];
         toast.error(firstError.message);
       } else {
-        toast.error("Something went wrong. Please try again.");
+        const errorMessage = handleSupabaseError(error);
+        toast.error(errorMessage);
       }
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -243,12 +213,7 @@ const BookingAppointment = () => {
   const maxDateStr = maxDate.toISOString().split("T")[0];
 
   return (
-    <Layout
-      canonical=""
-      image=""
-      keywords=""
-    >
-      <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <Layout>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 className="text-3xl md:text-4xl font-bold text-brand-green mb-8 text-center">
           Book Your Appointment
@@ -448,24 +413,12 @@ const BookingAppointment = () => {
                     </div>
                   </div>
 
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <h4 className="font-semibold text-green-800">Consultation Fee</h4>
-                        <p className="text-sm text-green-600">Covers initial consultation only. Therapy charges apply separately at center.</p>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-2xl font-bold text-green-800">₹499</span>
-                      </div>
-                    </div>
-                  </div>
-
                   <Button
                     type="submit"
                     className="w-full gold-gradient text-white hover:opacity-90 transition-opacity text-lg py-6"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Processing..." : "Pay ₹499 & Book Appointment"}
+                    {isSubmitting ? "Processing..." : "Confirm Booking"}
                   </Button>
                 </form>
               </CardContent>

@@ -9,7 +9,7 @@ export default defineConfig({
   },
   plugins: [
     react({
-      include: /\.(jsx|js)$/,
+      include: /\.(jsx|js|tsx|ts)$/,
       babel: {
         presets: [
           ['@babel/preset-react', { runtime: 'automatic' }]
@@ -17,18 +17,18 @@ export default defineConfig({
       }
     })
   ],
-  esbuild: false,
   resolve: {
     alias: {
       "@": path.resolve(process.cwd(), "./src"),
     },
-    extensions: ['.js', '.jsx', '.json']
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
   },
   define: {
     global: "globalThis",
   },
+  esbuild: false,
   build: {
-    target: 'es2020',
+    target: 'esnext',
     sourcemap: false
   }
 });
