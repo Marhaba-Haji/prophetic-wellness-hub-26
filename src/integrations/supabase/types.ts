@@ -43,8 +43,6 @@ export type Database = {
           full_name: string
           id: string
           notes: string | null
-          payment_amount: number | null
-          payment_id: string | null
           phone: string
           service: string
           status: string | null
@@ -57,8 +55,6 @@ export type Database = {
           full_name: string
           id?: string
           notes?: string | null
-          payment_amount?: number | null
-          payment_id?: string | null
           phone: string
           service: string
           status?: string | null
@@ -71,8 +67,6 @@ export type Database = {
           full_name?: string
           id?: string
           notes?: string | null
-          payment_amount?: number | null
-          payment_id?: string | null
           phone?: string
           service?: string
           status?: string | null
@@ -224,72 +218,6 @@ export type Database = {
           message?: string
           name?: string
           subject?: string
-        }
-        Relationships: []
-      }
-      payment_attempts: {
-        Row: {
-          amount: number
-          appointment_date: string
-          appointment_time: string
-          completed_at: string | null
-          created_at: string
-          customer_email: string
-          customer_name: string
-          customer_phone: string
-          failure_reason: string | null
-          id: string
-          ip_address: string | null
-          notes: string | null
-          payment_method: string | null
-          payment_status: string
-          razorpay_order_id: string | null
-          razorpay_payment_id: string | null
-          service: string
-          updated_at: string
-          user_agent: string | null
-        }
-        Insert: {
-          amount?: number
-          appointment_date: string
-          appointment_time: string
-          completed_at?: string | null
-          created_at?: string
-          customer_email: string
-          customer_name: string
-          customer_phone: string
-          failure_reason?: string | null
-          id?: string
-          ip_address?: string | null
-          notes?: string | null
-          payment_method?: string | null
-          payment_status?: string
-          razorpay_order_id?: string | null
-          razorpay_payment_id?: string | null
-          service: string
-          updated_at?: string
-          user_agent?: string | null
-        }
-        Update: {
-          amount?: number
-          appointment_date?: string
-          appointment_time?: string
-          completed_at?: string | null
-          created_at?: string
-          customer_email?: string
-          customer_name?: string
-          customer_phone?: string
-          failure_reason?: string | null
-          id?: string
-          ip_address?: string | null
-          notes?: string | null
-          payment_method?: string | null
-          payment_status?: string
-          razorpay_order_id?: string | null
-          razorpay_payment_id?: string | null
-          service?: string
-          updated_at?: string
-          user_agent?: string | null
         }
         Relationships: []
       }
