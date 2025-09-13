@@ -43,6 +43,8 @@ export type Database = {
           full_name: string
           id: string
           notes: string | null
+          payment_amount: number | null
+          payment_id: string | null
           phone: string
           service: string
           status: string | null
@@ -55,6 +57,8 @@ export type Database = {
           full_name: string
           id?: string
           notes?: string | null
+          payment_amount?: number | null
+          payment_id?: string | null
           phone: string
           service: string
           status?: string | null
@@ -67,6 +71,8 @@ export type Database = {
           full_name?: string
           id?: string
           notes?: string | null
+          payment_amount?: number | null
+          payment_id?: string | null
           phone?: string
           service?: string
           status?: string | null
