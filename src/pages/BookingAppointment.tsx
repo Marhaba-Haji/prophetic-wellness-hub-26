@@ -162,82 +162,102 @@ const BookingAppointment = () => {
   }, [availableSlots, time]);
 
   // Handle Razorpay payment
-  const handlePayment = (appointmentData: any) => {
+  const handlePayment = async (appointmentData: any) => {
     setIsPaymentProcessing(true);
     
-    const options = {
-      key: "rzp_test_9WzFzN1yYv6kQt", // Replace with your Razorpay key
-      amount: 29900, // Amount in paise (₹299)
-      currency: "INR",
-      name: "Hijama Healing",
-      description: "Consultation Fee",
-      image: "/favicon.ico",
-      handler: async function (response: any) {
-        try {
-          // Payment successful, now save appointment
-          await saveAppointment(appointmentData, response.razorpay_payment_id);
-        } catch (error) {
-          console.error("Error saving appointment:", error);
-          toast.error("Payment completed but failed to save appointment. Please contact us.");
-        } finally {
-          setIsPaymentProcessing(false);
-        }
-      },
-      prefill: {
-        name: appointmentData.full_name,
-        email: appointmentData.email,
-        contact: appointmentData.phone,
-      },
-      theme: {
-        color: "#22c55e",
-      },
-      modal: {
-        ondismiss: function () {
-          setIsPaymentProcessing(false);
-          toast.error("Payment cancelled");
+    try {
+      // Create Razorpay order via Supabase Edge Function
+      const { data: orderData, error: orderError } = await supabase.functions.invoke('create-order', {
+        body: {
+          amount: 299,
+          currency: 'INR',
+          receipt: `appointment_${Date.now()}`,
         },
-      },
-    };
-
-    const rzp = new window.Razorpay(options);
-    rzp.open();
-  };
-
-  // Save appointment after successful payment
-  const saveAppointment = async (appointmentData: any, paymentId: string) => {
-    await retryOperation(async () => {
-      const { error } = await supabase.from("appointments").insert({
-        full_name: appointmentData.full_name,
-        email: appointmentData.email,
-        phone: appointmentData.phone,
-        date: appointmentData.date,
-        time: appointmentData.time,
-        service: appointmentData.service,
-        notes: appointmentData.notes || null,
-        status: "confirmed",
-        payment_id: paymentId,
-        payment_amount: 299,
       });
 
-      if (error) throw error;
-    });
+      if (orderError) {
+        throw new Error(`Failed to create order: ${orderError.message}`);
+      }
 
-    toast.success(
-      "Payment successful! Booking confirmed. We'll contact you shortly.",
-    );
+      if (!orderData.success) {
+        throw new Error(orderData.error || 'Failed to create payment order');
+      }
 
-    // Reset form
-    setFullName("");
-    setEmail("");
-    setPhone("");
-    setDate("");
-    setTime("");
-    setService("");
-    setNotes("");
+      const options = {
+        key: orderData.key_id,
+        amount: orderData.order.amount,
+        currency: orderData.order.currency,
+        name: "Hijama Healing",
+        description: "Consultation Fee",
+        order_id: orderData.order.id,
+        image: "/favicon.ico",
+        handler: async function (response: any) {
+          try {
+            // Verify payment via Supabase Edge Function
+            const { data: verifyData, error: verifyError } = await supabase.functions.invoke('verify-payment', {
+              body: {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                appointment_data: appointmentData,
+              },
+            });
 
-    // Redirect after successful booking
-    navigate("/booking/success");
+            if (verifyError) {
+              throw new Error(`Payment verification failed: ${verifyError.message}`);
+            }
+
+            if (!verifyData.success) {
+              throw new Error(verifyData.error || 'Payment verification failed');
+            }
+
+            toast.success("Payment successful! Booking confirmed. We'll contact you shortly.");
+
+            // Reset form
+            setFullName("");
+            setEmail("");
+            setPhone("");
+            setDate("");
+            setTime("");
+            setService("");
+            setNotes("");
+
+            // Redirect after successful booking
+            navigate("/booking/success");
+            
+          } catch (error) {
+            console.error("Error verifying payment:", error);
+            toast.error("Payment completed but verification failed. Please contact us.");
+          } finally {
+            setIsPaymentProcessing(false);
+          }
+        },
+        prefill: {
+          name: appointmentData.full_name,
+          email: appointmentData.email,
+          contact: appointmentData.phone,
+        },
+        theme: {
+          color: "#22c55e",
+        },
+        modal: {
+          ondismiss: function () {
+            setIsPaymentProcessing(false);
+            toast.error("Payment cancelled");
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+      
+    } catch (error) {
+      console.error("Error creating payment order:", error);
+      toast.error("Failed to initiate payment. Please try again.");
+      setIsPaymentProcessing(false);
+    }
   };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -265,7 +285,7 @@ const BookingAppointment = () => {
       }
 
       // Proceed with payment
-      handlePayment(validatedData);
+      await handlePayment(validatedData);
     } catch (error) {
       if (error instanceof z.ZodError) {
         const firstError = error.errors[0];
