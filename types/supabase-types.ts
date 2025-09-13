@@ -29,6 +29,11 @@ export interface Appointment {
   consultation_fee_amount?: number;
   payment_status?: string;
   payment_date?: string | null;
+  // Payment capture fields
+  payment_captured?: boolean;
+  payment_captured_at?: string | null;
+  payment_captured_amount?: number | null;
+  payment_capture_error?: string | null;
 }
 
 export interface Admin {

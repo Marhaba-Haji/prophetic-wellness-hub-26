@@ -5,6 +5,7 @@ export interface RazorpayOptions {
   currency: string;
   name: string;
   description: string;
+  capture?: boolean; // Enable/disable auto-capture
   handler: (response: any) => void;
   prefill: {
     name: string;
@@ -40,6 +41,8 @@ export const RAZORPAY_CONFIG = {
   theme: {
     color: '#059669', // Brand green color
   },
+  // Auto-capture configuration
+  capture: true, // This enables automatic capture
 };
 
 // Payment amount in paise (Rs. 299 = 29900 paise)

@@ -18,6 +18,7 @@ import {
   getUserIP,
   AbandonedPaymentData 
 } from '@/lib/abandonedPayments';
+import { autoCapturePayment } from '@/lib/paymentCapture';
 import { toast } from '@/components/ui/sonner';
 
 interface PaymentModalProps {
@@ -97,11 +98,21 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         currency: RAZORPAY_CONFIG.currency,
         name: RAZORPAY_CONFIG.name,
         description: `${RAZORPAY_CONFIG.description} - ${appointmentData.service}`,
+        capture: true, // Enable automatic capture
         handler: async (response: RazorpayResponse) => {
           try {
-            // For now, we'll assume payment is successful
-            // In production, verify the signature on your backend
-            toast.success('Payment successful!');
+            // Auto-capture the payment to prevent refund
+            console.log('Payment authorized, attempting auto-capture...');
+            const captureResult = await autoCapturePayment(response.razorpay_payment_id, CONSULTATION_FEE);
+            
+            if (captureResult.success) {
+              toast.success('Payment captured successfully!');
+              console.log('Payment captured:', captureResult);
+            } else {
+              toast.error(`Payment authorized but capture failed: ${captureResult.error}`);
+              console.error('Capture failed:', captureResult);
+            }
+            
             onPaymentSuccess(response);
           } catch (error) {
             console.error('Payment verification error:', error);
