@@ -11,6 +11,7 @@ import {
   Phone,
   MessageSquare,
   MapPin,
+  CreditCard,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -20,6 +21,8 @@ import {
 } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
 import { z } from "zod";
+import PaymentModal from "@/components/PaymentModal";
+import { RazorpayResponse } from "@/lib/razorpay";
 
 const services = [
   "Unani Consultation",
@@ -74,6 +77,8 @@ const BookingAppointment = () => {
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
   const [availableSlots, setAvailableSlots] =
     useState<string[]>(availableTimes);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [appointmentData, setAppointmentData] = useState<any>(null);
 
   const navigate = useNavigate();
   const { toast: uiToast } = useToast();
@@ -155,27 +160,48 @@ const BookingAppointment = () => {
       };
 
       const validatedData = appointmentSchema.parse(appointmentData);
+      
+      // Store appointment data and show payment modal
+      setAppointmentData(validatedData);
+      setShowPaymentModal(true);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0];
+        toast.error(firstError.message);
+      } else {
+        const errorMessage = handleSupabaseError(error);
+        toast.error(errorMessage);
+      }
+    }
+  };
 
+  const handlePaymentSuccess = async (paymentData: RazorpayResponse) => {
+    try {
       setIsSubmitting(true);
 
-      // Insert appointment with retry
+      // Insert appointment with payment details
       await retryOperation(async () => {
         const { error } = await supabase.from("appointments").insert({
-          full_name: validatedData.full_name,
-          email: validatedData.email,
-          phone: validatedData.phone,
-          date: validatedData.date,
-          time: validatedData.time,
-          service: validatedData.service,
-          notes: validatedData.notes || null,
-          status: "pending",
+          full_name: appointmentData.full_name,
+          email: appointmentData.email,
+          phone: appointmentData.phone,
+          date: appointmentData.date,
+          time: appointmentData.time,
+          service: appointmentData.service,
+          notes: appointmentData.notes || null,
+          status: "confirmed",
+          payment_id: paymentData.razorpay_payment_id,
+          payment_order_id: paymentData.razorpay_order_id,
+          payment_signature: paymentData.razorpay_signature,
+          consultation_fee_paid: true,
+          consultation_fee_amount: 299,
         });
 
         if (error) throw error;
       });
 
       toast.success(
-        "Booking request received! We'll contact you to confirm shortly.",
+        "Payment successful! Your appointment has been confirmed. We'll contact you shortly.",
       );
 
       // Reset form
@@ -186,17 +212,20 @@ const BookingAppointment = () => {
       setTime("");
       setService("");
       setNotes("");
+      setAppointmentData(null);
+      setShowPaymentModal(false);
 
       // Redirect after successful booking
-      navigate("/booking/success");
+      navigate("/booking/success", { 
+        state: { 
+          paymentSuccess: true, 
+          paymentId: paymentData.razorpay_payment_id,
+          appointmentData: appointmentData
+        } 
+      });
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        const firstError = error.errors[0];
-        toast.error(firstError.message);
-      } else {
-        const errorMessage = handleSupabaseError(error);
-        toast.error(errorMessage);
-      }
+      const errorMessage = handleSupabaseError(error);
+      toast.error(`Payment successful but booking failed: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -213,7 +242,13 @@ const BookingAppointment = () => {
   const maxDateStr = maxDate.toISOString().split("T")[0];
 
   return (
-    <Layout>
+    <Layout
+      title="Book Appointment - RevivoHeal Bangalore"
+      description="Book your consultation appointment with RevivoHeal. Pay ₹299 consultation fee and secure your slot for Hijama therapy, Unani consultation, or Acupressure therapy."
+      canonical="https://www.revivoheal.com/booking"
+      image="https://res.cloudinary.com/doxoxzz02/image/upload/v1756287517/revivoheal_poster_qz5kom.jpg"
+      keywords="book appointment bangalore, hijama booking, cupping therapy appointment, unani consultation, acupressure therapy booking"
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 className="text-3xl md:text-4xl font-bold text-brand-green mb-8 text-center">
           Book Your Appointment
@@ -418,7 +453,12 @@ const BookingAppointment = () => {
                     className="w-full gold-gradient text-white hover:opacity-90 transition-opacity text-lg py-6"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Processing..." : "Confirm Booking"}
+                    {isSubmitting ? "Processing..." : (
+                      <>
+                        <CreditCard className="h-5 w-5 mr-2" />
+                        Pay ₹299 & Book Appointment
+                      </>
+                    )}
                   </Button>
                 </form>
               </CardContent>
@@ -478,6 +518,45 @@ const BookingAppointment = () => {
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        {/* Payment Modal */}
+        {appointmentData && (
+          <PaymentModal
+            isOpen={showPaymentModal}
+            onClose={() => {
+              setShowPaymentModal(false);
+              setAppointmentData(null);
+            }}
+            onPaymentSuccess={handlePaymentSuccess}
+            appointmentData={appointmentData}
+          />
+        )}
+
+        {/* Important Disclaimer */}
+        <div className="max-w-4xl mx-auto mt-8">
+          <Card className="bg-blue-50 border-blue-200">
+            <CardContent className="p-6">
+              <h3 className="font-semibold text-blue-900 mb-3 flex items-center">
+                <Phone className="h-5 w-5 mr-2" />
+                Important Booking Information
+              </h3>
+              <div className="text-sm text-blue-800 space-y-2">
+                <p>
+                  <strong>Consultation Fee:</strong> A nominal fee of ₹299 is required to secure your appointment slot. This helps us maintain quality service and reduces no-shows.
+                </p>
+                <p>
+                  <strong>Confirmation Process:</strong> Our team will call you within 24 hours to reconfirm your appointment details and answer any questions you may have.
+                </p>
+                <p>
+                  <strong>Rescheduling:</strong> We understand that plans can change. If you need to reschedule, please contact us at least 24 hours before your appointment, and we'll be happy to accommodate you.
+                </p>
+                <p>
+                  <strong>Balance Payment:</strong> The remaining amount for therapy/treatment can be paid directly at our therapy center on the day of your appointment.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </Layout>

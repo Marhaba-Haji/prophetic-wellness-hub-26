@@ -21,6 +21,14 @@ export interface Appointment {
   notes: string | null;
   status: string;
   created_at: string;
+  // Payment fields
+  payment_id?: string | null;
+  payment_order_id?: string | null;
+  payment_signature?: string | null;
+  consultation_fee_paid?: boolean;
+  consultation_fee_amount?: number;
+  payment_status?: string;
+  payment_date?: string | null;
 }
 
 export interface Admin {
