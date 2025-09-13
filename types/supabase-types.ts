@@ -38,6 +38,28 @@ export interface Admin {
   created_at: string;
 }
 
+export interface AbandonedPayment {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  service: string;
+  date: string;
+  time: string;
+  notes?: string | null;
+  consultation_fee_amount: number;
+  payment_status: string;
+  abandonment_reason?: string | null;
+  session_id?: string | null;
+  user_agent?: string | null;
+  ip_address?: string | null;
+  created_at: string;
+  updated_at: string;
+  retargeted: boolean;
+  retargeted_at?: string | null;
+  retargeting_notes?: string | null;
+}
+
 export interface BlogPost {
   id: string;
   title: string;

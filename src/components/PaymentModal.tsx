@@ -12,6 +12,12 @@ import {
   RazorpayOptions,
   RazorpayResponse
 } from '@/lib/razorpay';
+import { 
+  trackAbandonedPayment, 
+  generateSessionId, 
+  getUserIP,
+  AbandonedPaymentData 
+} from '@/lib/abandonedPayments';
 import { toast } from '@/components/ui/sonner';
 
 interface PaymentModalProps {
@@ -37,9 +43,14 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sessionId] = useState(() => generateSessionId());
+  const [userIP, setUserIP] = useState<string>('unknown');
 
   useEffect(() => {
     if (isOpen) {
+      // Get user IP for tracking
+      getUserIP().then(setUserIP);
+      
       loadRazorpayScript().then((loaded) => {
         setIsScriptLoaded(loaded);
         if (!loaded) {
@@ -48,6 +59,27 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       });
     }
   }, [isOpen]);
+
+  // Track abandoned payment when modal is closed
+  const handleClose = async () => {
+    // Track as abandoned payment
+    const abandonedData: AbandonedPaymentData = {
+      full_name: appointmentData.full_name,
+      email: appointmentData.email,
+      phone: appointmentData.phone,
+      service: appointmentData.service,
+      date: appointmentData.date,
+      time: appointmentData.time,
+      notes: appointmentData.notes,
+      abandonment_reason: 'modal_closed',
+      session_id: sessionId,
+      user_agent: navigator.userAgent,
+      ip_address: userIP,
+    };
+
+    await trackAbandonedPayment(abandonedData);
+    onClose();
+  };
 
   const handlePayment = async () => {
     if (!isScriptLoaded) {
@@ -75,6 +107,22 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             console.error('Payment verification error:', error);
             toast.error('Payment verification failed');
             setError('Payment verification failed. Please contact support.');
+            
+            // Track as abandoned payment due to verification failure
+            const abandonedData: AbandonedPaymentData = {
+              full_name: appointmentData.full_name,
+              email: appointmentData.email,
+              phone: appointmentData.phone,
+              service: appointmentData.service,
+              date: appointmentData.date,
+              time: appointmentData.time,
+              notes: appointmentData.notes,
+              abandonment_reason: 'payment_failed',
+              session_id: sessionId,
+              user_agent: navigator.userAgent,
+              ip_address: userIP,
+            };
+            await trackAbandonedPayment(abandonedData);
           }
         },
         prefill: {
@@ -89,8 +137,23 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         },
         theme: RAZORPAY_CONFIG.theme,
         modal: {
-          ondismiss: () => {
+          ondismiss: async () => {
             setIsLoading(false);
+            // Track as abandoned payment when user dismisses modal
+            const abandonedData: AbandonedPaymentData = {
+              full_name: appointmentData.full_name,
+              email: appointmentData.email,
+              phone: appointmentData.phone,
+              service: appointmentData.service,
+              date: appointmentData.date,
+              time: appointmentData.time,
+              notes: appointmentData.notes,
+              abandonment_reason: 'user_cancelled',
+              session_id: sessionId,
+              user_agent: navigator.userAgent,
+              ip_address: userIP,
+            };
+            await trackAbandonedPayment(abandonedData);
           },
         },
       };
@@ -107,6 +170,22 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       console.error('Payment error:', error);
       setError('Failed to initiate payment. Please try again.');
       toast.error('Payment failed. Please try again.');
+      
+      // Track as abandoned payment due to error
+      const abandonedData: AbandonedPaymentData = {
+        full_name: appointmentData.full_name,
+        email: appointmentData.email,
+        phone: appointmentData.phone,
+        service: appointmentData.service,
+        date: appointmentData.date,
+        time: appointmentData.time,
+        notes: appointmentData.notes,
+        abandonment_reason: 'error',
+        session_id: sessionId,
+        user_agent: navigator.userAgent,
+        ip_address: userIP,
+      };
+      await trackAbandonedPayment(abandonedData);
     } finally {
       setIsLoading(false);
     }
@@ -177,7 +256,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           <div className="flex gap-3">
             <Button
               variant="outline"
-              onClick={onClose}
+              onClick={handleClose}
               className="flex-1"
               disabled={isLoading}
             >

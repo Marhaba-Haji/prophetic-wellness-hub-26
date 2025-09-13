@@ -7,6 +7,7 @@ import { toast } from "@/components/ui/sonner";
 import AdminAppointments from "@/components/admin/AdminAppointments";
 import AdminContacts from "@/components/admin/AdminContacts";
 import AdminBlogs from "@/components/admin/AdminBlogs";
+import AdminAbandonedPayments from "@/components/admin/AdminAbandonedPayments";
 import {
   Users,
   MessageSquare,
@@ -15,6 +16,7 @@ import {
   Menu,
   ChevronLeft,
   ChevronRight,
+  AlertTriangle,
 } from "lucide-react";
 import { Admin } from "@/types/supabase-types";
 
@@ -22,9 +24,10 @@ const AdminDashboard = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeModule, setActiveModule] = useState<
-    "appointments" | "contacts" | "blogs"
+    "appointments" | "contacts" | "blogs" | "abandoned-payments"
   >("appointments");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [abandonedCount, setAbandonedCount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -73,6 +76,28 @@ const AdminDashboard = () => {
 
     checkAuth();
   }, [navigate]);
+
+  // Load abandoned payments count
+  useEffect(() => {
+    const loadAbandonedCount = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('abandoned_payments')
+          .select('id')
+          .eq('retargeted', false);
+
+        if (!error && data) {
+          setAbandonedCount(data.length);
+        }
+      } catch (error) {
+        console.error('Error loading abandoned count:', error);
+      }
+    };
+
+    if (user) {
+      loadAbandonedCount();
+    }
+  }, [user]);
 
   const handleSignOut = async () => {
     try {
@@ -148,6 +173,29 @@ const AdminDashboard = () => {
               Blog Management
             </span>
           </button>
+          <button
+            className={`w-full flex items-center gap-3 px-2 py-3 rounded-lg text-left transition-colors font-medium ${activeModule === "abandoned-payments" ? "bg-brand-green/10 text-brand-green" : "hover:bg-gray-100 text-gray-700"}`}
+            onClick={() => setActiveModule("abandoned-payments")}
+          >
+            <div className="relative">
+              <AlertTriangle className="h-5 w-5 mx-auto" />
+              {abandonedCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                  {abandonedCount > 9 ? '9+' : abandonedCount}
+                </span>
+              )}
+            </div>
+            <span
+              className={`transition-all duration-200 ${sidebarOpen ? "inline" : "hidden"}`}
+            >
+              Abandoned Payments
+              {abandonedCount > 0 && sidebarOpen && (
+                <span className="ml-2 bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
+                  {abandonedCount}
+                </span>
+              )}
+            </span>
+          </button>
         </nav>
         <div className="mt-auto p-4 border-t">
           <div
@@ -183,6 +231,7 @@ const AdminDashboard = () => {
           {activeModule === "appointments" && <AdminAppointments />}
           {activeModule === "contacts" && <AdminContacts />}
           {activeModule === "blogs" && <AdminBlogs />}
+          {activeModule === "abandoned-payments" && <AdminAbandonedPayments />}
         </main>
       </div>
     </div>
