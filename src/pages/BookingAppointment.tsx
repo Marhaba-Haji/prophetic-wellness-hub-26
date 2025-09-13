@@ -11,6 +11,9 @@ import {
   Phone,
   MessageSquare,
   MapPin,
+  CreditCard,
+  Shield,
+  Info,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -20,6 +23,13 @@ import {
 } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
 import { z } from "zod";
+
+// Declare Razorpay for TypeScript
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
 
 const services = [
   "Unani Consultation",
@@ -74,9 +84,21 @@ const BookingAppointment = () => {
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
   const [availableSlots, setAvailableSlots] =
     useState<string[]>(availableTimes);
+  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
 
   const navigate = useNavigate();
   const { toast: uiToast } = useToast();
+
+  // Load Razorpay script
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   // Check appointment availability
   const checkAvailability = async (selectedDate: string) => {
@@ -139,6 +161,84 @@ const BookingAppointment = () => {
     }
   }, [availableSlots, time]);
 
+  // Handle Razorpay payment
+  const handlePayment = (appointmentData: any) => {
+    setIsPaymentProcessing(true);
+    
+    const options = {
+      key: "rzp_test_9WzFzN1yYv6kQt", // Replace with your Razorpay key
+      amount: 29900, // Amount in paise (₹299)
+      currency: "INR",
+      name: "Hijama Healing",
+      description: "Consultation Fee",
+      image: "/favicon.ico",
+      handler: async function (response: any) {
+        try {
+          // Payment successful, now save appointment
+          await saveAppointment(appointmentData, response.razorpay_payment_id);
+        } catch (error) {
+          console.error("Error saving appointment:", error);
+          toast.error("Payment completed but failed to save appointment. Please contact us.");
+        } finally {
+          setIsPaymentProcessing(false);
+        }
+      },
+      prefill: {
+        name: appointmentData.full_name,
+        email: appointmentData.email,
+        contact: appointmentData.phone,
+      },
+      theme: {
+        color: "#22c55e",
+      },
+      modal: {
+        ondismiss: function () {
+          setIsPaymentProcessing(false);
+          toast.error("Payment cancelled");
+        },
+      },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  };
+
+  // Save appointment after successful payment
+  const saveAppointment = async (appointmentData: any, paymentId: string) => {
+    await retryOperation(async () => {
+      const { error } = await supabase.from("appointments").insert({
+        full_name: appointmentData.full_name,
+        email: appointmentData.email,
+        phone: appointmentData.phone,
+        date: appointmentData.date,
+        time: appointmentData.time,
+        service: appointmentData.service,
+        notes: appointmentData.notes || null,
+        status: "confirmed",
+        payment_id: paymentId,
+        payment_amount: 299,
+      });
+
+      if (error) throw error;
+    });
+
+    toast.success(
+      "Payment successful! Booking confirmed. We'll contact you shortly.",
+    );
+
+    // Reset form
+    setFullName("");
+    setEmail("");
+    setPhone("");
+    setDate("");
+    setTime("");
+    setService("");
+    setNotes("");
+
+    // Redirect after successful booking
+    navigate("/booking/success");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -158,44 +258,21 @@ const BookingAppointment = () => {
 
       setIsSubmitting(true);
 
-      // Insert appointment with retry
-      await retryOperation(async () => {
-        const { error } = await supabase.from("appointments").insert({
-          full_name: validatedData.full_name,
-          email: validatedData.email,
-          phone: validatedData.phone,
-          date: validatedData.date,
-          time: validatedData.time,
-          service: validatedData.service,
-          notes: validatedData.notes || null,
-          status: "pending",
-        });
+      // Check if Razorpay is loaded
+      if (!window.Razorpay) {
+        toast.error("Payment system is loading. Please try again in a moment.");
+        return;
+      }
 
-        if (error) throw error;
-      });
-
-      toast.success(
-        "Booking request received! We'll contact you to confirm shortly.",
-      );
-
-      // Reset form
-      setFullName("");
-      setEmail("");
-      setPhone("");
-      setDate("");
-      setTime("");
-      setService("");
-      setNotes("");
-
-      // Redirect after successful booking
-      navigate("/booking/success");
+      // Proceed with payment
+      handlePayment(validatedData);
     } catch (error) {
       if (error instanceof z.ZodError) {
         const firstError = error.errors[0];
         toast.error(firstError.message);
       } else {
-        const errorMessage = handleSupabaseError(error);
-        toast.error(errorMessage);
+        console.error("Booking error:", error);
+        toast.error("Failed to process booking. Please try again.");
       }
     } finally {
       setIsSubmitting(false);
@@ -224,6 +301,23 @@ const BookingAppointment = () => {
             Schedule your hijama therapy session with our certified
             practitioners.
           </p>
+          
+          {/* Payment and Disclaimer Info */}
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded-r-lg">
+            <div className="flex items-start">
+              <Info className="h-5 w-5 text-blue-400 mt-0.5 mr-3 flex-shrink-0" />
+              <div className="text-sm">
+                <h4 className="font-semibold text-blue-800 mb-2">Payment & Booking Information</h4>
+                <ul className="space-y-1 text-blue-700">
+                  <li>• <strong>Consultation Fee:</strong> ₹299 (to be paid during booking)</li>
+                  <li>• Our team will call to reconfirm your booked slot for consultation or therapy</li>
+                  <li>• We can reschedule the appointment as per your convenience if needed</li>
+                  <li>• Balance amount for therapy (if applicable) can be paid directly at the centre</li>
+                  <li>• Your slot will be confirmed only after successful payment</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -416,9 +510,13 @@ const BookingAppointment = () => {
                   <Button
                     type="submit"
                     className="w-full gold-gradient text-white hover:opacity-90 transition-opacity text-lg py-6"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isPaymentProcessing}
                   >
-                    {isSubmitting ? "Processing..." : "Confirm Booking"}
+                    <CreditCard className="h-5 w-5 mr-2" />
+                    {isSubmitting || isPaymentProcessing 
+                      ? "Processing..." 
+                      : "Pay ₹299 & Confirm Booking"
+                    }
                   </Button>
                 </form>
               </CardContent>
@@ -432,6 +530,18 @@ const BookingAppointment = () => {
                   Booking Information
                 </h3>
                 <div className="space-y-6 text-sm">
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex items-center mb-2">
+                      <Shield className="h-4 w-4 text-green-600 mr-2" />
+                      <h4 className="font-semibold text-green-800">Consultation Fee</h4>
+                    </div>
+                    <p className="text-green-700 text-sm">
+                      ₹299 (Secure Payment via Razorpay)
+                    </p>
+                    <p className="text-xs text-green-600 mt-1">
+                      Confirms your appointment slot
+                    </p>
+                  </div>
                   <div>
                     <h4 className="font-semibold mb-1">Opening Hours</h4>
                     <div className="text-center">
