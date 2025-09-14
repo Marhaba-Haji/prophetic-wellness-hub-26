@@ -67,28 +67,70 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     setError(null);
 
     try {
+      // First create an order using the edge function
+      const orderResponse = await supabase.functions.invoke('create-order', {
+        body: {
+          amount: CONSULTATION_FEE,
+          currency: 'INR',
+          receipt: `receipt_${Date.now()}`,
+          notes: {
+            service: appointmentData.service,
+            date: appointmentData.date,
+            time: appointmentData.time,
+            customer_name: appointmentData.full_name,
+            customer_email: appointmentData.email,
+            customer_phone: appointmentData.phone
+          }
+        }
+      });
+
+      if (orderResponse.error) {
+        throw new Error(orderResponse.error.message || 'Failed to create order');
+      }
+
+      const orderData = orderResponse.data;
+
       const options: RazorpayOptions = {
-        key: RAZORPAY_CONFIG.key,
+        key: orderData.key_id, // Use the key from edge function response
         amount: CONSULTATION_FEE,
         currency: RAZORPAY_CONFIG.currency,
         name: RAZORPAY_CONFIG.name,
         description: `${RAZORPAY_CONFIG.description} - ${appointmentData.service}`,
+        order_id: orderData.id, // Use the order ID from Razorpay
         capture: true, // Enable automatic capture
         handler: async (response: RazorpayResponse) => {
           try {
-            // Auto-capture the payment to prevent refund
-            console.log('Payment authorized, attempting auto-capture...');
-            const captureResult = await autoCapturePayment(response.razorpay_payment_id, CONSULTATION_FEE);
-            
-            if (captureResult.success) {
-              toast.success('Payment captured successfully!');
-              console.log('Payment captured:', captureResult);
-            } else {
-              toast.error(`Payment authorized but capture failed: ${captureResult.error}`);
-              console.error('Capture failed:', captureResult);
+            // Verify payment using edge function
+            console.log('Payment completed, verifying...');
+            const verifyResponse = await supabase.functions.invoke('verify-payment', {
+              body: {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature
+              }
+            });
+
+            if (verifyResponse.error) {
+              throw new Error(verifyResponse.error.message || 'Payment verification failed');
             }
-            
-            onPaymentSuccess(response);
+
+            if (verifyResponse.data.verified) {
+              // Auto-capture the payment to prevent refund
+              console.log('Payment verified, attempting auto-capture...');
+              const captureResult = await autoCapturePayment(response.razorpay_payment_id, CONSULTATION_FEE);
+              
+              if (captureResult.success) {
+                toast.success('Payment captured successfully!');
+                console.log('Payment captured:', captureResult);
+              } else {
+                toast.error(`Payment authorized but capture failed: ${captureResult.error}`);
+                console.error('Capture failed:', captureResult);
+              }
+              
+              onPaymentSuccess(response);
+            } else {
+              throw new Error('Payment signature verification failed');
+            }
           } catch (error) {
             console.error('Payment verification error:', error);
             toast.error('Payment verification failed');
