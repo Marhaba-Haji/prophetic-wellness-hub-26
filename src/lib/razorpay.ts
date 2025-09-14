@@ -34,7 +34,7 @@ export interface RazorpayResponse {
 
 // Razorpay configuration
 export const RAZORPAY_CONFIG = {
-  key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_1234567890', // Replace with your actual key
+  key: 'rzp_test_1234567890', // Replace with your actual key
   currency: 'INR',
   name: 'Revivoheal - Prophetic Wellness Hub',
   description: 'Consultation Fee',

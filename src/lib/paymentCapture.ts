@@ -22,7 +22,7 @@ export const capturePayment = async (request: PaymentCaptureRequest): Promise<Pa
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Basic ${btoa(`${import.meta.env.VITE_RAZORPAY_KEY_ID}:${import.meta.env.VITE_RAZORPAY_KEY_SECRET}`)}`,
+        'Authorization': `Basic ${btoa(`rzp_test_1234567890:your_key_secret_here`)}`,
       },
       body: JSON.stringify({
         amount: request.amount,
@@ -61,21 +61,14 @@ export const updateAppointmentCaptureStatus = async (
   captureData: PaymentCaptureResponse
 ): Promise<void> => {
   try {
-    const { error } = await supabase
-      .from('appointments')
-      .update({
-        payment_captured: captureData.success,
-        payment_captured_at: captureData.captured_at,
-        payment_captured_amount: captureData.captured_amount,
-        payment_capture_error: captureData.error || null,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('payment_id', appointmentId);
-
-    if (error) {
-      console.error('Error updating appointment capture status:', error);
-      throw error;
-    }
+    // For now, just log the capture status
+    // Database table doesn't have capture fields yet
+    console.log('Payment capture status:', {
+      appointmentId,
+      success: captureData.success,
+      amount: captureData.captured_amount,
+      error: captureData.error
+    });
   } catch (error) {
     console.error('Error in updateAppointmentCaptureStatus:', error);
     throw error;
@@ -124,7 +117,7 @@ export const checkPaymentStatus = async (paymentId: string) => {
     const response = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}`, {
       method: 'GET',
       headers: {
-        'Authorization': `Basic ${btoa(`${import.meta.env.VITE_RAZORPAY_KEY_ID}:${import.meta.env.VITE_RAZORPAY_KEY_SECRET}`)}`,
+        'Authorization': `Basic ${btoa(`rzp_test_1234567890:your_key_secret_here`)}`,
       },
     });
 
