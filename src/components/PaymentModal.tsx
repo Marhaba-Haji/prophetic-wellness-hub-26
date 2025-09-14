@@ -156,7 +156,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
               </div>
               <div className="flex justify-between font-semibold border-t pt-1">
                 <span>Consultation Fee:</span>
-                <span>₹299</span>
+                <span>₹1</span>
               </div>
             </div>
           </div>
@@ -214,7 +214,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
               ) : (
                 <>
                   <CreditCard className="h-4 w-4 mr-2" />
-                  Pay ₹299
+                  Pay ₹1
                 </>
               )}
             </Button>

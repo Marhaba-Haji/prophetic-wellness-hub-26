@@ -78,7 +78,7 @@ export const updateAppointmentCaptureStatus = async (
 // Auto-capture payment after successful authorization
 export const autoCapturePayment = async (
   paymentId: string,
-  amount: number = 29900 // Default consultation fee
+  amount: number = 100 // Default consultation fee (Rs. 1)
 ): Promise<PaymentCaptureResponse> => {
   try {
     console.log(`Auto-capturing payment: ${paymentId} for amount: ${amount}`);
