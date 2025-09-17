@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, CreditCard, Shield, Phone, Calendar } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   loadRazorpayScript, 
   createRazorpayOrder, 
@@ -96,7 +97,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         currency: RAZORPAY_CONFIG.currency,
         name: RAZORPAY_CONFIG.name,
         description: `${RAZORPAY_CONFIG.description} - ${appointmentData.service}`,
-        order_id: orderData.id, // Use the order ID from Razorpay
         capture: true, // Enable automatic capture
         handler: async (response: RazorpayResponse) => {
           try {
