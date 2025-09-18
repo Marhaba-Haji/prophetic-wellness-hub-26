@@ -10,7 +10,11 @@ import CuppingInfo from "@/components/home/CuppingInfo";
 
 const Index = () => {
   return (
-    <Layout>
+    <Layout 
+      canonical="/"
+      image="/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
+      keywords="RevivoHeal, cupping therapy, Hijama, pain relief, Bangalore, traditional medicine"
+    >
       <Hero />
       <MainServices />
       <Benefits />

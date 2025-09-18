@@ -25,6 +25,7 @@ import ServiceDetail from "./pages/ServiceDetail";
 import UnaniHealthCare from "./pages/UnaniHealthCare";
 import AcupressureTherapy from "./pages/AcupressureTherapy";
 import GreekRegimenTherapy from "./pages/GreekRegimenTherapy";
+import FullBodyDetox from "./pages/FullBodyDetox";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Refund from "./pages/Refund";
@@ -50,7 +51,8 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/benefits" element={<Benefits />} />
               <Route path="/cupping-therapy" element={<Services />} />
-              <Route path="/greek-regimen-therapy" element={<GreekRegimenTherapy />} />
+            <Route path="/greek-regimen-therapy" element={<GreekRegimenTherapy />} />
+            <Route path="/full-body-detox" element={<FullBodyDetox />} />
               <Route path="/service/:serviceId" element={<ServiceDetail />} />
               <Route path="/unani-healthcare" element={<UnaniHealthCare />} />
               <Route path="/acupressure-therapy" element={<AcupressureTherapy />} />

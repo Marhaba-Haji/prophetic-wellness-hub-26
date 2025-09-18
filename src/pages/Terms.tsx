@@ -2,7 +2,11 @@ import React from "react";
 import Layout from "@/components/layout/Layout";
 
 const Terms = () => (
-  <Layout>
+  <Layout
+    canonical="/terms"
+    image="/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
+    keywords="terms and conditions, RevivoHeal terms, healthcare terms"
+  >
     <div className="container mx-auto px-4 py-16 max-w-3xl">
       <h1 className="text-3xl font-bold mb-6 text-brand-green">
         TERMS & CONDITIONS – Revivo Heal

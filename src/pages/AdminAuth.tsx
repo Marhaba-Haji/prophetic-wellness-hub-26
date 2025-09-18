@@ -218,7 +218,11 @@ const AdminAuth = () => {
   };
 
   return (
-    <Layout>
+    <Layout
+      canonical="/admin"
+      image="/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
+      keywords="admin login, RevivoHeal admin, healthcare administration"
+    >
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-md mx-auto">
           <Card>

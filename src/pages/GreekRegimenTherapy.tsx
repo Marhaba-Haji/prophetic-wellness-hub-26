@@ -37,6 +37,8 @@ const GreekRegimenTherapy = () => {
       title="Greek Regimen Therapy - Complete Detox, Restoration & Healing | RevivoHeal Bangalore"
       description="Discover Greek Regimen Therapy (Ilaj bil Tadbeer) - a time-tested Unani regimen for natural detox, healing chronic conditions, and restoring balance."
       keywords="Greek Regimen Therapy, Ilaj bil Tadbeer, Unani therapy, detox therapy, cupping therapy, natural healing, chronic disease treatment, Bangalore"
+      canonical="/greek-regimen-therapy"
+      image="/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
     >
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5">

@@ -6,7 +6,11 @@ import ContactForm from "@/components/ContactForm";
 
 const Contact = () => {
   return (
-    <Layout>
+    <Layout
+      canonical="/contact"
+      image="/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
+      keywords="contact RevivoHeal, appointment booking, Bangalore clinic, pain relief consultation"
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 className="text-3xl md:text-4xl font-bold text-brand-green mb-8 text-center">
           Contact Us

@@ -266,7 +266,11 @@ const UnaniHealthCare = () => {
   };
 
   return (
-    <Layout>
+    <Layout
+      canonical="/unani-healthcare"
+      image="/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
+      keywords="Unani healthcare, traditional medicine, natural healing, holistic treatment Bangalore"
+    >
 
       {/* Treatments Section */}
       <section className="py-20 bg-white">

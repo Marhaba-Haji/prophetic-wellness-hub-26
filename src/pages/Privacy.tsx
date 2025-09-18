@@ -3,7 +3,11 @@ import React from "react";
 import Layout from "@/components/layout/Layout";
 
 const Privacy = () => (
-  <Layout>
+  <Layout
+    canonical="/privacy"
+    image="/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
+    keywords="privacy policy, data protection, RevivoHeal privacy"
+  >
     <div className="container mx-auto px-4 py-16 max-w-3xl">
       <h1 className="text-3xl font-bold mb-6 text-brand-green">
         PRIVACY POLICY – Revivo Heal

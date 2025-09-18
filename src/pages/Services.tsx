@@ -161,7 +161,11 @@ const ServicesPage = () => {
     </section>
   );
   return (
-    <Layout>
+    <Layout
+      canonical="/services"
+      image="/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
+      keywords="cupping therapy services, Hijama Bangalore, pain relief treatments, traditional medicine"
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 className="text-3xl md:text-5xl font-bold text-brand-green mb-2 text-center">
           Cupping Therapy Services in Bangalore
