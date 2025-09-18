@@ -74,79 +74,113 @@ const FullBodyDetox = () => {
       image="/lovable-uploads/a2f81c2e-c7fd-41be-bcee-e95c0e4202e5.png"
     >
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-        <div className="container mx-auto px-4 text-center">
-          <div className="max-w-5xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
-              RevivoHeal Signature Full Body Detox Program
+      <section className="relative min-h-screen flex items-center justify-center bg-gradient-hero overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 islamic-pattern-bg opacity-50"></div>
+        
+        {/* Floating Elements */}
+        <div className="absolute top-20 left-10 w-20 h-20 bg-primary/10 rounded-full floating-element"></div>
+        <div className="absolute bottom-20 right-10 w-16 h-16 bg-accent/10 rounded-full floating-element animation-delay-1000"></div>
+        <div className="absolute top-1/3 right-1/4 w-12 h-12 bg-primary/5 rounded-full floating-element animation-delay-2000"></div>
+        
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <div className="max-w-5xl mx-auto animate-fade-in">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+              <span className="gradient-text">RevivoHeal Signature</span>
+              <br />
+              <span className="text-foreground">Full Body Detox Program</span>
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-4xl mx-auto leading-relaxed">
-              A clinically supervised Unani therapy (known as Munzij-Mushil) that gently removes deep-rooted toxins, balances your system, and restores vitality.
+            <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-4xl mx-auto leading-relaxed animate-slide-up">
+              A clinically supervised Unani therapy (known as <span className="font-semibold text-primary">Munzij-Mushil</span>) that gently removes deep-rooted toxins, balances your system, and restores vitality.
             </p>
             
             {/* Trust Badges */}
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
+            <div className="flex flex-wrap justify-center gap-4 mb-8 animate-scale-in">
               {trustBadges.map((badge, index) => (
-                <div key={index} className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border">
-                  {badge.icon}
-                  <span className="text-sm font-medium">{badge.text}</span>
+                <div 
+                  key={index} 
+                  className="flex items-center gap-2 glass-effect px-4 py-3 rounded-full border hover-lift"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="text-primary">{badge.icon}</div>
+                  <span className="text-sm font-medium text-foreground">{badge.text}</span>
                 </div>
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" onClick={scrollToBooking} className="text-lg px-8 py-6">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
+              <Button 
+                size="lg" 
+                onClick={scrollToBooking} 
+                className="text-lg px-8 py-6 shadow-glow hover:scale-105 transition-all"
+              >
                 <Calendar className="mr-2 h-5 w-5" />
                 Book Your Free 15-Minute Consultation
               </Button>
-              <Button variant="outline" size="lg" onClick={scrollToDetails} className="text-lg px-8 py-6">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                onClick={scrollToDetails} 
+                className="text-lg px-8 py-6 hover-lift"
+              >
                 <ArrowRight className="mr-2 h-5 w-5" />
                 Learn How This Detox Works
               </Button>
             </div>
           </div>
         </div>
+        
+        {/* Bottom wave */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-background">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-full">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="hsl(var(--background))"></path>
+          </svg>
+        </div>
       </section>
 
       {/* Introduction */}
-      <section className="py-20 bg-background">
+      <section className="py-24 bg-background relative">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-              What is the Signature Full Body Detox?
+            <h2 className="text-3xl md:text-5xl font-bold mb-8 animate-fade-in">
+              What is the <span className="gradient-text">Signature Full Body Detox</span>?
             </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-12">
-              Our detox program is based on the ancient Unani principle of <strong>Munzij-Mushil</strong> - a two-step scientific approach to cleanse your body naturally and safely.
+            <p className="text-lg text-muted-foreground leading-relaxed mb-12 animate-slide-up">
+              Our detox program is based on the ancient Unani principle of <strong className="text-primary">Munzij-Mushil</strong> - a two-step scientific approach to cleanse your body naturally and safely.
             </p>
             
             <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl">🌿</span>
-                  </div>
-                  <CardTitle>Step 1: Munzij</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">Softens and ripens morbid matter (toxins, waste) using gentle herbal decoctions</p>
-                </CardContent>
-              </Card>
+              <div className="group">
+                <Card className="card-elegant hover-lift h-full">
+                  <CardHeader className="text-center">
+                    <div className="w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 floating-element">
+                      <span className="text-3xl">🌿</span>
+                    </div>
+                    <CardTitle className="text-xl">Step 1: Munzij</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">Softens and ripens morbid matter (toxins, waste) using gentle herbal decoctions</p>
+                  </CardContent>
+                </Card>
+              </div>
               
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl">✨</span>
-                  </div>
-                  <CardTitle>Step 2: Mushil</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">Safely expels these toxins through natural purgation under medical supervision</p>
-                </CardContent>
-              </Card>
+              <div className="group">
+                <Card className="card-elegant hover-lift h-full">
+                  <CardHeader className="text-center">
+                    <div className="w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 floating-element animation-delay-1000">
+                      <span className="text-3xl">✨</span>
+                    </div>
+                    <CardTitle className="text-xl">Step 2: Mushil</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">Safely expels these toxins through natural purgation under medical supervision</p>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
 
-            <div className="mt-12">
-              <Button variant="outline" onClick={scrollToBooking}>
+            <div className="mt-12 animate-fade-in">
+              <Button variant="outline" onClick={scrollToBooking} className="hover-lift">
                 Discover if This Program is Right for You →
               </Button>
             </div>
@@ -155,26 +189,31 @@ const FullBodyDetox = () => {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-gradient-subtle relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute top-0 left-0 w-full h-full bg-dots-pattern opacity-30"></div>
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-              Why Patients Choose Our Full Body Detox
+            <h2 className="text-3xl md:text-5xl font-bold mb-8 animate-fade-in">
+              Why Patients Choose Our <span className="gradient-text">Full Body Detox</span>
             </h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {benefits.map((benefit, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl">{benefit.icon}</span>
-                  </div>
-                  <CardTitle className="text-lg">{benefit.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">{benefit.description}</p>
-                </CardContent>
-              </Card>
+              <div key={index} className="group animate-slide-up" style={{ animationDelay: `${index * 100}ms` }}>
+                <Card className="card-elegant hover-lift text-center h-full">
+                  <CardHeader>
+                    <div className="w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-glow transition-all">
+                      <span className="text-3xl">{benefit.icon}</span>
+                    </div>
+                    <CardTitle className="text-xl">{benefit.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">{benefit.description}</p>
+                  </CardContent>
+                </Card>
+              </div>
             ))}
           </div>
         </div>
