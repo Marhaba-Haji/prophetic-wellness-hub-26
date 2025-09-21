@@ -1,50 +1,31 @@
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Calendar } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-// import { BlogPost } from "@/types/supabase-types";
+import { useLatestPosts } from "@/hooks/useBlogData";
+import BlogCard from "@/components/blog/BlogCard";
 import { ClientOnly } from "@/components/ui/ClientOnlyComponent";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const BlogPreview = () => {
-  const [blogPosts, setBlogPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: blogPosts = [], isLoading, error } = useLatestPosts(3);
 
-  useEffect(() => {
-    fetchLatestPosts();
-  }, []);
-
-  const fetchLatestPosts = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("blogs")
-        .select("*")
-        .eq("published", true)
-        .order("published_date", { ascending: false })
-        .limit(3);
-
-      if (error) throw error;
-      setBlogPosts(data || []);
-    } catch (error) {
-      console.error("Error fetching latest posts:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "Recently";
-    try {
-      return new Date(dateString).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
-    } catch (e) {
-      return "Recently";
-    }
-  };
+  // Loading skeleton for homepage
+  const LoadingSkeleton = () => (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {Array.from({ length: 3 }, (_, i) => (
+        <div key={i} className="border border-gray-200 rounded-lg overflow-hidden">
+          <Skeleton className="w-full h-48" />
+          <div className="p-6 space-y-3">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-6 w-full" />
+            <Skeleton className="h-6 w-3/4" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-2/3" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <section className="py-16 bg-gray-50">
@@ -60,60 +41,18 @@ const BlogPreview = () => {
         </div>
 
         <ClientOnly
-          fallback={
-            <div className="flex justify-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-green"></div>
-            </div>
-          }
+          fallback={<LoadingSkeleton />}
         >
-          {loading ? (
-            <div className="flex justify-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-green"></div>
+          {isLoading ? (
+            <LoadingSkeleton />
+          ) : error ? (
+            <div className="text-center py-8">
+              <p className="text-red-500">Error loading blog posts.</p>
             </div>
           ) : blogPosts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {blogPosts.map((post) => (
-                <Card
-                  key={post.id}
-                  className="group border border-gray-200 hover:shadow-lg transition-shadow duration-300 overflow-hidden"
-                >
-                  <Link to={`/blog/${post.slug}`}>
-                    <div className="overflow-hidden">
-                      <img
-                        src={
-                          post.featured_image ||
-                          "https://images.unsplash.com/photo-1584515933487-779824d29309?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-                        }
-                        alt={post.featured_image_alt || post.title}
-                        className="w-full h-48 object-cover transition-all duration-500 group-hover:scale-105"
-                      />
-                    </div>
-                  </Link>
-                  <CardContent className="p-6">
-                    <div className="flex items-center text-sm text-gray-500 mb-2">
-                      <Calendar className="h-3.5 w-3.5 mr-1" />
-                      <span>{formatDate(post.published_date)}</span>
-                    </div>
-                    <Link to={`/blog/${post.slug}`}>
-                      <h3 className="text-xl font-bold text-brand-green mb-2 hover:text-brand-green-light transition-colors">
-                        {post.title}
-                      </h3>
-                    </Link>
-                    <p className="text-gray-700">
-                      {post.excerpt || post.meta_description}
-                    </p>
-                  </CardContent>
-                  <CardFooter className="px-6 pb-6 pt-0">
-                    <Link to={`/blog/${post.slug}`}>
-                      <Button
-                        variant="link"
-                        className="text-brand-green p-0 hover:text-brand-green-light"
-                      >
-                        Read More →
-                      </Button>
-                    </Link>
-                  </CardFooter>
-                </Card>
+                <BlogCard key={post.id} post={post} variant="compact" />
               ))}
             </div>
           ) : (

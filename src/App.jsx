@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { HelmetProvider } from "@/components/providers/HelmetProvider";
 import ScrollToTop from "@/components/ScrollToTop";
+import { PerformanceMonitor } from "@/components/PerformanceMonitor";
 
 // Import pages
 import Index from "./pages/Index";
@@ -33,8 +34,21 @@ import Refund from "./pages/Refund";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60 * 1000,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
       refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      retry: (failureCount, error) => {
+        // Don't retry on 4xx errors
+        if (error?.status >= 400 && error?.status < 500) {
+          return false;
+        }
+        return failureCount < 3;
+      },
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    },
+    mutations: {
+      retry: 1,
     },
   },
 });
@@ -46,6 +60,7 @@ function App() {
         <TooltipProvider>
           <Router>
             <ScrollToTop />
+            <PerformanceMonitor />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />

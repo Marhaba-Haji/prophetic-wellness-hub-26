@@ -1,56 +1,104 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import Layout from "@/components/layout/Layout";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { Calendar, User, Tag } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { BlogPost } from "@/types/supabase-types";
+import { useBlogPosts, useBlogCount } from "@/hooks/useBlogData";
+import BlogCard from "@/components/blog/BlogCard";
 import PageSEO from "@/components/SEO/PageSEO";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Blog = () => {
-  const [blogPosts, setBlogPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 9;
 
-  useEffect(() => {
-    fetchBlogPosts();
-  }, [currentPage]);
+  // Use React Query for optimized data fetching
+  const { data: blogPosts = [], isLoading, error } = useBlogPosts(currentPage, postsPerPage);
+  const { data: totalCount = 0 } = useBlogCount();
 
-  const fetchBlogPosts = async () => {
-    try {
-      const from = (currentPage - 1) * postsPerPage;
-      const to = from + postsPerPage - 1;
+  // Calculate pagination info
+  const totalPages = Math.ceil(totalCount / postsPerPage);
+  const hasNextPage = currentPage < totalPages;
+  const hasPrevPage = currentPage > 1;
 
-      const { data, error } = await supabase
-        .from("blogs")
-        .select("*")
-        .eq("published", true)
-        .order("published_date", { ascending: false })
-        .range(from, to);
-
-      if (error) throw error;
-      setBlogPosts(data || []);
-    } catch (error) {
-      console.error("Error fetching blog posts:", error);
-    } finally {
-      setLoading(false);
-    }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    // Scroll to top when page changes
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "Recently";
-    try {
-      return new Date(dateString).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
-    } catch (e) {
-      return "Recently";
-    }
-  };
+  // Memoize pagination component to prevent unnecessary re-renders
+  const PaginationComponent = useMemo(() => {
+    if (totalPages <= 1) return null;
+
+    return (
+      <div className="flex justify-center items-center gap-2 mt-12">
+        <Button
+          variant="outline"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={!hasPrevPage}
+          className="px-4 py-2"
+        >
+          Previous
+        </Button>
+        
+        <div className="flex gap-1">
+          {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+            let pageNum;
+            if (totalPages <= 5) {
+              pageNum = i + 1;
+            } else if (currentPage <= 3) {
+              pageNum = i + 1;
+            } else if (currentPage >= totalPages - 2) {
+              pageNum = totalPages - 4 + i;
+            } else {
+              pageNum = currentPage - 2 + i;
+            }
+
+            return (
+              <Button
+                key={pageNum}
+                variant={currentPage === pageNum ? "default" : "outline"}
+                onClick={() => handlePageChange(pageNum)}
+                className="px-3 py-2 min-w-[40px]"
+              >
+                {pageNum}
+              </Button>
+            );
+          })}
+        </div>
+
+        <Button
+          variant="outline"
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={!hasNextPage}
+          className="px-4 py-2"
+        >
+          Next
+        </Button>
+      </div>
+    );
+  }, [currentPage, totalPages, hasNextPage, hasPrevPage]);
+
+  // Loading skeleton component
+  const LoadingSkeleton = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {Array.from({ length: postsPerPage }, (_, i) => (
+        <div key={i} className="border border-gray-200 rounded-lg overflow-hidden">
+          <Skeleton className="w-full aspect-video" />
+          <div className="p-6 space-y-3">
+            <div className="flex gap-4">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-16" />
+            </div>
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-6 w-full" />
+            <Skeleton className="h-6 w-3/4" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-2/3" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <Layout disableDefaultSEO>
@@ -74,85 +122,23 @@ const Blog = () => {
           </p>
         </div>
 
-        {loading ? (
-          <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-green"></div>
+        {isLoading ? (
+          <LoadingSkeleton />
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-500 text-lg">
+              Error loading blog posts. Please try again later.
+            </p>
           </div>
         ) : blogPosts.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post) => (
-              <Card
-                key={post.id}
-                className="group border border-gray-200 hover:shadow-lg transition-shadow duration-300 overflow-hidden"
-              >
-                <Link to={`/blog/${post.slug}`}>
-                  <div className="overflow-hidden">
-                    <img
-                      src={
-                        post.featured_image ||
-                        "https://images.unsplash.com/photo-1584515933487-779824d29309?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-                      }
-                      alt={post.featured_image_alt || post.title}
-                      className="w-full aspect-video sm:aspect-[1.9/1] object-cover transition-all duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                </Link>
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
-                    <div className="flex items-center">
-                      <Calendar className="h-3.5 w-3.5 mr-1" />
-                      <span>{formatDate(post.published_date)}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <User className="h-3.5 w-3.5 mr-1" />
-                      <span>{post.author}</span>
-                    </div>
-                  </div>
-
-                  {post.category && (
-                    <div className="flex items-center mb-2">
-                      <Tag className="h-3.5 w-3.5 mr-1 text-brand-green" />
-                      <span className="text-sm text-brand-green font-medium">
-                        {post.category}
-                      </span>
-                    </div>
-                  )}
-
-                  <Link to={`/blog/${post.slug}`}>
-                    <h2 className="text-xl font-bold text-brand-green mb-2 hover:text-brand-green-light transition-colors line-clamp-2">
-                      {post.title}
-                    </h2>
-                  </Link>
-                  <p className="text-gray-700 line-clamp-3">
-                    {post.excerpt || post.meta_description}
-                  </p>
-
-                  {post.tags && post.tags.length > 0 && (
-                    <div className="mt-3 flex flex-wrap gap-1">
-                      {post.tags.slice(0, 3).map((tag, index) => (
-                        <span
-                          key={index}
-                          className="px-2 py-1 bg-brand-green/10 text-brand-green rounded-full text-xs"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-                <CardFooter className="px-6 pb-6 pt-0">
-                  <Link to={`/blog/${post.slug}`}>
-                    <Button
-                      variant="link"
-                      className="text-brand-green p-0 hover:text-brand-green-light"
-                    >
-                      Read More →
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {blogPosts.map((post) => (
+                <BlogCard key={post.id} post={post} />
+              ))}
+            </div>
+            {PaginationComponent}
+          </>
         ) : (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">
