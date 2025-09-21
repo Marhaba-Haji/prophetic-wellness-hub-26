@@ -1,149 +1,137 @@
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles, Shield, CheckCircle, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Sparkles, Shield, ArrowRight, CheckCircle } from 'lucide-react';
 
 const FeaturedServices = () => {
-  const services = [
+  const programs = [
     {
-      icon: <Sparkles className="h-12 w-12" />,
+      id: "greek-regimen-therapy",
       title: "Greek Regimen Therapy",
       subtitle: "Ilaj bil Tadbeer",
-      description: "Complete detox, restoration & healing through time-tested Unani regimens designed to cleanse toxins, restore balance, and naturally heal chronic conditions.",
-      features: ["Pain Relief", "Detoxification", "Immune Strengthening", "Holistic Healing"],
+      description: "Complete detox & healing through ancient Unani regimens. Eliminates chronic pain, restores balance, and naturally heals conditions.",
+      icon: <Sparkles className="h-8 w-8" />,
+      features: ["Pain Relief", "Detoxification", "Immune Boost", "Holistic Healing"],
+      image: "https://res.cloudinary.com/doxoxzz02/image/upload/v1758482343/regimenal_therapy_rilyte.jpg",
       link: "/greek-regimen-therapy",
-      iconBg: "bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5",
-      iconColor: "text-primary",
-      cardGradient: "from-primary/5 via-background to-primary/3",
-      accentColor: "primary"
+      color: "primary"
     },
     {
-      icon: <Shield className="h-12 w-12" />,
+      id: "full-body-detox",
       title: "Full Body Detox Program", 
       subtitle: "Munzij-Mushil Therapy",
-      description: "Clinically supervised Unani therapy that gently removes deep-rooted toxins, balances your system, and restores vitality through natural purgation.",
+      description: "Advanced natural detoxification that removes deep toxins, balances your system, and restores vitality through gentle purgation.",
+      icon: <Shield className="h-8 w-8" />,
       features: ["Deep Cleansing", "Metabolic Balance", "Organ Function", "Natural Healing"],
+      image: "https://res.cloudinary.com/doxoxzz02/image/upload/v1758482711/MM_therapy_o4b22r.jpg",
       link: "/full-body-detox",
-      iconBg: "bg-gradient-to-br from-secondary/20 via-secondary/10 to-secondary/5", 
-      iconColor: "text-secondary",
-      cardGradient: "from-secondary/5 via-background to-secondary/3",
-      accentColor: "secondary"
+      color: "secondary"
     }
   ];
 
   return (
-    <section className="py-32 bg-gradient-to-b from-background via-background/98 to-secondary/3 relative overflow-hidden">
-      {/* Enhanced Background Pattern */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,hsl(var(--primary)/0.08),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,hsl(var(--secondary)/0.08),transparent_60%)]" />
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-gradient-to-b from-primary/5 to-transparent rounded-full blur-3xl" />
-      </div>
-      
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Premium Header */}
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-3 bg-gradient-to-r from-primary/10 to-secondary/10 text-primary px-6 py-3 rounded-full text-sm font-semibold mb-8 border border-primary/20">
-            <Star className="h-4 w-4 text-primary" />
+    <section className="py-16 bg-gray-50">
+      <div className="container mx-auto px-4">
+        {/* Section Header - Matching Home Theme */}
+        <div className="text-center mb-14">
+          <span className="text-brand-gold uppercase tracking-wider font-medium">
             Our Signature Programs
-            <Star className="h-4 w-4 text-secondary" />
-          </div>
-          
-          <h2 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
-            <span className="text-foreground">Premium </span>
-            <span className="bg-gradient-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent">
-              Healing Experiences
-            </span>
+          </span>
+          <h2 className="text-3xl md:text-4xl font-bold text-brand-green mb-4 mt-2">
+            Premium Healing Experiences
           </h2>
-          
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-light">
-            Our most sought-after therapeutic programs, meticulously crafted by combining 
-            <span className="text-primary font-medium"> ancient Unani wisdom</span> with 
-            <span className="text-secondary font-medium"> modern clinical excellence</span>
+          <div className="h-1 w-24 bg-brand-gold mx-auto mb-4"></div>
+          <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+            Our most transformative therapeutic programs, combining ancient Unani wisdom with modern clinical excellence to deliver exceptional healing results.
           </p>
         </div>
 
-        {/* Premium Cards - Always 2 columns on tablet+ */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-8xl mx-auto mb-20">
-          {services.map((service, index) => (
+        {/* Compact Cards Grid - Always 2 columns on tablet+ */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto mb-12">
+          {programs.map((program, index) => (
             <Card 
-              key={index} 
-              className={`group relative overflow-hidden bg-gradient-to-br ${service.cardGradient} backdrop-blur-sm border-0 shadow-2xl hover:shadow-3xl transition-all duration-700 hover:scale-[1.03] hover:-translate-y-2`}
+              key={program.id} 
+              className="group overflow-hidden border border-gray-200 hover:border-brand-gold transition-all duration-300 hover:shadow-xl bg-white rounded-xl"
             >
-              {/* Premium Background Effects */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-primary/15 to-transparent rounded-bl-[120px] opacity-60" />
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-secondary/10 to-transparent rounded-tr-[100px] opacity-40" />
-              
-              <CardHeader className="relative z-10 p-10 pb-8">
-                {/* Premium Icon Section */}
-                <div className="flex items-start gap-8 mb-8">
-                  <div className={`p-6 rounded-3xl ${service.iconBg} shadow-2xl group-hover:shadow-3xl transition-all duration-500 group-hover:scale-110 group-hover:-rotate-3 border border-white/20`}>
-                    <div className={service.iconColor}>
-                      {service.icon}
-                    </div>
+              <div className="flex h-full">
+                {/* Compact Image - Left side */}
+                <div className="w-32 md:w-36 flex-shrink-0">
+                  <img 
+                    src={program.image}
+                    alt={program.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
                   </div>
                   
-                  <div className="flex-1">
-                    <CardTitle className="text-4xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors duration-500 leading-tight">
-                      {service.title}
-                    </CardTitle>
-                    <CardDescription className={`${service.accentColor === 'primary' ? 'text-primary bg-primary/15 border-primary/30' : 'text-secondary bg-secondary/15 border-secondary/30'} font-bold text-lg px-4 py-2 rounded-xl inline-block border`}>
-                      {service.subtitle}
-                    </CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-
-              <CardContent className="relative z-10 px-10 pb-10 space-y-8">
-                {/* Premium Description */}
-                <p className="text-muted-foreground leading-relaxed text-lg font-light">
-                  {service.description}
-                </p>
-
-                {/* Premium Features Grid */}
-                <div className="grid grid-cols-2 gap-4">
-                  {service.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-center gap-4 p-4 rounded-xl bg-background/60 hover:bg-background/80 transition-all duration-300 border border-border/50 hover:border-primary/30 group/feature">
-                      <CheckCircle className={`h-6 w-6 ${service.accentColor === 'primary' ? 'text-primary' : 'text-secondary'} flex-shrink-0 group-hover/feature:scale-110 transition-transform duration-300`} />
-                      <span className="font-medium text-foreground text-sm">{feature}</span>
+                {/* Compact Content */}
+                <div className="flex-1 p-4 flex flex-col justify-between min-h-0">
+                  {/* Card Header - Matching Home Theme */}
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className={`w-10 h-10 rounded-lg bg-${program.color}/10 flex items-center justify-center flex-shrink-0`}>
+                        <div className={`text-${program.color}`}>
+                          {program.icon}
+                        </div>
+                      </div>
+                      <span className={`text-sm font-semibold text-${program.color} bg-${program.color}/10 px-3 py-1 rounded-full`}>
+                        {program.subtitle}
+                      </span>
                     </div>
-                  ))}
-                </div>
+                    <h3 className="text-xl font-bold text-brand-green group-hover:text-brand-gold transition-colors leading-tight">
+                      {program.title}
+                    </h3>
+                  </div>
 
-                {/* Premium CTA Button */}
-                <Link to={service.link} className="block pt-4">
-                  <Button 
-                    className={`w-full group/btn h-16 text-lg font-bold ${service.accentColor === 'primary' ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : 'bg-secondary hover:bg-secondary/90 text-secondary-foreground'} shadow-xl hover:shadow-2xl transition-all duration-500 rounded-2xl relative overflow-hidden`}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000" />
-                    <span className="relative z-10">Discover & Book Your Healing Journey</span>
-                    <ArrowRight className="ml-3 h-6 w-6 group-hover/btn:translate-x-3 group-hover/btn:scale-110 transition-all duration-300 relative z-10" />
-                  </Button>
-                </Link>
-              </CardContent>
+                  {/* Card Description - Matching Home Theme */}
+                  <p className="text-gray-700 text-sm leading-relaxed mb-4 flex-1">
+                    {program.description}
+                  </p>
+
+                  {/* Card Features - Matching Home Theme */}
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    {program.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-center gap-2">
+                        <CheckCircle className={`h-4 w-4 text-${program.color} flex-shrink-0`} />
+                        <span className="text-sm text-gray-700 font-medium">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA Button - Matching Home Theme */}
+                  <Link to={program.link} className="block">
+                    <Button 
+                      className={`w-full h-10 text-sm font-semibold ${
+                        program.color === 'primary' 
+                          ? 'bg-brand-green hover:bg-brand-green/90 text-white' 
+                          : 'bg-brand-gold hover:bg-brand-gold/90 text-white'
+                      } rounded-lg group/btn`}
+                    >
+                      <span>Book Now</span>
+                      <ArrowRight className="h-4 w-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             </Card>
           ))}
         </div>
 
-        {/* Premium Trust Indicators */}
-        <div className="text-center">
-          <div className="inline-flex items-center gap-8 bg-gradient-to-r from-card/80 via-card to-card/80 backdrop-blur-xl border border-border/50 px-12 py-6 rounded-3xl shadow-2xl">
-            <div className="flex items-center gap-3">
-              <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
-              <span className="font-bold text-foreground text-lg">Doctor Supervised</span>
+        {/* Compact Trust Indicators */}
+        <div className="flex flex-wrap items-center justify-center gap-4 text-xs md:text-sm">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-brand-green"></div>
+            <span className="font-medium text-brand-green">Doctor Supervised</span>
             </div>
-            <div className="w-px h-8 bg-gradient-to-b from-transparent via-border to-transparent" />
-            <div className="flex items-center gap-3">
-              <div className="w-3 h-3 rounded-full bg-secondary animate-pulse" />
-              <span className="font-bold text-foreground text-lg">100% Natural</span>
+          <div className="hidden sm:block w-px h-4 bg-gray-300"></div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-brand-gold"></div>
+            <span className="font-medium text-brand-gold">100% Natural</span>
             </div>
-            <div className="w-px h-8 bg-gradient-to-b from-transparent via-border to-transparent" />
-            <div className="flex items-center gap-3">
-              <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
-              <span className="font-bold text-foreground text-lg">Clinically Proven</span>
-            </div>
+          <div className="hidden sm:block w-px h-4 bg-gray-300"></div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-brand-green"></div>
+            <span className="font-medium text-brand-green">Clinically Proven</span>
           </div>
         </div>
       </div>
