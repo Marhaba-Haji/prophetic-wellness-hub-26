@@ -1,113 +1,125 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles, Shield, CheckCircle } from 'lucide-react';
+import { ArrowRight, Sparkles, Shield, CheckCircle, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const FeaturedServices = () => {
   const services = [
     {
-      icon: <Sparkles className="h-10 w-10" />,
+      icon: <Sparkles className="h-12 w-12" />,
       title: "Greek Regimen Therapy",
       subtitle: "Ilaj bil Tadbeer",
       description: "Complete detox, restoration & healing through time-tested Unani regimens designed to cleanse toxins, restore balance, and naturally heal chronic conditions.",
       features: ["Pain Relief", "Detoxification", "Immune Strengthening", "Holistic Healing"],
       link: "/greek-regimen-therapy",
-      iconBg: "bg-gradient-to-br from-primary/20 to-primary/10",
+      iconBg: "bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5",
       iconColor: "text-primary",
+      cardGradient: "from-primary/5 via-background to-primary/3",
       accentColor: "primary"
     },
     {
-      icon: <Shield className="h-10 w-10" />,
-      title: "Full Body Detox Program",
+      icon: <Shield className="h-12 w-12" />,
+      title: "Full Body Detox Program", 
       subtitle: "Munzij-Mushil Therapy",
       description: "Clinically supervised Unani therapy that gently removes deep-rooted toxins, balances your system, and restores vitality through natural purgation.",
       features: ["Deep Cleansing", "Metabolic Balance", "Organ Function", "Natural Healing"],
       link: "/full-body-detox",
-      iconBg: "bg-gradient-to-br from-secondary/20 to-secondary/10",
+      iconBg: "bg-gradient-to-br from-secondary/20 via-secondary/10 to-secondary/5", 
       iconColor: "text-secondary",
+      cardGradient: "from-secondary/5 via-background to-secondary/3",
       accentColor: "secondary"
     }
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-b from-background via-background/95 to-secondary/5 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.05),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,hsl(var(--secondary)/0.05),transparent_50%)]" />
+    <section className="py-32 bg-gradient-to-b from-background via-background/98 to-secondary/3 relative overflow-hidden">
+      {/* Enhanced Background Pattern */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,hsl(var(--primary)/0.08),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,hsl(var(--secondary)/0.08),transparent_60%)]" />
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-gradient-to-b from-primary/5 to-transparent rounded-full blur-3xl" />
+      </div>
       
       <div className="container mx-auto px-4 relative z-10">
-        {/* Enhanced Header */}
+        {/* Premium Header */}
         <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
-            <Sparkles className="h-4 w-4" />
-            Signature Programs
+          <div className="inline-flex items-center gap-3 bg-gradient-to-r from-primary/10 to-secondary/10 text-primary px-6 py-3 rounded-full text-sm font-semibold mb-8 border border-primary/20">
+            <Star className="h-4 w-4 text-primary" />
+            Our Signature Programs
+            <Star className="h-4 w-4 text-secondary" />
           </div>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="text-foreground">Signature </span>
-            <span className="bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text text-transparent">
-              Healing Programs
+          
+          <h2 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
+            <span className="text-foreground">Premium </span>
+            <span className="bg-gradient-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent">
+              Healing Experiences
             </span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-            Experience our most sought-after therapeutic programs, rooted in ancient Unani wisdom 
-            and enhanced with modern clinical expertise for profound healing results.
+          
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-light">
+            Our most sought-after therapeutic programs, meticulously crafted by combining 
+            <span className="text-primary font-medium"> ancient Unani wisdom</span> with 
+            <span className="text-secondary font-medium"> modern clinical excellence</span>
           </p>
         </div>
 
-        {/* Enhanced Cards Grid */}
-        <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto mb-16">
+        {/* Premium Cards - Always 2 columns on tablet+ */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-8xl mx-auto mb-20">
           {services.map((service, index) => (
             <Card 
               key={index} 
-              className="group relative overflow-hidden bg-card/80 backdrop-blur-sm border border-border/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:border-primary/20"
+              className={`group relative overflow-hidden bg-gradient-to-br ${service.cardGradient} backdrop-blur-sm border-0 shadow-2xl hover:shadow-3xl transition-all duration-700 hover:scale-[1.03] hover:-translate-y-2`}
             >
-              {/* Enhanced background effects */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-[100px] opacity-50" />
+              {/* Premium Background Effects */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-primary/15 to-transparent rounded-bl-[120px] opacity-60" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-secondary/10 to-transparent rounded-tr-[100px] opacity-40" />
               
-              <CardHeader className="relative z-10 p-8 pb-6">
-                {/* Enhanced icon section */}
-                <div className="flex items-start gap-6 mb-6">
-                  <div className={`p-4 rounded-2xl ${service.iconBg} shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110`}>
+              <CardHeader className="relative z-10 p-10 pb-8">
+                {/* Premium Icon Section */}
+                <div className="flex items-start gap-8 mb-8">
+                  <div className={`p-6 rounded-3xl ${service.iconBg} shadow-2xl group-hover:shadow-3xl transition-all duration-500 group-hover:scale-110 group-hover:-rotate-3 border border-white/20`}>
                     <div className={service.iconColor}>
                       {service.icon}
                     </div>
                   </div>
+                  
                   <div className="flex-1">
-                    <CardTitle className="text-3xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
+                    <CardTitle className="text-4xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors duration-500 leading-tight">
                       {service.title}
                     </CardTitle>
-                    <CardDescription className={`${service.accentColor === 'primary' ? 'text-primary bg-primary/10' : 'text-secondary bg-secondary/10'} font-semibold text-lg px-3 py-1 rounded-full inline-block`}>
+                    <CardDescription className={`${service.accentColor === 'primary' ? 'text-primary bg-primary/15 border-primary/30' : 'text-secondary bg-secondary/15 border-secondary/30'} font-bold text-lg px-4 py-2 rounded-xl inline-block border`}>
                       {service.subtitle}
                     </CardDescription>
                   </div>
                 </div>
               </CardHeader>
 
-              <CardContent className="relative z-10 px-8 pb-8 space-y-8">
-                {/* Enhanced description */}
-                <p className="text-muted-foreground leading-relaxed text-lg">
+              <CardContent className="relative z-10 px-10 pb-10 space-y-8">
+                {/* Premium Description */}
+                <p className="text-muted-foreground leading-relaxed text-lg font-light">
                   {service.description}
                 </p>
 
-                {/* Enhanced features grid */}
+                {/* Premium Features Grid */}
                 <div className="grid grid-cols-2 gap-4">
                   {service.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-background/50 hover:bg-background/80 transition-colors duration-200">
-                      <CheckCircle className={`h-5 w-5 ${service.accentColor === 'primary' ? 'text-primary' : 'text-secondary'} flex-shrink-0`} />
-                      <span className="text-sm font-medium text-foreground">{feature}</span>
+                    <div key={idx} className="flex items-center gap-4 p-4 rounded-xl bg-background/60 hover:bg-background/80 transition-all duration-300 border border-border/50 hover:border-primary/30 group/feature">
+                      <CheckCircle className={`h-6 w-6 ${service.accentColor === 'primary' ? 'text-primary' : 'text-secondary'} flex-shrink-0 group-hover/feature:scale-110 transition-transform duration-300`} />
+                      <span className="font-medium text-foreground text-sm">{feature}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* Enhanced CTA button */}
-                <Link to={service.link} className="block">
+                {/* Premium CTA Button */}
+                <Link to={service.link} className="block pt-4">
                   <Button 
-                    className={`w-full group/btn h-14 text-base font-semibold ${service.accentColor === 'primary' ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : 'bg-secondary hover:bg-secondary/90 text-secondary-foreground'} shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl`}
+                    className={`w-full group/btn h-16 text-lg font-bold ${service.accentColor === 'primary' ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : 'bg-secondary hover:bg-secondary/90 text-secondary-foreground'} shadow-xl hover:shadow-2xl transition-all duration-500 rounded-2xl relative overflow-hidden`}
                   >
-                    Learn More & Book Consultation
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover/btn:translate-x-2 transition-transform duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000" />
+                    <span className="relative z-10">Discover & Book Your Healing Journey</span>
+                    <ArrowRight className="ml-3 h-6 w-6 group-hover/btn:translate-x-3 group-hover/btn:scale-110 transition-all duration-300 relative z-10" />
                   </Button>
                 </Link>
               </CardContent>
@@ -115,22 +127,22 @@ const FeaturedServices = () => {
           ))}
         </div>
 
-        {/* Enhanced trust indicators */}
+        {/* Premium Trust Indicators */}
         <div className="text-center">
-          <div className="inline-flex items-center gap-8 bg-card/60 backdrop-blur-sm border border-border/50 px-8 py-4 rounded-2xl shadow-lg">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-primary" />
-              <span className="font-semibold text-foreground">Doctor-supervised</span>
+          <div className="inline-flex items-center gap-8 bg-gradient-to-r from-card/80 via-card to-card/80 backdrop-blur-xl border border-border/50 px-12 py-6 rounded-3xl shadow-2xl">
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
+              <span className="font-bold text-foreground text-lg">Doctor Supervised</span>
             </div>
-            <div className="w-px h-6 bg-border" />
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-primary" />
-              <span className="font-semibold text-foreground">100% Natural</span>
+            <div className="w-px h-8 bg-gradient-to-b from-transparent via-border to-transparent" />
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-secondary animate-pulse" />
+              <span className="font-bold text-foreground text-lg">100% Natural</span>
             </div>
-            <div className="w-px h-6 bg-border" />
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-primary" />
-              <span className="font-semibold text-foreground">Clinically Proven</span>
+            <div className="w-px h-8 bg-gradient-to-b from-transparent via-border to-transparent" />
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
+              <span className="font-bold text-foreground text-lg">Clinically Proven</span>
             </div>
           </div>
         </div>
