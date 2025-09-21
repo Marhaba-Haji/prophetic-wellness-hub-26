@@ -180,7 +180,7 @@ const CuppingInfo = () => {
         </div>
         
         <div className="text-center">
-          <Link to="/booking-appointment">
+          <Link to="/booking">
             <Button className="gold-gradient text-white hover:opacity-90 transition-opacity px-8 py-6 rounded-full shadow-lg">
               Book An Appointment
             </Button>
