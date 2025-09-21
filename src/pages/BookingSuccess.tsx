@@ -51,7 +51,7 @@ const BookingSuccess = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-green-700">Amount Paid:</span>
-                    <span className="font-semibold text-green-800">₹1</span>
+                    <span className="font-semibold text-green-800">₹299</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-green-700">Payment Status:</span>

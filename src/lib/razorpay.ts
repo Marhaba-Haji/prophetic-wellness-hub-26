@@ -45,8 +45,8 @@ export const RAZORPAY_CONFIG = {
   capture: true, // This enables automatic capture
 };
 
-// Payment amount in paise (Rs. 1 = 100 paise)
-export const CONSULTATION_FEE = 100;
+// Payment amount in paise (Rs. 299 = 29900 paise)
+export const CONSULTATION_FEE = 29900;
 
 // Load Razorpay script dynamically
 export const loadRazorpayScript = (): Promise<boolean> => {

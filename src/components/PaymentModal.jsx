@@ -64,7 +64,7 @@ const PaymentModal = ({
             </div>
             <div className="flex justify-between border-t pt-3">
               <span className="text-lg font-semibold">Total Amount:</span>
-              <span className="text-lg font-bold text-primary">₹1</span>
+              <span className="text-lg font-bold text-primary">₹299</span>
             </div>
           </div>
 
@@ -74,7 +74,7 @@ const PaymentModal = ({
               onClick={handlePayment}
               disabled={isLoading}
             >
-              {isLoading ? "Processing Payment..." : "Pay ₹1 Now"}
+              {isLoading ? "Processing Payment..." : "Pay ₹299 Now"}
             </Button>
             
             <div className="text-center text-sm text-muted-foreground">

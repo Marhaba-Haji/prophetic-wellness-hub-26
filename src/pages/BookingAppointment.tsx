@@ -194,7 +194,7 @@ const BookingAppointment = () => {
           payment_order_id: paymentData.razorpay_order_id,
           payment_signature: paymentData.razorpay_signature,
           consultation_fee_paid: true,
-          consultation_fee_amount: 1,
+          consultation_fee_amount: 299,
         });
 
         if (error) throw error;
@@ -244,7 +244,7 @@ const BookingAppointment = () => {
   return (
     <Layout
       title="Book Appointment - RevivoHeal Bangalore"
-      description="Book your consultation appointment with RevivoHeal. Pay ₹1 consultation fee and secure your slot for Hijama therapy, Unani consultation, or Acupressure therapy."
+      description="Book your consultation appointment with RevivoHeal. Pay ₹299 consultation fee and secure your slot for Hijama therapy, Unani consultation, or Acupressure therapy."
       canonical="https://www.revivoheal.com/booking"
       image="https://res.cloudinary.com/doxoxzz02/image/upload/v1756287517/revivoheal_poster_qz5kom.jpg"
       keywords="book appointment bangalore, hijama booking, cupping therapy appointment, unani consultation, acupressure therapy booking"
@@ -456,7 +456,7 @@ const BookingAppointment = () => {
                     {isSubmitting ? "Processing..." : (
                       <>
                         <CreditCard className="h-5 w-5 mr-2" />
-                        Pay ₹1 & Book Appointment
+                        Pay ₹299 & Book Appointment
                       </>
                     )}
                   </Button>
@@ -543,7 +543,7 @@ const BookingAppointment = () => {
               </h3>
               <div className="text-sm text-blue-800 space-y-2">
                 <p>
-                  <strong>Consultation Fee:</strong> A nominal fee of ₹1 is required to secure your appointment slot. This helps us maintain quality service and reduces no-shows.
+                  <strong>Consultation Fee:</strong> A nominal fee of ₹299 is required to secure your appointment slot. This helps us maintain quality service and reduces no-shows.
                 </p>
                 <p>
                   <strong>Confirmation Process:</strong> Our team will call you within 24 hours to reconfirm your appointment details and answer any questions you may have.
