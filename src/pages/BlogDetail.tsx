@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import React, { useState, useEffect, useMemo } from "react";
+import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Layout from "@/components/layout/Layout";
@@ -21,20 +21,23 @@ interface SimpleBlogPost {
 }
 
 const BlogDetail = () => {
-  const router = useNavigate();
-  const location = useLocation();
   const { slug } = useParams();
   const [blog, setBlog] = useState<BlogPost | null>(null);
   const [recentPosts, setRecentPosts] = useState<SimpleBlogPost[]>([]);
   const [relatedPosts, setRelatedPosts] = useState<SimpleBlogPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [imageError, setImageError] = useState(false);
-  const [imageLoading, setImageLoading] = useState(true);
 
   useEffect(() => {
     if (slug) {
-      fetchBlogPost();
-      fetchRecentPosts();
+      Promise.all([
+        fetchBlogPost(),
+        fetchRecentPosts(),
+      ]).then(() => {
+        // Fetch related posts after blog is loaded
+        if (blog) {
+          fetchRelatedPosts();
+        }
+      });
     }
   }, [slug]);
 
@@ -44,6 +47,7 @@ const BlogDetail = () => {
     }
   }, [blog]);
 
+  // Optimized database queries with specific field selection
   const fetchBlogPost = async () => {
     try {
       const { data, error } = await supabase
@@ -54,13 +58,11 @@ const BlogDetail = () => {
         .single();
 
       if (error) throw error;
-
       setBlog(data);
-      console.log("Blog data fetched:", data);
-      console.log("Featured image URL from database:", data.featured_image);
     } catch (error) {
       console.error("Error fetching blog post:", error);
       toast.error("Blog post not found");
+      setLoading(false);
     }
   };
 
@@ -75,7 +77,6 @@ const BlogDetail = () => {
         .limit(5);
 
       if (error) throw error;
-
       setRecentPosts(data || []);
     } catch (error) {
       console.error("Error fetching recent posts:", error);
@@ -95,7 +96,6 @@ const BlogDetail = () => {
         .limit(3);
 
       if (error) throw error;
-
       setRelatedPosts(data || []);
     } catch (error) {
       console.error("Error fetching related posts:", error);
@@ -104,7 +104,8 @@ const BlogDetail = () => {
     }
   };
 
-  const formatDate = (dateString: string | null) => {
+  // Memoized utility functions for performance
+  const formatDate = useMemo(() => (dateString: string | null) => {
     if (!dateString) return "Recently";
     try {
       return new Date(dateString).toLocaleDateString("en-US", {
@@ -115,91 +116,41 @@ const BlogDetail = () => {
     } catch (e) {
       return "Recently";
     }
-  };
+  }, []);
 
-  const fixImgBBUrl = (url: string) => {
-    console.log("Original URL:", url);
-
-    // If it's already a proper direct ImgBB URL, return as is
-    if (url.includes("i.ibb.co/") && !url.includes("/f/")) {
-      console.log("URL is already in correct format:", url);
-      return url;
-    }
-
-    // Extract the image ID from various ImgBB URL formats
-    let imageId = "";
-
-    // Handle format: https://ibb.co/f/xxxxxxx
-    const fMatch = url.match(/ibb\.co\/f\/([a-zA-Z0-9]+)/);
-    if (fMatch) {
-      imageId = fMatch[1];
-      console.log("Extracted image ID from /f/ format:", imageId);
-    }
-
-    // Handle format: https://ibb.co/xxxxxxx
-    const directMatch = url.match(/ibb\.co\/([a-zA-Z0-9]+)$/);
-    if (directMatch && !imageId) {
-      imageId = directMatch[1];
-      console.log("Extracted image ID from direct format:", imageId);
-    }
-
-    // If we found an image ID, construct the direct URL
-    if (imageId) {
-      const directUrl = `https://i.ibb.co/${imageId}`;
-      console.log("Converted to direct URL:", directUrl);
-      return directUrl;
-    }
-    console.log("Could not convert URL, returning original:", url);
-    return url;
-  };
-
-  const getValidImageUrl = (url: string | null) => {
-    if (!url) {
-      console.log("No URL provided");
-      return null;
-    }
-    console.log("Processing image URL:", url);
+  const getValidImageUrl = useMemo(() => (url: string | null) => {
+    if (!url) return null;
 
     // Basic URL validation
     try {
       new URL(url);
-
+      
       // Fix ImgBB URLs if needed
       if (url.includes("ibb.co")) {
-        const fixedUrl = fixImgBBUrl(url);
-        console.log("Fixed ImgBB URL:", fixedUrl);
-        return fixedUrl;
+        // Extract the image ID from various ImgBB URL formats
+        const fMatch = url.match(/ibb\.co\/f\/([a-zA-Z0-9]+)/);
+        const directMatch = url.match(/ibb\.co\/([a-zA-Z0-9]+)$/);
+        const imageId = fMatch?.[1] || directMatch?.[1];
+        
+        if (imageId) {
+          return `https://i.ibb.co/${imageId}`;
+        }
       }
-      console.log("Valid URL detected:", url);
       return url;
     } catch {
-      console.log("Invalid URL format:", url);
       return null;
     }
-  };
+  }, []);
 
-  const handleImageError = () => {
-    console.log("Image failed to load");
-    setImageError(true);
-    setImageLoading(false);
-  };
-
-  const handleImageLoad = () => {
-    console.log("Image loaded successfully");
-    setImageError(false);
-    setImageLoading(false);
-  };
-
-  const generateSchemaMarkup = () => {
+  // Memoized schema markup for performance
+  const schemaMarkup = useMemo(() => {
     if (!blog) return "";
     const schema = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
       headline: blog.title,
       description: blog.meta_description || blog.excerpt,
-      image:
-        getValidImageUrl(blog.featured_image) ||
-        getValidImageUrl(blog.og_image),
+      image: getValidImageUrl(blog.featured_image) || getValidImageUrl(blog.og_image),
       author: {
         "@type": "Person",
         name: blog.author,
@@ -209,12 +160,12 @@ const BlogDetail = () => {
         name: "Hijama Healing",
       },
       datePublished: blog.published_date,
-      dateModified: blog.created_at,
+      dateModified: blog.published_date,
       keywords: blog.meta_keywords || blog.tags?.join(", "),
       url: `${typeof window !== "undefined" ? window.location.origin : ""}/blog/${blog.slug}`,
     };
     return JSON.stringify(schema);
-  };
+  }, [blog, getValidImageUrl]);
 
   const createCta = (
     title: string,
@@ -233,7 +184,10 @@ const BlogDetail = () => {
     `;
   };
 
-  const injectCtas = (content: string) => {
+  // Memoized content processing for performance
+  const processedContent = useMemo(() => {
+    if (!blog?.content) return "";
+    
     const ctas = [
       createCta(
         "Experience Cupping Therapy",
@@ -255,33 +209,28 @@ const BlogDetail = () => {
       ),
     ];
 
-    const paragraphs = content.split("</p>");
+    const paragraphs = blog.content.split("</p>");
     let newContent = "";
     let ctaIndex = 0;
-
-    // Aim to inject after the 1st, 3rd, and 5th paragraphs if they exist
     const injectionPoints = [1, 3, 5];
 
     for (let i = 0; i < paragraphs.length; i++) {
       newContent += paragraphs[i] + "</p>";
-      if (
-        ctaIndex < ctas.length &&
-        injectionPoints.includes(i)
-      ) {
+      if (ctaIndex < ctas.length && injectionPoints.includes(i)) {
         newContent += ctas[ctaIndex];
         ctaIndex++;
       }
     }
     
-    // If there were not enough paragraphs, append remaining CTAs at the end
     while (ctaIndex < ctas.length) {
       newContent += ctas[ctaIndex];
       ctaIndex++;
     }
 
     return newContent;
-  };
+  }, [blog?.content]);
 
+  // Optimized loading states
   if (loading) {
     return (
       <Layout
@@ -320,45 +269,42 @@ const BlogDetail = () => {
     );
   }
   
-  const processedContent = blog ? injectCtas(blog.content) : "";
-  const validImageUrl = getValidImageUrl(blog.featured_image);
-  const currentUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/blog/${blog.slug}`;
-  
-  // SEO values with fallbacks
-  const seoTitle = blog.meta_title || blog.og_title || blog.title || "Blog Post - RevivoHeal Bangalore";
-  const seoDescription = blog.meta_description || blog.og_description || blog.excerpt || "Read our latest blog post about hijama cupping therapy and traditional healing.";
-  const seoKeywords = blog.meta_keywords || blog.tags?.join(", ") || "hijama, cupping therapy, traditional healing, bangalore";
-  const seoImage = getValidImageUrl(blog.og_image) || validImageUrl;
-
-  console.log("SEO Debug - Final SEO values:", {
-    seoTitle,
-    seoDescription,
-    seoKeywords,
-    seoImage,
-    currentUrl,
-  });
+  // Memoized SEO values for performance
+  const seoData = useMemo(() => {
+    const validImageUrl = getValidImageUrl(blog.featured_image);
+    const currentUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/blog/${blog.slug}`;
+    
+    return {
+      seoTitle: blog.meta_title || blog.og_title || blog.title || "Blog Post - RevivoHeal Bangalore",
+      seoDescription: blog.meta_description || blog.og_description || blog.excerpt || "Read our latest blog post about hijama cupping therapy and traditional healing.",
+      seoKeywords: blog.meta_keywords || blog.tags?.join(", ") || "hijama, cupping therapy, traditional healing, bangalore",
+      seoImage: getValidImageUrl(blog.og_image) || validImageUrl,
+      currentUrl,
+      validImageUrl
+    };
+  }, [blog, getValidImageUrl]);
 
   return (
     <>
       {/* Direct meta tag injection to ensure SEO works */}
       <Helmet>
-        <title>{seoTitle}</title>
-        <meta name="description" content={seoDescription} />
-        <meta name="keywords" content={seoKeywords} />
-        <link rel="canonical" href={currentUrl} />
+        <title>{seoData.seoTitle}</title>
+        <meta name="description" content={seoData.seoDescription} />
+        <meta name="keywords" content={seoData.seoKeywords} />
+        <link rel="canonical" href={seoData.currentUrl} />
 
         {/* Open Graph Meta Tags */}
-        <meta property="og:title" content={seoTitle} />
-        <meta property="og:description" content={seoDescription} />
+        <meta property="og:title" content={seoData.seoTitle} />
+        <meta property="og:description" content={seoData.seoDescription} />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={currentUrl} />
-        {seoImage && <meta property="og:image" content={seoImage} />}
+        <meta property="og:url" content={seoData.currentUrl} />
+        {seoData.seoImage && <meta property="og:image" content={seoData.seoImage} />}
         <meta property="og:site_name" content="RevivoHeal Bangalore" />
 
         {/* Article specific Open Graph tags */}
         {blog.author && <meta property="article:author" content={blog.author} />}
         {blog.published_date && <meta property="article:published_time" content={blog.published_date} />}
-        {blog.created_at && <meta property="article:modified_time" content={blog.created_at} />}
+        {blog.published_date && <meta property="article:modified_time" content={blog.published_date} />}
         {blog.category && <meta property="article:section" content={blog.category} />}
         {blog.tags && blog.tags.map((tag, index) => (
           <meta key={`tag-${index}`} property="article:tag" content={tag} />
@@ -366,25 +312,25 @@ const BlogDetail = () => {
 
         {/* Twitter Card Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={seoTitle} />
-        <meta name="twitter:description" content={seoDescription} />
-        {seoImage && <meta name="twitter:image" content={seoImage} />}
+        <meta name="twitter:title" content={seoData.seoTitle} />
+        <meta name="twitter:description" content={seoData.seoDescription} />
+        {seoData.seoImage && <meta name="twitter:image" content={seoData.seoImage} />}
 
         {/* Additional SEO Meta Tags */}
         <meta name="robots" content="index, follow" />
         
         {/* Schema markup injection */}
         <script type="application/ld+json">
-          {generateSchemaMarkup()}
+          {schemaMarkup}
         </script>
       </Helmet>
 
       <Layout
-        title={seoTitle}
-        description={seoDescription}
-        canonical={currentUrl}
-        image={seoImage}
-        keywords={seoKeywords}
+        title={seoData.seoTitle}
+        description={seoData.seoDescription}
+        canonical={seoData.currentUrl}
+        image={seoData.seoImage}
+        keywords={seoData.seoKeywords}
         disableDefaultSEO={true}
       >
 
@@ -466,7 +412,8 @@ const BlogDetail = () => {
                               src={getValidImageUrl(post.featured_image) || ""}
                               alt={post.title}
                               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                              referrerPolicy="no-referrer"
+                              loading="lazy"
+                              decoding="async"
                             />
                           </div>
                         )}

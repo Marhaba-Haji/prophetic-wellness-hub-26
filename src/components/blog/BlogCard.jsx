@@ -5,26 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Calendar, User, Tag } from 'lucide-react';
 import OptimizedImage from '@/components/ui/OptimizedImage';
 
-interface BlogCardProps {
-  post: {
-    id: string;
-    title: string;
-    slug: string;
-    excerpt?: string;
-    meta_description?: string;
-    featured_image?: string;
-    featured_image_alt?: string;
-    published_date?: string;
-    author?: string;
-    category?: string;
-    tags?: string[];
-    reading_time?: number;
-  };
-  variant?: 'default' | 'compact';
-}
-
-const BlogCard: React.FC<BlogCardProps> = ({ post, variant = 'default' }) => {
-  const formatDate = (dateString?: string) => {
+const BlogCard = ({ post, variant = 'default' }) => {
+  const formatDate = (dateString) => {
     if (!dateString) return "Recently";
     try {
       return new Date(dateString).toLocaleDateString("en-US", {

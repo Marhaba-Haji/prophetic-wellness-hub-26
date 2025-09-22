@@ -1,21 +1,6 @@
 import React, { useState, useCallback } from 'react';
 
-interface OptimizedImageProps {
-  src: string;
-  alt: string;
-  width?: number;
-  height?: number;
-  className?: string;
-  priority?: boolean;
-  sizes?: string;
-  quality?: number;
-  placeholder?: 'blur' | 'empty';
-  blurDataURL?: string;
-  onLoad?: () => void;
-  onError?: () => void;
-}
-
-const OptimizedImage: React.FC<OptimizedImageProps> = ({
+const OptimizedImage = ({
   src,
   alt,
   width = 800,
@@ -25,9 +10,9 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
   quality = 80,
   placeholder = 'empty',
-  blurDataURL,
-  onLoad,
-  onError,
+  blurDataURL = null,
+  onLoad = null,
+  onError = null,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -44,7 +29,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   }, [onError]);
 
   // Generate optimized image URL with parameters
-  const getOptimizedSrc = (originalSrc: string) => {
+  const getOptimizedSrc = (originalSrc) => {
     if (!originalSrc) return '';
     
     // If it's an external image service, add optimization parameters
