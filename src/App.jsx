@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { HelmetProvider } from "@/components/providers/HelmetProvider";
 import ScrollToTop from "@/components/ScrollToTop";
-import { PerformanceMonitor } from "@/components/PerformanceMonitor";
+import PerformanceMonitor from "@/components/PerformanceMonitor";
 
 // Import pages
 import Index from "./pages/Index";

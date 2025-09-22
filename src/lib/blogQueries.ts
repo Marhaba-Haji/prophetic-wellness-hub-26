@@ -36,7 +36,8 @@ const BLOG_DETAIL_FIELDS = `
   category,
   tags,
   reading_time,
-  canonical_url
+  canonical_url,
+  created_at
 `;
 
 // Fields for related/recent posts (minimal data)

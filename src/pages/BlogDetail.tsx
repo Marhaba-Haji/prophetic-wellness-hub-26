@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Layout from "@/components/layout/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, User, Tag, Clock } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { BlogPost } from "@/types/supabase-types";
 import { toast } from "@/components/ui/sonner";
+import { useBlogPost, useRecentPosts, useRelatedPosts } from "@/hooks/useBlogData";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 // Simplified interface for recent and related posts
 interface SimpleBlogPost {
@@ -24,85 +26,36 @@ const BlogDetail = () => {
   const router = useNavigate();
   const location = useLocation();
   const { slug } = useParams();
-  const [blog, setBlog] = useState<BlogPost | null>(null);
-  const [recentPosts, setRecentPosts] = useState<SimpleBlogPost[]>([]);
-  const [relatedPosts, setRelatedPosts] = useState<SimpleBlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
 
+  // Use React Query hooks for optimized data fetching
+  const { 
+    data: blog, 
+    isLoading: blogLoading, 
+    error: blogError 
+  } = useBlogPost(slug || '');
+
+  const { 
+    data: recentPosts = [], 
+    isLoading: recentLoading 
+  } = useRecentPosts(slug, 5);
+
+  const { 
+    data: relatedPosts = [], 
+    isLoading: relatedLoading 
+  } = useRelatedPosts(blog?.category || '', slug || '', 3);
+
+  // Combined loading state
+  const loading = blogLoading;
+
+  // Handle blog error
   useEffect(() => {
-    if (slug) {
-      fetchBlogPost();
-      fetchRecentPosts();
-    }
-  }, [slug]);
-
-  useEffect(() => {
-    if (blog) {
-      fetchRelatedPosts();
-    }
-  }, [blog]);
-
-  const fetchBlogPost = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("blogs")
-        .select("*")
-        .eq("slug", slug)
-        .eq("published", true)
-        .single();
-
-      if (error) throw error;
-
-      setBlog(data);
-      console.log("Blog data fetched:", data);
-      console.log("Featured image URL from database:", data.featured_image);
-    } catch (error) {
-      console.error("Error fetching blog post:", error);
+    if (blogError) {
+      console.error("Error fetching blog post:", blogError);
       toast.error("Blog post not found");
     }
-  };
-
-  const fetchRecentPosts = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("blogs")
-        .select("id, title, slug, published_date, featured_image")
-        .eq("published", true)
-        .neq("slug", slug)
-        .order("published_date", { ascending: false })
-        .limit(5);
-
-      if (error) throw error;
-
-      setRecentPosts(data || []);
-    } catch (error) {
-      console.error("Error fetching recent posts:", error);
-    }
-  };
-
-  const fetchRelatedPosts = async () => {
-    if (!blog) return;
-
-    try {
-      const { data, error } = await supabase
-        .from("blogs")
-        .select("id, title, slug, published_date, featured_image, category")
-        .eq("published", true)
-        .eq("category", blog.category)
-        .neq("slug", slug)
-        .limit(3);
-
-      if (error) throw error;
-
-      setRelatedPosts(data || []);
-    } catch (error) {
-      console.error("Error fetching related posts:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [blogError]);
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "Recently";
@@ -209,7 +162,7 @@ const BlogDetail = () => {
         name: "Hijama Healing",
       },
       datePublished: blog.published_date,
-      dateModified: blog.created_at,
+      dateModified: blog.created_at || blog.published_date,
       keywords: blog.meta_keywords || blog.tags?.join(", "),
       url: `${typeof window !== "undefined" ? window.location.origin : ""}/blog/${blog.slug}`,
     };
@@ -233,7 +186,10 @@ const BlogDetail = () => {
     `;
   };
 
-  const injectCtas = (content: string) => {
+  // Memoize CTA injection to prevent re-processing on every render
+  const processedContent = useMemo(() => {
+    if (!blog?.content) return "";
+    
     const ctas = [
       createCta(
         "Experience Cupping Therapy",
@@ -255,7 +211,7 @@ const BlogDetail = () => {
       ),
     ];
 
-    const paragraphs = content.split("</p>");
+    const paragraphs = blog.content.split("</p>");
     let newContent = "";
     let ctaIndex = 0;
 
@@ -280,24 +236,81 @@ const BlogDetail = () => {
     }
 
     return newContent;
-  };
+  }, [blog?.content]);
 
-  if (loading) {
-    return (
-      <Layout
-        title="Loading Blog Post..."
-        description="Please wait while we load the blog post."
-        canonical=""
-        image=""
-        keywords=""
-      >
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex justify-center items-center min-h-[400px]">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-green"></div>
+  // Loading skeleton component
+  const BlogDetailSkeleton = () => (
+    <Layout
+      title="Loading Blog Post..."
+      description="Please wait while we load the blog post."
+      canonical=""
+      image=""
+      keywords=""
+    >
+      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
+          {/* Main Content Skeleton */}
+          <div className="lg:col-span-3 order-2 lg:order-1">
+            <Card className="w-full mb-4">
+              <CardHeader>
+                <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-2 sm:mb-4">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-16" />
+                </div>
+                <Skeleton className="h-8 w-3/4 mb-2" />
+                <Skeleton className="h-6 w-full" />
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-5/6" />
+                  <Skeleton className="h-4 w-4/5" />
+                  <Skeleton className="h-32 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Sidebar Skeleton */}
+          <div className="lg:col-span-1 order-1 lg:order-2 mb-6 lg:mb-0">
+            <div className="sticky top-24 z-20 space-y-4 sm:space-y-6">
+              <Card className="bg-gradient-to-br from-brand-green to-brand-green/80 text-white shadow-lg w-full">
+                <CardHeader className="pb-2 sm:pb-4">
+                  <Skeleton className="h-6 w-3/4 bg-white/20" />
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <Skeleton className="h-4 w-full mb-4 bg-white/20" />
+                  <Skeleton className="h-10 w-full bg-white/20" />
+                </CardContent>
+              </Card>
+              
+              <Card className="shadow-lg w-full hidden sm:block">
+                <CardHeader className="pb-2 sm:pb-4">
+                  <Skeleton className="h-5 w-1/2" />
+                </CardHeader>
+                <CardContent className="space-y-4 pt-0">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="flex gap-3">
+                      <Skeleton className="w-16 h-16 flex-shrink-0" />
+                      <div className="flex-1">
+                        <Skeleton className="h-4 w-full mb-1" />
+                        <Skeleton className="h-3 w-2/3" />
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
-      </Layout>
-    );
+      </div>
+    </Layout>
+  );
+
+  if (loading) {
+    return <BlogDetailSkeleton />;
   }
 
   if (!blog) {
@@ -320,7 +333,6 @@ const BlogDetail = () => {
     );
   }
   
-  const processedContent = blog ? injectCtas(blog.content) : "";
   const validImageUrl = getValidImageUrl(blog.featured_image);
   const currentUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/blog/${blog.slug}`;
   
@@ -358,7 +370,7 @@ const BlogDetail = () => {
         {/* Article specific Open Graph tags */}
         {blog.author && <meta property="article:author" content={blog.author} />}
         {blog.published_date && <meta property="article:published_time" content={blog.published_date} />}
-        {blog.created_at && <meta property="article:modified_time" content={blog.created_at} />}
+        {(blog as any).created_at && <meta property="article:modified_time" content={(blog as any).created_at} />}
         {blog.category && <meta property="article:section" content={blog.category} />}
         {blog.tags && blog.tags.map((tag, index) => (
           <meta key={`tag-${index}`} property="article:tag" content={tag} />
@@ -448,11 +460,23 @@ const BlogDetail = () => {
             </Card>
 
             {/* Related Posts */}
-            {relatedPosts.length > 0 && (
-              <div className="mt-8 sm:mt-12">
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">
-                  Related Posts
-                </h2>
+            <div className="mt-8 sm:mt-12">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">
+                Related Posts
+              </h2>
+              {relatedLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                  {[1, 2, 3].map((i) => (
+                    <Card key={i} className="w-full">
+                      <Skeleton className="h-32 sm:h-48 w-full rounded-t-lg" />
+                      <CardContent className="p-3 sm:p-4">
+                        <Skeleton className="h-4 w-full mb-2" />
+                        <Skeleton className="h-3 w-2/3" />
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : relatedPosts.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {relatedPosts.map((post) => (
                     <Card
@@ -462,11 +486,14 @@ const BlogDetail = () => {
                       <Link to={`/blog/${post.slug}`}>
                         {post.featured_image && (
                           <div className="h-32 sm:h-48 overflow-hidden rounded-t-lg">
-                            <img
+                            <OptimizedImage
                               src={getValidImageUrl(post.featured_image) || ""}
                               alt={post.title}
+                              width={400}
+                              height={200}
                               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                              referrerPolicy="no-referrer"
+                              sizes="(max-width: 768px) 100vw, 50vw"
+                              quality={85}
                             />
                           </div>
                         )}
@@ -482,8 +509,8 @@ const BlogDetail = () => {
                     </Card>
                   ))}
                 </div>
-              </div>
-            )}
+              ) : null}
+            </div>
           </div>
 
           {/* Sidebar */}
@@ -510,15 +537,27 @@ const BlogDetail = () => {
               </Card>
 
               {/* Recent Posts */}
-              {recentPosts.length > 0 && (
-                <Card className="shadow-lg w-full hidden sm:block">
-                  <CardHeader className="pb-2 sm:pb-4">
-                    <CardTitle className="text-base sm:text-lg">
-                      Recent Posts
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2 sm:space-y-4 pt-0">
-                    {recentPosts.map((post) => (
+              <Card className="shadow-lg w-full hidden sm:block">
+                <CardHeader className="pb-2 sm:pb-4">
+                  <CardTitle className="text-base sm:text-lg">
+                    Recent Posts
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 sm:space-y-4 pt-0">
+                  {recentLoading ? (
+                    <>
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <div key={i} className="flex gap-2 sm:gap-3">
+                          <Skeleton className="w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0 rounded" />
+                          <div className="flex-1">
+                            <Skeleton className="h-3 w-full mb-1" />
+                            <Skeleton className="h-2 w-2/3" />
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  ) : recentPosts.length > 0 ? (
+                    recentPosts.map((post) => (
                       <Link
                         key={post.id}
                         to={`/blog/${post.slug}`}
@@ -527,13 +566,14 @@ const BlogDetail = () => {
                         <div className="flex gap-2 sm:gap-3">
                           {post.featured_image && (
                             <div className="w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
-                              <img
-                                src={
-                                  getValidImageUrl(post.featured_image) || ""
-                                }
+                              <OptimizedImage
+                                src={getValidImageUrl(post.featured_image) || ""}
                                 alt={post.title}
+                                width={64}
+                                height={64}
                                 className="w-full h-full object-cover rounded"
-                                referrerPolicy="no-referrer"
+                                sizes="64px"
+                                quality={80}
                               />
                             </div>
                           )}
@@ -547,10 +587,10 @@ const BlogDetail = () => {
                           </div>
                         </div>
                       </Link>
-                    ))}
-                  </CardContent>
-                </Card>
-              )}
+                    ))
+                  ) : null}
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>

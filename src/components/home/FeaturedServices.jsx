@@ -19,7 +19,7 @@ const FeaturedServices = () => {
     },
     {
       id: "full-body-detox",
-      title: "Full Body Detox Program", 
+      title: "Body Reboot 360", 
       subtitle: "Munzij-Mushil Therapy",
       description: "Advanced natural detoxification that removes deep toxins, balances your system, and restores vitality through gentle purgation.",
       icon: <Shield className="h-8 w-8" />,
