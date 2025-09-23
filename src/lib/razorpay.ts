@@ -1,4 +1,5 @@
 // Razorpay configuration and utilities
+import { supabase } from '@/integrations/supabase/client';
 export interface RazorpayOptions {
   key: string;
   amount: number;
@@ -69,9 +70,7 @@ export const loadRazorpayScript = (): Promise<boolean> => {
 // Create Razorpay order using edge function
 export const createRazorpayOrder = async (amount: number, currency: string = 'INR') => {
   try {
-    // Import supabase client
-    const { supabase } = await import('@/integrations/supabase/client');
-    
+    console.log('Calling edge function with amount:', amount);
     const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
       body: {
         amount: amount,
