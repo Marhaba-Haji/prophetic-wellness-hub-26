@@ -66,18 +66,35 @@ export const loadRazorpayScript = (): Promise<boolean> => {
   });
 };
 
-// Create Razorpay order - for frontend integration, we'll use a simple approach
+// Create Razorpay order using edge function
 export const createRazorpayOrder = async (amount: number, currency: string = 'INR') => {
-  // For frontend integration, we'll create a simple order object
-  // In production, this should be done on your backend for security
-  const orderId = `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  
-  return {
-    id: orderId,
-    amount: amount,
-    currency: currency,
-    status: 'created',
-  };
+  try {
+    const response = await fetch('https://zywvlznelzpoixnrzwqk.supabase.co/functions/v1/create-razorpay-order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        amount: amount,
+        currency: currency,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create order');
+    }
+
+    const data = await response.json();
+    return {
+      id: data.order_id,
+      amount: data.amount,
+      currency: data.currency,
+      key_id: data.key_id,
+    };
+  } catch (error) {
+    console.error('Error creating order:', error);
+    return null;
+  }
 };
 
 // Verify payment signature (this should be done on your backend)

@@ -32,10 +32,10 @@ const PaymentModal = ({
         return;
       }
 
-      // Create order
+      // Create order using edge function
       const order = await createRazorpayOrder(CONSULTATION_FEE);
       
-      if (!order) {
+      if (!order || !order.key_id) {
         toast.error("Failed to create payment order. Please try again.");
         setIsLoading(false);
         return;
@@ -43,7 +43,7 @@ const PaymentModal = ({
 
       // Razorpay options
       const options = {
-        key: RAZORPAY_CONFIG.key,
+        key: order.key_id, // Use the key from the order response
         amount: CONSULTATION_FEE,
         currency: RAZORPAY_CONFIG.currency,
         name: RAZORPAY_CONFIG.name,
