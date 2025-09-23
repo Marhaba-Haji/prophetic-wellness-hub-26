@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { X, CreditCard, Shield } from "lucide-react";
+import { 
+  loadRazorpayScript, 
+  createRazorpayOrder, 
+  RAZORPAY_CONFIG, 
+  CONSULTATION_FEE
+} from "@/lib/razorpay";
+import { toast } from "@/components/ui/sonner";
 
 const PaymentModal = ({
   isOpen,
@@ -15,17 +22,66 @@ const PaymentModal = ({
   const handlePayment = async () => {
     setIsLoading(true);
     
-    // Simulate payment processing
-    setTimeout(() => {
-      const mockPaymentData = {
-        razorpay_payment_id: `pay_${Date.now()}`,
-        razorpay_order_id: `order_${Date.now()}`,
-        razorpay_signature: `signature_${Date.now()}`
-      };
+    try {
+      // Load Razorpay script
+      const isScriptLoaded = await loadRazorpayScript();
       
-      onPaymentSuccess(mockPaymentData);
+      if (!isScriptLoaded) {
+        toast.error("Payment gateway failed to load. Please try again.");
+        setIsLoading(false);
+        return;
+      }
+
+      // Create order
+      const order = await createRazorpayOrder(CONSULTATION_FEE);
+      
+      if (!order) {
+        toast.error("Failed to create payment order. Please try again.");
+        setIsLoading(false);
+        return;
+      }
+
+      // Razorpay options
+      const options = {
+        key: RAZORPAY_CONFIG.key,
+        amount: CONSULTATION_FEE,
+        currency: RAZORPAY_CONFIG.currency,
+        name: RAZORPAY_CONFIG.name,
+        description: RAZORPAY_CONFIG.description,
+        order_id: order.id,
+        handler: function (response) {
+          console.log("Payment successful:", response);
+          onPaymentSuccess(response);
+          setIsLoading(false);
+        },
+        prefill: {
+          name: appointmentData?.full_name || "",
+          email: appointmentData?.email || "",
+          contact: appointmentData?.phone || "",
+        },
+        notes: {
+          service: appointmentData?.service || "",
+          date: appointmentData?.date || "",
+          time: appointmentData?.time || "",
+        },
+        theme: RAZORPAY_CONFIG.theme,
+        modal: {
+          ondismiss: function () {
+            console.log("Payment modal dismissed");
+            setIsLoading(false);
+          }
+        }
+      };
+
+      // Create Razorpay instance and open payment modal
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+      
+    } catch (error) {
+      console.error("Payment error:", error);
+      toast.error("Payment failed. Please try again.");
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   if (!isOpen) return null;

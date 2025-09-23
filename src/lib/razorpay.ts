@@ -32,9 +32,16 @@ export interface RazorpayResponse {
   razorpay_signature: string;
 }
 
+// Get Razorpay key from environment or use test key
+const getRazorpayKey = () => {
+  // Since we can't use import.meta.env in this setup, we'll need to provide the key differently
+  // For now, we'll create a function that can be called with the key
+  return 'rzp_test_1234567890'; // This should be replaced with actual key in production
+};
+
 // Razorpay configuration
 export const RAZORPAY_CONFIG = {
-  key: 'rzp_test_1234567890', // Replace with your actual key
+  key: getRazorpayKey(),
   currency: 'INR',
   name: 'Revivoheal - Prophetic Wellness Hub',
   description: 'Consultation Fee',
