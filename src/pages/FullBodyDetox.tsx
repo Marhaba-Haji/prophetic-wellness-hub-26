@@ -119,15 +119,15 @@ const FullBodyDetox = () => {
   ];
 
   const steps = [
-    { step: "1", title: "Initial Consultation", description: "Detailed health assessment", duration: "45 mins" },
-    { step: "2", title: "Munzij Phase", description: "Herbal decoctions + diet regulation", duration: "1-2 weeks" },
+    { step: "1", title: "Initial Consultation", description: "Detailed health assessment", duration: "30 mins" },
+    { step: "2", title: "Munzij Phase", description: "Herbal decoctions + diet regulation", duration: "4-6 weeks" },
     { step: "3", title: "Mushil Phase", description: "Toxin elimination via safe purgation", duration: "3-5 days" },
     { step: "4", title: "Supportive Therapies", description: "Hijama, massage, diet adjustments", duration: "Ongoing" },
     { step: "5", title: "Post-Care", description: "Strengthening tonics & lifestyle guidance", duration: "Follow-up" }
   ];
 
   const faqs = [
-    { q: "How long does the program take?", a: "The complete program typically takes 3-4 weeks including consultation, preparation, detox, and recovery phases." },
+    { q: "How long does the program take?", a: "The complete program typically takes 4-6 weeks including consultation, preparation, detox, and recovery phases." },
     { q: "Are there any side effects?", a: "The therapy uses gentle herbal preparations. Mild digestive changes are normal during the detox phase and are monitored by our doctors." },
     { q: "Can I continue my allopathic medicines?", a: "Yes, but we recommend consulting with both your allopathic doctor and our Unani physician for the best approach." },
     { q: "Will I need to change my diet?", a: "Yes, we provide specific dietary guidelines during the program to enhance the detox process and ensure safety." },
@@ -318,22 +318,14 @@ const FullBodyDetox = () => {
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in max-w-5xl mx-auto">
+            <div className="flex justify-center animate-fade-in">
               <Button 
                 size="lg" 
                 onClick={scrollToBooking} 
-                className="text-base font-semibold px-8 py-5 shadow-glow hover:scale-105 transition-all w-full sm:w-[380px] h-[56px] bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg"
+                className="text-base font-semibold px-8 py-5 shadow-glow hover:scale-105 transition-all duration-300 w-full sm:w-[380px] h-[56px] bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg"
               >
                 <Calendar className="mr-3 h-5 w-5" />
-                Book Your Free 15-Minute Consultation
-              </Button>
-              <Button 
-                size="lg" 
-                onClick={scrollToDetails} 
-                className="text-base font-semibold px-8 py-5 hover:scale-105 transition-all w-full sm:w-[380px] h-[56px] bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg"
-              >
-                <ArrowRight className="mr-3 h-5 w-5" />
-                Learn How This Detox Works
+                Book Your Reboot Session
               </Button>
             </div>
           </div>
@@ -344,6 +336,81 @@ const FullBodyDetox = () => {
           <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-full">
             <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="hsl(var(--background))"></path>
           </svg>
+        </div>
+      </section>
+
+      {/* The Problem Section */}
+      <section className="py-20 bg-muted/30 relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 to-red-50/50"></div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-4xl mx-auto text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+              The Problem: <span className="text-orange-600">Why Detox is Needed</span>
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Modern lifestyle leaves behind hidden toxins in your body — weakening organs, slowing metabolism, and fueling chronic pain.
+            </p>
+          </div>
+
+          {/* Problem Icons Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+            {/* Toxin Buildup */}
+            <div className="group text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-red-100 to-red-200 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Toxin Buildup</h3>
+              <p className="text-sm text-muted-foreground">Environmental pollutants accumulate in organs</p>
+            </div>
+
+            {/* Fatigue */}
+            <div className="group text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-10 h-10 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Chronic Fatigue</h3>
+              <p className="text-sm text-muted-foreground">Constant tiredness despite adequate rest</p>
+            </div>
+
+            {/* Joint Pain */}
+            <div className="group text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Joint Pain</h3>
+              <p className="text-sm text-muted-foreground">Inflammation causing stiffness and discomfort</p>
+            </div>
+
+            {/* Poor Sleep */}
+            <div className="group text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Poor Sleep</h3>
+              <p className="text-sm text-muted-foreground">Restless nights and difficulty falling asleep</p>
+            </div>
+          </div>
+
+          {/* Call to Action */}
+          <div className="text-center mt-12">
+            <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-800 px-6 py-3 rounded-full font-medium">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+              <span>Pills only mask symptoms. Your body deserves a deeper, natural reset.</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -397,7 +464,7 @@ const FullBodyDetox = () => {
             </div>
 
             <div className="mt-12 animate-fade-in">
-              <Button variant="outline" onClick={scrollToBooking} className="hover-lift">
+              <Button variant="outline" onClick={scrollToBooking} className="hover:scale-105 transition-all duration-300 hover-lift">
                 Discover if This Program is Right for You →
               </Button>
             </div>
@@ -453,24 +520,109 @@ const FullBodyDetox = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
               Your Healing Journey, Step by Step
             </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Our comprehensive detox program follows a proven 5-step process designed for optimal healing and recovery
+            </p>
           </div>
-          <div className="max-w-4xl mx-auto">
-            {steps.map((step, index) => (
-              <div key={index} className="flex items-start gap-6 mb-8 last:mb-0">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold">
-                  {step.step}
-                </div>
-                <div className="flex-grow">
-                  <div className="flex items-center gap-4 mb-2">
-                    <h3 className="text-xl font-semibold text-foreground">{step.title}</h3>
-                    <span className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm">
-                      {step.duration}
-                    </span>
+          
+          {/* Desktop Horizontal Layout */}
+          <div className="hidden lg:block">
+            <div className="relative max-w-7xl mx-auto">
+              {/* Connecting Line */}
+              <div className="absolute top-16 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20"></div>
+              
+              <div className="grid grid-cols-5 gap-8 relative z-10">
+                {steps.map((step, index) => (
+                  <div key={index} className="group">
+                    {/* Step Circle */}
+                    <div className="relative mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground rounded-full flex items-center justify-center font-bold text-lg mx-auto shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+                        {step.step}
+                      </div>
+                      {/* Pulse effect on hover */}
+                      <div className="absolute inset-0 w-16 h-16 bg-primary/20 rounded-full mx-auto animate-ping opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    
+                    {/* Step Content */}
+                    <div className="text-center space-y-3">
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
+                          {step.title}
+                        </h3>
+                        <span className="inline-block bg-gradient-to-r from-secondary to-secondary/80 text-secondary-foreground px-3 py-1 rounded-full text-sm font-medium">
+                          {step.duration}
+                        </span>
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {step.description}
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-muted-foreground">{step.description}</p>
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
+          </div>
+
+          {/* Tablet Layout */}
+          <div className="hidden md:block lg:hidden">
+            <div className="max-w-5xl mx-auto">
+              <div className="grid grid-cols-2 gap-8">
+                {steps.map((step, index) => (
+                  <div key={index} className="group">
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0">
+                        <div className="w-14 h-14 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground rounded-full flex items-center justify-center font-bold text-lg shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                          {step.step}
+                        </div>
+                      </div>
+                      <div className="flex-grow space-y-2">
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
+                            {step.title}
+                          </h3>
+                          <span className="bg-gradient-to-r from-secondary to-secondary/80 text-secondary-foreground px-3 py-1 rounded-full text-sm font-medium">
+                            {step.duration}
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {step.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Layout */}
+          <div className="block md:hidden">
+            <div className="max-w-md mx-auto space-y-6">
+              {steps.map((step, index) => (
+                <div key={index} className="group">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0">
+                      <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground rounded-full flex items-center justify-center font-bold shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                        {step.step}
+                      </div>
+                    </div>
+                    <div className="flex-grow space-y-2">
+                      <div className="space-y-1">
+                        <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
+                          {step.title}
+                        </h3>
+                        <span className="inline-block bg-gradient-to-r from-secondary to-secondary/80 text-secondary-foreground px-3 py-1 rounded-full text-sm font-medium">
+                          {step.duration}
+                        </span>
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {step.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -583,12 +735,12 @@ const FullBodyDetox = () => {
           </h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/booking-appointment">
-              <Button size="lg" className="text-lg px-8 py-6">
+              <Button size="lg" className="text-lg px-8 py-6 w-full sm:w-[280px] hover:scale-105 transition-all duration-300 shadow-glow">
                 <Calendar className="mr-2 h-5 w-5" />
-                Book My Free Consultation
+                Book My Detox Session
               </Button>
             </Link>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-6">
+            <Button variant="outline" size="lg" className="text-lg px-8 py-6 w-full sm:w-[280px] hover:scale-105 transition-all duration-300 !border-primary !text-primary hover:!bg-primary/90 hover:!text-primary-foreground shadow-glow">
               <Phone className="mr-2 h-5 w-5" />
               Call Us Today
             </Button>
@@ -821,8 +973,8 @@ const FullBodyDetox = () => {
                       <div>
                         <h4 className="font-semibold mb-1">Program Duration</h4>
                         <div className="text-center">
-                          <p>Initial Consultation: 45 mins</p>
-                          <p>Complete Program: 3-4 weeks</p>
+                          <p>Initial Consultation: 30 mins</p>
+                          <p>Complete Program: 4-6 weeks</p>
                           <p>Follow-up: Ongoing</p>
                         </div>
                       </div>
@@ -848,7 +1000,7 @@ const FullBodyDetox = () => {
                           </div>
                           <div className="flex items-center justify-center">
                             <Mail className="h-4 w-4 text-primary mr-2" />
-                            <span>info@hijamahealing.com</span>
+                            <span>revivoheal@gmail.com</span>
                           </div>
                         </div>
                       </div>
