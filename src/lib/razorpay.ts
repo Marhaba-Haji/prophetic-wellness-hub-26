@@ -69,22 +69,25 @@ export const loadRazorpayScript = (): Promise<boolean> => {
 // Create Razorpay order using edge function
 export const createRazorpayOrder = async (amount: number, currency: string = 'INR') => {
   try {
-    const response = await fetch('https://zywvlznelzpoixnrzwqk.supabase.co/functions/v1/create-razorpay-order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    // Import supabase client
+    const { supabase } = await import('@/integrations/supabase/client');
+    
+    const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
+      body: {
         amount: amount,
         currency: currency,
-      }),
+      },
     });
 
-    if (!response.ok) {
+    if (error) {
+      console.error('Edge function error:', error);
+      throw new Error(error.message || 'Failed to create order');
+    }
+
+    if (!data?.success) {
       throw new Error('Failed to create order');
     }
 
-    const data = await response.json();
     return {
       id: data.order_id,
       amount: data.amount,
