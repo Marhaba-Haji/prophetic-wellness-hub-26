@@ -10,14 +10,45 @@ import {
   CONSULTATION_FEE
 } from "@/lib/razorpay";
 import { toast } from "@/components/ui/sonner";
+import { captureAbandonedPayment, getUserIP, ABANDONMENT_REASONS } from "@/lib/abandonedPayments";
 
 const PaymentModal = ({
   isOpen,
   onClose,
   onPaymentSuccess,
   appointmentData,
+  onAbandonedPayment,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+
+  // Function to handle abandoned payment capture
+  const handleAbandonedPaymentInternal = async (reason) => {
+    if (onAbandonedPayment) {
+      await onAbandonedPayment(reason);
+    } else {
+      // Fallback to internal implementation if no prop provided
+      if (!appointmentData) return;
+
+      try {
+        const ipAddress = await getUserIP();
+        
+        await captureAbandonedPayment({
+          full_name: appointmentData.full_name,
+          email: appointmentData.email,
+          phone: appointmentData.phone,
+          service: appointmentData.service,
+          date: appointmentData.date,
+          time: appointmentData.time,
+          notes: appointmentData.notes,
+          abandonment_reason: reason,
+          user_agent: navigator.userAgent,
+          ip_address: ipAddress,
+        });
+      } catch (error) {
+        console.error('Failed to capture abandoned payment:', error);
+      }
+    }
+  };
 
   const handlePayment = async () => {
     setIsLoading(true);
@@ -68,6 +99,7 @@ const PaymentModal = ({
         modal: {
           ondismiss: function () {
             console.log("Payment modal dismissed");
+            handleAbandonedPaymentInternal(ABANDONMENT_REASONS.MODAL_CLOSED);
             setIsLoading(false);
           }
         }
@@ -79,6 +111,7 @@ const PaymentModal = ({
       
     } catch (error) {
       console.error("Payment error:", error);
+      handleAbandonedPaymentInternal(ABANDONMENT_REASONS.TECHNICAL_ERROR);
       toast.error("Payment failed. Please try again.");
       setIsLoading(false);
     }
@@ -94,7 +127,14 @@ const PaymentModal = ({
             <CreditCard className="h-5 w-5" />
             Payment Details
           </CardTitle>
-          <Button variant="ghost" size="icon" onClick={onClose}>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => {
+              handleAbandonedPaymentInternal(ABANDONMENT_REASONS.MODAL_CLOSED);
+              onClose();
+            }}
+          >
             <X className="h-4 w-4" />
           </Button>
         </CardHeader>

@@ -15,6 +15,7 @@ import { toast } from "@/components/ui/sonner";
 import { z } from "zod";
 import PaymentModal from "@/components/PaymentModal";
 import { RazorpayResponse } from "@/lib/razorpay";
+import { captureAbandonedPayment, getUserIP, ABANDONMENT_REASONS } from "@/lib/abandonedPayments";
 
 // Services specific to detox program
 const detoxServices = [
@@ -76,6 +77,30 @@ const FullBodyDetox = () => {
 
   const navigate = useNavigate();
   const { toast: uiToast } = useToast();
+
+  // Function to handle abandoned payment capture
+  const handleAbandonedPayment = async (reason) => {
+    if (!appointmentData) return;
+
+    try {
+      const ipAddress = await getUserIP();
+      
+      await captureAbandonedPayment({
+        full_name: appointmentData.full_name,
+        email: appointmentData.email,
+        phone: appointmentData.phone,
+        service: appointmentData.service,
+        date: appointmentData.date,
+        time: appointmentData.time,
+        notes: appointmentData.notes,
+        abandonment_reason: reason,
+        user_agent: navigator.userAgent,
+        ip_address: ipAddress,
+      });
+    } catch (error) {
+      console.error('Failed to capture abandoned payment:', error);
+    }
+  };
 
   const scrollToBooking = () => {
     const element = document.getElementById('booking-form');
@@ -259,6 +284,8 @@ const FullBodyDetox = () => {
       });
     } catch (error) {
       const errorMessage = handleSupabaseError(error);
+      // Capture as abandoned payment since payment succeeded but booking failed
+      await handleAbandonedPayment(ABANDONMENT_REASONS.PAYMENT_FAILED);
       toast.error(`Payment successful but booking failed: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
@@ -734,13 +761,20 @@ const FullBodyDetox = () => {
             Start Your Detox Journey Today
           </h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/booking-appointment">
-              <Button size="lg" className="text-lg px-8 py-6 w-full sm:w-[280px] hover:scale-105 transition-all duration-300 shadow-glow">
-                <Calendar className="mr-2 h-5 w-5" />
-                Book My Detox Session
-              </Button>
-            </Link>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-6 w-full sm:w-[280px] hover:scale-105 transition-all duration-300 !border-primary !text-primary hover:!bg-primary/90 hover:!text-primary-foreground shadow-glow">
+            <Button 
+              size="lg" 
+              onClick={scrollToBooking}
+              className="text-lg px-8 py-6 w-full sm:w-[280px] hover:scale-105 transition-all duration-300 shadow-glow"
+            >
+              <Calendar className="mr-2 h-5 w-5" />
+              Book My Detox Session
+            </Button>
+            <Button 
+              variant="outline" 
+              size="lg" 
+              onClick={() => window.open('tel:+919480389296', '_self')}
+              className="text-lg px-8 py-6 w-full sm:w-[280px] hover:scale-105 transition-all duration-300 !border-primary !text-primary hover:!bg-primary/90 hover:!text-primary-foreground shadow-glow"
+            >
               <Phone className="mr-2 h-5 w-5" />
               Call Us Today
             </Button>
@@ -1029,6 +1063,7 @@ const FullBodyDetox = () => {
                 }}
                 onPaymentSuccess={handlePaymentSuccess}
                 appointmentData={appointmentData}
+                onAbandonedPayment={handleAbandonedPayment}
               />
             )}
 
