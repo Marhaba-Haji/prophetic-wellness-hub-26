@@ -277,17 +277,36 @@ const GreekRegimenTherapy = () => {
       image="/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
     >
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-        <div className="container mx-auto px-4 text-center">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden" 
+               style={{
+                 backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), url("https://res.cloudinary.com/doxoxzz02/image/upload/v1758738237/hijama_vs_leech_jsktye.jpg")`,
+                 backgroundSize: 'cover',
+                 backgroundPosition: 'center',
+                 backgroundRepeat: 'no-repeat',
+                 backgroundAttachment: 'fixed'
+               }}>
+        {/* Floating Elements */}
+        <div className="absolute top-20 left-10 w-4 h-4 bg-primary/20 rounded-full animate-pulse"></div>
+        <div className="absolute top-32 right-16 w-3 h-3 bg-secondary/20 rounded-full animate-bounce" style={{animationDelay: '1s'}}></div>
+        <div className="absolute bottom-20 right-10 w-6 h-6 bg-primary/15 rounded-full animate-pulse" style={{animationDelay: '2s'}}></div>
+        <div className="absolute bottom-32 left-20 w-5 h-5 bg-secondary/15 rounded-full animate-bounce" style={{animationDelay: '0.5s'}}></div>
+        <div className="absolute top-1/2 left-5 w-2 h-2 bg-primary/25 rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
+        <div className="absolute top-1/3 right-8 w-3 h-3 bg-secondary/20 rounded-full animate-bounce" style={{animationDelay: '2.5s'}}></div>
+        
+        <div className="container mx-auto px-4 text-center relative z-10">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
               Greek Regimen Therapy – Complete Detox, Restoration & Healing
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
               A time-tested Unani regimen designed to cleanse toxins, restore balance, and naturally heal chronic conditions — safe, effective, and personalized for your body.
             </p>
             <div className="flex justify-center">
-              <Button size="lg" onClick={scrollToBooking} className="text-lg px-8 py-6">
+              <Button 
+                size="lg" 
+                onClick={scrollToBooking} 
+                className="text-lg px-8 py-6 transition-all duration-300 ease-in-out hover:transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/25 focus:transform focus:-translate-y-1 focus:shadow-xl focus:shadow-primary/20"
+              >
                 <Calendar className="mr-2 h-5 w-5" />
                 Book Your Consultation Today
               </Button>
@@ -313,7 +332,7 @@ const GreekRegimenTherapy = () => {
               </div>
               <div className="order-1 lg:order-2">
                 <p className="text-lg text-muted-foreground leading-relaxed">
-              Greek Regimen Therapy, known in Unani medicine as <strong>Ilaj bil Tadbeer (Regimental Therapy)</strong>, is a holistic system of natural treatments that uses carefully designed regimens to detoxify the body, balance the four humors, and strengthen the immune system. Unlike modern quick-fix methods, it works gently and deeply to restore long-term wellness.
+              Greek Regimen Therapy, known in Unani medicine as <strong>Ilaj bil Tadbeer (Regimenal Therapy)</strong>, is a holistic system of natural treatments that uses carefully designed regimens to detoxify the body, balance the four humors, and strengthen the immune system. Unlike modern quick-fix methods, it works gently and deeply to restore long-term wellness.
             </p>
                 <div className="mt-6 p-4 bg-primary/5 rounded-lg border-l-4 border-primary">
                   <p className="text-sm text-primary font-medium">
@@ -762,8 +781,8 @@ const GreekRegimenTherapy = () => {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-foreground mb-2">Safe, Modern Clinic Environment</h3>
-                    <p className="text-muted-foreground">Our state-of-the-art facility combines traditional healing methods with modern hygiene standards, ensuring your safety and comfort throughout the treatment.</p>
+                    <h3 className="text-xl font-semibold text-foreground mb-2">Safe Clinic Environment</h3>
+                    <p className="text-muted-foreground">Combine traditional healing methods with modern hygiene standards, ensuring your safety and comfort throughout the treatment.</p>
                   </div>
                 </div>
                 
@@ -790,15 +809,6 @@ const GreekRegimenTherapy = () => {
                       alt="Modern Clinic Environment" 
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                      <div className="text-center text-white">
-                        <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4">
-                          <MapPin className="h-8 w-8 text-white" />
-                        </div>
-                        <p className="text-white font-medium text-lg">Modern Clinic Environment</p>
-                        <p className="text-sm text-white/90">State-of-the-art facilities</p>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -827,7 +837,7 @@ const GreekRegimenTherapy = () => {
                   <Heart className="h-8 w-8 text-primary" />
                 </div>
                 <h4 className="text-lg font-semibold text-foreground mb-2">Proven Results</h4>
-                <p className="text-sm text-muted-foreground">Thousands of satisfied patients who have experienced lasting improvements in their health</p>
+                <p className="text-sm text-muted-foreground">Satisfied patients who have experienced lasting improvements in their health</p>
               </div>
             </div>
             
@@ -836,7 +846,7 @@ const GreekRegimenTherapy = () => {
               <div className="inline-block p-8 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl border border-primary/20">
                 <h3 className="text-2xl font-bold text-foreground mb-4">Ready to Experience Authentic Healing?</h3>
                 <p className="text-lg text-muted-foreground mb-6">
-                  Join thousands of patients who have transformed their health with our personalized regimen therapy approach.
+                  Join the several patients who have transformed their health with our personalized regimen therapy approach.
                 </p>
                 <Button 
                   size="lg" 
@@ -845,7 +855,7 @@ const GreekRegimenTherapy = () => {
                 >
                 <Calendar className="mr-2 h-5 w-5" />
                   Book Your Consultation Today
-              </Button>
+            </Button>
               </div>
             </div>
           </div>
@@ -1018,7 +1028,7 @@ const GreekRegimenTherapy = () => {
                                 </option>
                               ))}
                     </select>
-                          </div>
+                  </div>
                           {date &&
                             availableSlots.length === 0 &&
                             !isCheckingAvailability && (
@@ -1062,10 +1072,10 @@ const GreekRegimenTherapy = () => {
                             Pay ₹299 & Book Appointment
                           </>
                         )}
-                      </Button>
-                    </form>
-                  </CardContent>
-                </Card>
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
               </div>
 
               <div>
@@ -1078,9 +1088,10 @@ const GreekRegimenTherapy = () => {
                       <div>
                         <h4 className="font-semibold mb-1">Opening Hours</h4>
                         <div className="text-center">
-                          <p>Monday - Thursday: 9:00 AM - 8:00 PM</p>
-                          <p>Saturday - Sunday: 9:00 AM - 8:00 PM</p>
-                          <p>Friday: Closed</p>
+                          <p>Monday - Saturday: 11:00 AM - 1:00 PM</p>
+                          <p>Monday - Saturday: 4:30 PM - 7:30 PM</p>
+                          <p>Friday: 4:30 PM - 7:30 PM</p>
+                          <p>Sunday: Closed</p>
                         </div>
                       </div>
                       <div className="pt-4 border-t border-gray-100">
@@ -1105,7 +1116,7 @@ const GreekRegimenTherapy = () => {
                           </div>
                           <div className="flex items-center justify-center">
                             <Mail className="h-4 w-4 text-primary mr-2" />
-                            <span>info@hijamahealing.com</span>
+                            <span>revivoheal@gmail.com</span>
                           </div>
                         </div>
                       </div>
