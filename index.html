@@ -159,30 +159,149 @@
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
-    <!-- Optimize CSS loading - critical CSS only, defer non-critical -->
+    <!-- Optimize CSS loading - inline critical CSS, defer non-critical -->
     <style>
-      /* Critical above-the-fold CSS only - reduce unused CSS */
-      * { box-sizing: border-box; margin: 0; padding: 0; }
-      html, body { font-family: Inter, system-ui, sans-serif; line-height: 1.6; }
-      body { background: #ffffff; color: #1a1a1a; overflow-x: hidden; }
-      #root { min-height: 100vh; }
+      /* Critical above-the-fold styles - extracted from main CSS */
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
       
-      /* Critical navigation styles only */
-      .navbar { background: white; border-bottom: 1px solid #e5e7eb; }
-      .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+      /* Critical CSS Variables */
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --primary: 142 76% 36%;
+        --primary-foreground: 210 40% 98%;
+        --primary-glow: 142 70% 45%;
+        --border: 214.3 31.8% 91.4%;
+        --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+        --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --brand-green: 142 76% 36%;
+        --brand-gold: 45 100% 50%;
+      }
       
-      /* Critical brand colors */
-      .text-brand-green { color: hsl(142 76% 36%); }
-      .text-brand-gold { color: hsl(45 100% 50%); }
-      .bg-brand-green { background: hsl(142 76% 36%); }
+      /* Critical reset and base styles */
+      *, *::before, *::after { 
+        box-sizing: border-box; 
+        margin: 0; 
+        padding: 0; 
+      }
+      
+      html, body { 
+        font-family: Inter, system-ui, sans-serif; 
+        line-height: 1.6; 
+        font-weight: 400;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      body { 
+        background: hsl(var(--background)); 
+        color: hsl(var(--foreground)); 
+        overflow-x: hidden; 
+      }
+      
+      #root { 
+        min-height: 100vh; 
+        display: flex;
+        flex-direction: column;
+      }
+      
+      /* Critical navigation styles */
+      .navbar { 
+        background: white; 
+        border-bottom: 1px solid hsl(var(--border)); 
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+      
+      .container { 
+        max-width: 1200px; 
+        margin: 0 auto; 
+        padding: 0 1rem; 
+      }
+      
+      @media (min-width: 640px) {
+        .container { padding: 0 1.5rem; }
+      }
+      
+      @media (min-width: 1024px) {
+        .container { padding: 0 2rem; }
+      }
+      
+      /* Critical hero section styles */
+      .hero-section {
+        background: hsl(var(--background));
+        padding: 5rem 0;
+        text-align: center;
+      }
+      
+      .hero-heading {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: hsl(var(--brand-green));
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+      }
+      
+      @media (min-width: 768px) {
+        .hero-heading { font-size: 3rem; }
+      }
       
       /* Critical button styles */
-      .btn { padding: 0.5rem 1rem; border-radius: 0.375rem; font-weight: 500; }
-      .btn-primary { background: hsl(142 76% 36%); color: white; border: none; }
+      .btn { 
+        padding: 0.5rem 1rem; 
+        border-radius: 0.375rem; 
+        font-weight: 500; 
+        transition: var(--transition-smooth);
+        border: 1px solid transparent;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .btn-primary { 
+        background: hsl(var(--primary)); 
+        color: hsl(var(--primary-foreground)); 
+        border: none; 
+      }
+      
+      .btn-primary:hover {
+        background: hsl(var(--primary-glow));
+        transform: translateY(-1px);
+      }
+      
+      /* Critical loading state */
+      .animate-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+      
+      /* Critical utility classes */
+      .text-brand-green { color: hsl(var(--brand-green)); }
+      .text-brand-gold { color: hsl(var(--brand-gold)); }
+      .bg-brand-green { background: hsl(var(--brand-green)); }
+      .font-bold { font-weight: 700; }
+      .text-center { text-align: center; }
+      .mb-6 { margin-bottom: 1.5rem; }
+      .mt-4 { margin-top: 1rem; }
+      .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+      .px-4 { padding-left: 1rem; padding-right: 1rem; }
+      .hidden { display: none; }
+      .block { display: block; }
+      .flex { display: flex; }
+      .items-center { align-items: center; }
+      .justify-center { justify-content: center; }
+      .space-x-4 > * + * { margin-left: 1rem; }
+      .rounded-lg { border-radius: 0.5rem; }
+      .shadow-lg { box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05); }
     </style>
     
-    <!-- Optimize TTI - preload only critical resources -->
-    <link rel="modulepreload" href="/src/main.tsx" as="script">
+    <!-- Defer main CSS to prevent render blocking -->
     <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
     

@@ -9,11 +9,13 @@ export default defineConfig({
     port: 8080,
   },
   plugins: [
-    react()
+    react({
+      include: "**/*.{jsx,tsx,js,ts}",
+    })
   ],
   resolve: {
     alias: {
-      "@": path.resolve(process.cwd(), "./src"),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
   define: {
