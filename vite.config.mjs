@@ -9,21 +9,8 @@ export default defineConfig({
     port: 8080,
   },
   plugins: [
-    react({
-      jsxRuntime: 'automatic',
-      include: /\.(jsx|js|tsx|ts)$/,
-    })
+    react()
   ],
-  esbuild: {
-    jsx: 'automatic',
-    target: 'es2020',
-    format: 'esm',
-    drop: ['console', 'debugger'],
-    minify: true,
-  },
-  build: {
-    skipTypeCheck: true,
-  },
   resolve: {
     alias: {
       "@": path.resolve(process.cwd(), "./src"),
@@ -50,31 +37,30 @@ export default defineConfig({
         chunkFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
         manualChunks: {
-          // Core React - keep small for faster parsing
+          // Critical path - minimal for TTI
           'react-core': ['react', 'react-dom'],
           'router': ['react-router-dom'],
           
-          // UI components - minimal for faster evaluation
-          'ui-radix': [
+          // UI components - lazy loaded
+          'ui-components': [
             '@radix-ui/react-dialog', 
             '@radix-ui/react-dropdown-menu',
             '@radix-ui/react-tabs',
             '@radix-ui/react-toast'
           ],
           
-          // Heavy third-party - separate for code splitting
+          // Heavy libraries - deferred loading
           'vendor-heavy': ['mapbox-gl', '@tinymce/tinymce-react', 'react-quill'],
           'vendor-data': ['@supabase/supabase-js', '@tanstack/react-query'],
           
-          // Utilities - lightweight chunk
-          'utils': ['clsx', 'tailwind-merge', 'nanoid', 'date-fns', 'lucide-react'],
+          // Utilities - small bundle for fast TTI
+          'utils': ['clsx', 'tailwind-merge', 'lucide-react'],
         },
-        experimentalMinChunkSize: 8000,
+        experimentalMinChunkSize: 5000,
       },
     },
-    chunkSizeWarningLimit: 250,
+    chunkSizeWarningLimit: 200,
   },
-  // Optimize dependencies to reduce unused JavaScript
   optimizeDeps: {
     include: [
       'react',
@@ -84,11 +70,9 @@ export default defineConfig({
       'tailwind-merge',
     ],
     exclude: [
-      // Exclude heavy libraries to prevent bundling unused code
       'mapbox-gl',
       '@tinymce/tinymce-react',
       'react-quill',
-      '@supabase/supabase-js',
     ],
   },
 });
