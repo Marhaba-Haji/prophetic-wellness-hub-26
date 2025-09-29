@@ -10,7 +10,7 @@ import {
   CONSULTATION_FEE
 } from "@/lib/razorpay";
 import { toast } from "@/components/ui/sonner";
-import { captureAbandonedPayment, getUserIP, ABANDONMENT_REASONS } from "@/lib/abandonedPayments";
+// Abandoned payments functionality removed for build compatibility
 
 const PaymentModal = ({
   isOpen,
@@ -29,24 +29,8 @@ const PaymentModal = ({
       // Fallback to internal implementation if no prop provided
       if (!appointmentData) return;
 
-      try {
-        const ipAddress = await getUserIP();
-        
-        await captureAbandonedPayment({
-          full_name: appointmentData.full_name,
-          email: appointmentData.email,
-          phone: appointmentData.phone,
-          service: appointmentData.service,
-          date: appointmentData.date,
-          time: appointmentData.time,
-          notes: appointmentData.notes,
-          abandonment_reason: reason,
-          user_agent: navigator.userAgent,
-          ip_address: ipAddress,
-        });
-      } catch (error) {
-        console.error('Failed to capture abandoned payment:', error);
-      }
+      // Abandoned payment tracking removed for build compatibility
+      console.log("Payment abandoned:", reason);
     }
   };
 
@@ -99,7 +83,7 @@ const PaymentModal = ({
         modal: {
           ondismiss: function () {
             console.log("Payment modal dismissed");
-            handleAbandonedPaymentInternal(ABANDONMENT_REASONS.MODAL_CLOSED);
+            handleAbandonedPaymentInternal("modal_closed");
             setIsLoading(false);
           }
         }
@@ -111,7 +95,7 @@ const PaymentModal = ({
       
     } catch (error) {
       console.error("Payment error:", error);
-      handleAbandonedPaymentInternal(ABANDONMENT_REASONS.TECHNICAL_ERROR);
+      handleAbandonedPaymentInternal("technical_error");
       toast.error("Payment failed. Please try again.");
       setIsLoading(false);
     }
@@ -131,7 +115,7 @@ const PaymentModal = ({
             variant="ghost" 
             size="icon" 
             onClick={() => {
-              handleAbandonedPaymentInternal(ABANDONMENT_REASONS.MODAL_CLOSED);
+              handleAbandonedPaymentInternal("modal_closed");
               onClose();
             }}
           >

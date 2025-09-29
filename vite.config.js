@@ -33,17 +33,21 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Vendor chunks for better caching
+          // Vendor chunks for better caching and reduced critical chain
           vendor: ['react', 'react-dom'],
           router: ['react-router-dom'],
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-tabs'],
           supabase: ['@supabase/supabase-js'],
           query: ['@tanstack/react-query'],
+          // Separate heavy libraries to reduce main bundle
+          maps: ['mapbox-gl'],
+          editor: ['@tinymce/tinymce-react', 'react-quill'],
+          utils: ['date-fns', 'nanoid', 'clsx', 'tailwind-merge'],
         },
       },
     },
-    // Optimize chunk size
-    chunkSizeWarningLimit: 1000,
+    // Optimize chunk size for better loading
+    chunkSizeWarningLimit: 800,
   },
   // Optimize dependencies
   optimizeDeps: {
