@@ -9,10 +9,7 @@ export default defineConfig({
     port: 8080,
   },
   plugins: [
-    react({
-      include: /\.(jsx|js|tsx|ts)$/,
-      jsx: 'automatic',
-    })
+    react()
   ],
   resolve: {
     alias: {
@@ -25,43 +22,41 @@ export default defineConfig({
   build: {
     target: 'es2015',
     sourcemap: false,
-    // Optimize for better caching with content-based hashing
+    // Code splitting and tree shaking to reduce unused JavaScript
     rollupOptions: {
       output: {
-        // Enable content-based hashing for long-term caching
+        // Content-based hashing for better caching
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
         manualChunks: {
-          // Critical vendors - stable chunks for better caching
-          'react-core': ['react', 'react-dom'],
-          'react-router': ['react-router-dom'],
+          // Critical app code - minimal chunks
+          'react-vendor': ['react', 'react-dom'],
+          'router': ['react-router-dom'],
           
-          // UI libraries - split for better cache efficiency
-          'radix-ui': [
+          // UI components - split for better tree shaking
+          'ui-core': [
             '@radix-ui/react-dialog', 
             '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-popover',
-            '@radix-ui/react-select',
-            '@radix-ui/react-checkbox'
+            '@radix-ui/react-tabs'
           ],
           
-          // Heavy libraries - separate chunks for better caching
-          'heavy-libs': ['mapbox-gl'],
-          'editor-libs': ['@tinymce/tinymce-react', 'react-quill'],
-          'data-libs': ['@supabase/supabase-js', '@tanstack/react-query'],
+          // Heavy libraries - lazy load these
+          'maps': ['mapbox-gl'],
+          'rich-text': ['@tinymce/tinymce-react', 'react-quill'],
+          'data': ['@supabase/supabase-js', '@tanstack/react-query'],
           
-          // Utilities - stable chunk for better caching
-          'utils': ['clsx', 'tailwind-merge', 'nanoid'],
+          // Utilities - keep small and cacheable
+          'utils': ['clsx', 'tailwind-merge', 'nanoid', 'date-fns'],
         },
-        // Optimize chunk loading
-        experimentalMinChunkSize: 15000,
+        // Aggressive chunk size limits to reduce unused code
+        experimentalMinChunkSize: 10000,
       },
     },
-    // Optimize chunk size
-    chunkSizeWarningLimit: 400,
+    // Reduce chunk size warning limit for better optimization
+    chunkSizeWarningLimit: 300,
   },
-  // Optimize dependencies
+  // Optimize dependencies to reduce unused JavaScript
   optimizeDeps: {
     include: [
       'react',
@@ -71,9 +66,11 @@ export default defineConfig({
       'tailwind-merge',
     ],
     exclude: [
+      // Exclude heavy libraries to prevent bundling unused code
       'mapbox-gl',
       '@tinymce/tinymce-react',
       'react-quill',
+      '@supabase/supabase-js',
     ],
   },
 });
