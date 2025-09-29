@@ -33,31 +33,56 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Vendor chunks for better caching and reduced critical chain
-          vendor: ['react', 'react-dom'],
-          router: ['react-router-dom'],
-          ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-tabs'],
-          supabase: ['@supabase/supabase-js'],
-          query: ['@tanstack/react-query'],
-          // Separate heavy libraries to reduce main bundle
-          maps: ['mapbox-gl'],
-          editor: ['@tinymce/tinymce-react', 'react-quill'],
-          utils: ['date-fns', 'nanoid', 'clsx', 'tailwind-merge'],
+          // Critical vendors - keep these small for faster FID
+          'react-core': ['react', 'react-dom'],
+          'react-router': ['react-router-dom'],
+          
+          // UI libraries - split into smaller chunks
+          'radix-ui-core': [
+            '@radix-ui/react-dialog', 
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-popover'
+          ],
+          'radix-ui-forms': [
+            '@radix-ui/react-select',
+            '@radix-ui/react-checkbox',
+            '@radix-ui/react-radio-group'
+          ],
+          'radix-ui-navigation': [
+            '@radix-ui/react-tabs',
+            '@radix-ui/react-accordion',
+            '@radix-ui/react-navigation-menu'
+          ],
+          
+          // Heavy libraries - defer loading
+          'heavy-libs': ['mapbox-gl'],
+          'editor-libs': ['@tinymce/tinymce-react', 'react-quill'],
+          'data-libs': ['@supabase/supabase-js', '@tanstack/react-query'],
+          
+          // Utilities - small chunks
+          'date-utils': ['date-fns'],
+          'misc-utils': ['nanoid', 'clsx', 'tailwind-merge'],
         },
+        // Optimize chunk loading for better FID
+        experimentalMinChunkSize: 20000,
       },
     },
-    // Optimize chunk size for better loading
-    chunkSizeWarningLimit: 800,
+    // Optimize chunk size for faster parsing
+    chunkSizeWarningLimit: 500,
   },
-  // Optimize dependencies
+  // Optimize dependencies for faster FID
   optimizeDeps: {
     include: [
+      // Pre-bundle critical dependencies for faster startup
       'react',
       'react-dom',
       'react-router-dom',
-      '@supabase/supabase-js',
-      '@tanstack/react-query',
-      'lucide-react',
+    ],
+    exclude: [
+      // Exclude heavy libraries from pre-bundling to reduce initial parse time
+      'mapbox-gl',
+      '@tinymce/tinymce-react',
+      'react-quill',
     ],
   },
 });
