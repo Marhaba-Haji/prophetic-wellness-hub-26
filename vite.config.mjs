@@ -9,12 +9,7 @@ export default defineConfig({
     port: 8080,
   },
   plugins: [
-    react({
-      include: /\.(jsx|js|tsx|ts)$/,
-      babel: {
-        presets: [['@babel/preset-react', { runtime: 'automatic' }]]
-      }
-    })
+    react()
   ],
   resolve: {
     alias: {
