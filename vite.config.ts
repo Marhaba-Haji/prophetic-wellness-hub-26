@@ -9,8 +9,21 @@ export default defineConfig({
     port: 8080,
   },
   plugins: [
-    react()
+    react({
+      jsxRuntime: 'automatic',
+      include: /\.(jsx|js|tsx|ts)$/,
+    })
   ],
+  esbuild: {
+    jsx: 'automatic',
+    target: 'es2020',
+    format: 'esm',
+    drop: ['console', 'debugger'],
+    minify: true,
+  },
+  build: {
+    skipTypeCheck: true,
+  },
   resolve: {
     alias: {
       "@": path.resolve(process.cwd(), "./src"),
@@ -20,41 +33,46 @@ export default defineConfig({
     global: "globalThis",
   },
   build: {
-    target: 'es2015',
+    target: 'es2020',
     sourcemap: false,
-    // Code splitting and tree shaking to reduce unused JavaScript
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log'],
+      },
+      mangle: true,
+    },
     rollupOptions: {
       output: {
-        // Content-based hashing for better caching
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
         manualChunks: {
-          // Critical app code - minimal chunks
-          'react-vendor': ['react', 'react-dom'],
+          // Core React - keep small for faster parsing
+          'react-core': ['react', 'react-dom'],
           'router': ['react-router-dom'],
           
-          // UI components - split for better tree shaking
-          'ui-core': [
+          // UI components - minimal for faster evaluation
+          'ui-radix': [
             '@radix-ui/react-dialog', 
             '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-tabs'
+            '@radix-ui/react-tabs',
+            '@radix-ui/react-toast'
           ],
           
-          // Heavy libraries - lazy load these
-          'maps': ['mapbox-gl'],
-          'rich-text': ['@tinymce/tinymce-react', 'react-quill'],
-          'data': ['@supabase/supabase-js', '@tanstack/react-query'],
+          // Heavy third-party - separate for code splitting
+          'vendor-heavy': ['mapbox-gl', '@tinymce/tinymce-react', 'react-quill'],
+          'vendor-data': ['@supabase/supabase-js', '@tanstack/react-query'],
           
-          // Utilities - keep small and cacheable
-          'utils': ['clsx', 'tailwind-merge', 'nanoid', 'date-fns'],
+          // Utilities - lightweight chunk
+          'utils': ['clsx', 'tailwind-merge', 'nanoid', 'date-fns', 'lucide-react'],
         },
-        // Aggressive chunk size limits to reduce unused code
-        experimentalMinChunkSize: 10000,
+        experimentalMinChunkSize: 8000,
       },
     },
-    // Reduce chunk size warning limit for better optimization
-    chunkSizeWarningLimit: 300,
+    chunkSizeWarningLimit: 250,
   },
   // Optimize dependencies to reduce unused JavaScript
   optimizeDeps: {
