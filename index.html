@@ -9,10 +9,88 @@
     <title>RevivoHeal Bangalore | Centre for Pain Relief & Healing</title>
     <meta name="description" content="Experience pain relief at RevivoHeal Bangalore with Hijama cupping and traditional massage therapies. Natural healing by certified professionals. Book now." />
     
+    <!-- Critical CSS inline to prevent render blocking -->
+    <style>
+      /* Critical above-the-fold styles */
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --primary: 142 76% 36%;
+        --primary-foreground: 210 40% 98%;
+        --border: 214.3 31.8% 91.4%;
+        --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      * { box-sizing: border-box; }
+      
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+        line-height: 1.5;
+        font-weight: 400;
+        overflow-x: hidden;
+        contain: layout style;
+        overflow-anchor: none;
+      }
+      
+      #root {
+        width: 100%;
+        min-height: 100vh;
+      }
+      
+      /* Critical header/navigation styles */
+      nav, header {
+        contain: layout style;
+      }
+      
+      /* Critical button styles */
+      button {
+        font-family: inherit;
+        border: 0;
+        font-size: 100%;
+        line-height: 1.15;
+        margin: 0;
+        contain: layout;
+        will-change: transform;
+      }
+      
+      /* Critical interactive elements */
+      a, [role="button"] {
+        contain: layout;
+        will-change: transform;
+        text-decoration: inherit;
+        color: inherit;
+      }
+      
+      /* Prevent layout shifts */
+      img, video, iframe {
+        max-width: 100%;
+        height: auto;
+        contain: layout;
+      }
+      
+      /* Critical loading state */
+      .animate-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+    </style>
+    
     <!-- Preconnect to external domains for faster loading -->
     <link rel="preconnect" href="https://zywvlznelzpoixnrzwqk.supabase.co" />
     <link rel="preconnect" href="https://api.razorpay.com" />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
+    
+    <!-- Load CSS asynchronously to prevent render blocking -->
+    <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
     
     <!-- Preload critical resources with high priority -->
     <link rel="modulepreload" href="/src/main.tsx" as="script" />
