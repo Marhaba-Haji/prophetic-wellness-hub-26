@@ -99,6 +99,32 @@
 
   body {
     @apply bg-background text-foreground;
+    /* Performance optimizations to reduce forced reflows */
+    contain: layout style;
+    overflow-anchor: none;
+  }
+
+  /* Optimize common interactive elements to prevent layout thrashing */
+  button, a, [role="button"] {
+    contain: layout;
+    will-change: transform;
+  }
+
+  /* Optimize card components that might cause reflows */
+  [class*="card"], [class*="modal"], [class*="dialog"] {
+    contain: layout style;
+    transform: translateZ(0); /* Force hardware acceleration */
+  }
+
+  /* Optimize images and media to prevent layout shifts */
+  img, video, iframe {
+    contain: layout;
+  }
+
+  /* Optimize scrollable containers */
+  [class*="scroll"], .overflow-auto, .overflow-scroll {
+    contain: strict;
+    overflow-anchor: auto;
   }
 }
 
@@ -153,5 +179,29 @@
   .scrollbar-hide {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+
+  /* Performance optimizations for animations and transitions */
+  .hover-lift, .medical-card, [class*="transition"] {
+    contain: layout;
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Optimize elements that frequently change size */
+  [class*="animate"], [class*="hover"] {
+    contain: layout;
+    transform: translateZ(0);
+  }
+
+  /* Batch layout operations for form elements */
+  input, textarea, select {
+    contain: layout style;
+  }
+
+  /* Optimize navigation and header elements */
+  nav, header, [role="navigation"], [role="banner"] {
+    contain: layout style;
   }
 }
