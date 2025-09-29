@@ -159,16 +159,33 @@
     <link rel="preconnect" href="https://api.razorpay.com" />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     
-    <!-- Load CSS asynchronously to prevent render blocking with cache optimization -->
-    <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <!-- Optimize CSS loading - critical CSS only, defer non-critical -->
+    <style>
+      /* Critical above-the-fold CSS only - reduce unused CSS */
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { font-family: Inter, system-ui, sans-serif; line-height: 1.6; }
+      body { background: #ffffff; color: #1a1a1a; overflow-x: hidden; }
+      #root { min-height: 100vh; }
+      
+      /* Critical navigation styles only */
+      .navbar { background: white; border-bottom: 1px solid #e5e7eb; }
+      .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+      
+      /* Critical brand colors */
+      .text-brand-green { color: hsl(142 76% 36%); }
+      .text-brand-gold { color: hsl(45 100% 50%); }
+      .bg-brand-green { background: hsl(142 76% 36%); }
+      
+      /* Critical button styles */
+      .btn { padding: 0.5rem 1rem; border-radius: 0.375rem; font-weight: 500; }
+      .btn-primary { background: hsl(142 76% 36%); color: white; border: none; }
+    </style>
+    
+    <!-- Defer non-critical CSS to reduce unused CSS -->
+    <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'" media="print">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
     
-    <!-- Cache optimization meta tags -->
-    <meta http-equiv="Cache-Control" content="public, max-age=31536000, immutable">
-    <meta name="expires" content="31536000">
-    
-    <!-- Preload critical resources with cache optimization -->
-    <link rel="modulepreload" href="/src/main.tsx" as="script" />
+    <!-- Optimized script loading - minimal JavaScript only -->
     <script type="module" src="/src/main.tsx"></script>
     
     <!-- Google Analytics with reduced main thread impact -->
