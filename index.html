@@ -19,9 +19,15 @@
         --primary-foreground: 210 40% 98%;
         --border: 214.3 31.8% 91.4%;
         --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        /* Brand colors for LCP optimization */
+        --brand-green: 142 76% 36%;
+        --brand-gold: 45 100% 50%;
       }
       
-      * { box-sizing: border-box; }
+      * { 
+        box-sizing: border-box; 
+      }
       
       body {
         margin: 0;
@@ -34,11 +40,61 @@
         overflow-x: hidden;
         contain: layout style;
         overflow-anchor: none;
+        font-display: swap;
       }
       
       #root {
         width: 100%;
         min-height: 100vh;
+      }
+      
+      /* Critical LCP element optimization */
+      .lcp-heading {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: hsl(var(--brand-green));
+        margin-bottom: 1.5rem;
+        margin-top: 1rem;
+        line-height: 1.1;
+        text-align: center;
+        /* Optimize for fast rendering */
+        font-display: swap;
+        will-change: auto;
+        contain: layout style;
+        /* Prevent layout shifts */
+        min-height: 3rem;
+      }
+      
+      @media (min-width: 768px) {
+        .lcp-heading {
+          font-size: 3rem;
+          min-height: 3.5rem;
+        }
+      }
+      
+      /* Critical section styles */
+      .main-services-section {
+        padding: 5rem 0;
+        background: linear-gradient(to bottom, #ffffff, #f9fafb);
+        contain: layout;
+      }
+      
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      
+      @media (min-width: 640px) {
+        .container {
+          padding: 0 1.5rem;
+        }
+      }
+      
+      @media (min-width: 1024px) {
+        .container {
+          padding: 0 2rem;
+        }
       }
       
       /* Critical header/navigation styles */
@@ -81,7 +137,19 @@
         0%, 100% { opacity: 1; }
         50% { opacity: 0.5; }
       }
+      
+      /* Optimize font rendering for LCP */
+      .text-brand-green { color: hsl(var(--brand-green)); }
+      .text-brand-gold { color: hsl(var(--brand-gold)); }
+      .font-bold { font-weight: 700; }
+      .text-center { text-align: center; }
+      .mb-6 { margin-bottom: 1.5rem; }
+      .mt-4 { margin-top: 1rem; }
     </style>
+    
+    <!-- Preload critical fonts for LCP optimization -->
+    <link rel="preload" href="/fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
     
     <!-- Preconnect to external domains for faster loading -->
     <link rel="preconnect" href="https://zywvlznelzpoixnrzwqk.supabase.co" />
