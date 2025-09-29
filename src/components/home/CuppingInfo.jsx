@@ -11,6 +11,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import YouTubeFacade from "@/components/ui/YouTubeFacade";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const CuppingInfo = () => {
@@ -83,16 +84,13 @@ const CuppingInfo = () => {
                   value={`video${index + 1}`}
                   className="m-0"
                 >
-                  <div className="relative aspect-video w-full">
-                    <iframe
-                      className="w-full h-full"
-                      src={`https://www.youtube.com/embed/${video.id}`}
-                      title={video.title}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
-                  </div>
+                    <div className="relative aspect-video w-full">
+                      <YouTubeFacade
+                        videoId={video.id}
+                        title={video.title}
+                        className="w-full h-full"
+                      />
+                    </div>
                   <div className="bg-white p-4">
                     <p className="font-medium text-brand-green flex items-center">
                       <Youtube className="h-5 w-5 mr-2 text-brand-gold" />

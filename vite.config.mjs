@@ -11,6 +11,7 @@ export default defineConfig({
   plugins: [
     react({
       include: /\.(jsx|js|tsx|ts)$/,
+      jsx: 'automatic',
     })
   ],
   resolve: {
