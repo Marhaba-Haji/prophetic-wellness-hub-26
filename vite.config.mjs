@@ -9,7 +9,9 @@ export default defineConfig({
     port: 8080,
   },
   plugins: [
-    react()
+    react({
+      include: /\.(jsx|js|tsx|ts)$/,
+    })
   ],
   resolve: {
     alias: {
@@ -22,53 +24,52 @@ export default defineConfig({
   build: {
     target: 'es2015',
     sourcemap: false,
+    // Optimize for better caching with content-based hashing
     rollupOptions: {
       output: {
+        // Enable content-based hashing for long-term caching
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
         manualChunks: {
-          // Critical vendors - keep these small for faster FID
+          // Critical vendors - stable chunks for better caching
           'react-core': ['react', 'react-dom'],
           'react-router': ['react-router-dom'],
           
-          // UI libraries - split into smaller chunks to reduce FID
-          'radix-ui-core': [
+          // UI libraries - split for better cache efficiency
+          'radix-ui': [
             '@radix-ui/react-dialog', 
             '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-popover'
-          ],
-          'radix-ui-forms': [
+            '@radix-ui/react-popover',
             '@radix-ui/react-select',
-            '@radix-ui/react-checkbox',
-            '@radix-ui/react-radio-group'
+            '@radix-ui/react-checkbox'
           ],
           
-          // Heavy libraries - defer loading to reduce main thread blocking
+          // Heavy libraries - separate chunks for better caching
           'heavy-libs': ['mapbox-gl'],
           'editor-libs': ['@tinymce/tinymce-react', 'react-quill'],
           'data-libs': ['@supabase/supabase-js', '@tanstack/react-query'],
           
-          // Utilities - small chunks for faster parsing
+          // Utilities - stable chunk for better caching
           'utils': ['clsx', 'tailwind-merge', 'nanoid'],
         },
-        // Optimize chunk loading for better FID
+        // Optimize chunk loading
         experimentalMinChunkSize: 15000,
       },
     },
-    // Optimize chunk size for faster parsing and reduced FID
+    // Optimize chunk size
     chunkSizeWarningLimit: 400,
   },
-  // Optimize dependencies for faster FID and prevent main thread blocking
+  // Optimize dependencies
   optimizeDeps: {
     include: [
-      // Pre-bundle critical dependencies for faster startup
       'react',
       'react-dom',
       'react-router-dom',
-      // Pre-bundle utilities to reduce runtime parsing
       'clsx',
       'tailwind-merge',
     ],
     exclude: [
-      // Exclude heavy libraries to prevent main thread blocking during initial load
       'mapbox-gl',
       '@tinymce/tinymce-react',
       'react-quill',
