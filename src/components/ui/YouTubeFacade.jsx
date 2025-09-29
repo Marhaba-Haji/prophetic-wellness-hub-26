@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PlayCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
+
+const cn = (...classes) => classes.filter(Boolean).join(' ');
 
 const YouTubeFacade = ({ videoId, title, className }) => {
   const [isLoaded, setIsLoaded] = useState(false);

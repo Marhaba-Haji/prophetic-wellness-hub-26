@@ -10,7 +10,10 @@ export default defineConfig({
   },
   plugins: [
     react({
-      jsx: 'automatic',
+      include: /\.(jsx|js|tsx|ts)$/,
+      babel: {
+        presets: [['@babel/preset-react', { runtime: 'automatic' }]]
+      }
     })
   ],
   resolve: {

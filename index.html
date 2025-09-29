@@ -185,8 +185,26 @@
     <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'" media="print">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
     
-    <!-- Optimized script loading - minimal JavaScript only -->
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- Defer third-party scripts to reduce main thread blocking -->
+    <script type="module">
+      // Minimal critical initialization only
+      import('/src/main.tsx');
+      
+      // Defer Google Analytics to reduce third-party impact
+      setTimeout(() => {
+        const script = document.createElement('script');
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7X8Z9633RK';
+        script.async = true;
+        document.head.appendChild(script);
+        
+        script.onload = () => {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7X8Z9633RK');
+        };
+      }, 3000); // Defer analytics by 3 seconds to reduce third-party blocking
+    </script>
     
     <!-- Google Analytics with reduced main thread impact -->
     <script>
