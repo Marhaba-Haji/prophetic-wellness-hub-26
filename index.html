@@ -150,19 +150,19 @@
       .mt-4 { margin-top: 1rem; }
     </style>
     
-    <!-- Preload critical fonts for LCP optimization -->
-    <link rel="preload" href="/fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Preload Google Fonts for LCP optimization - use font-display: swap -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
     
     <!-- Optimize network dependency chain - preconnect to reduce critical chain length -->
     <link rel="preconnect" href="https://zywvlznelzpoixnrzwqk.supabase.co" />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
-    <!-- Optimize CSS loading - inline critical CSS, defer non-critical -->
+    <!-- Critical CSS inlined for instant LCP rendering -->
     <style>
-      /* Critical above-the-fold styles - extracted from main CSS */
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+      /* Remove @import to prevent render blocking - fonts loaded via preload above */
       
       /* Critical CSS Variables */
       :root {
@@ -301,12 +301,12 @@
       .shadow-lg { box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05); }
     </style>
     
-    <!-- Defer main CSS to prevent render blocking -->
+    <!-- Defer main CSS to prevent render blocking while maintaining critical styles above -->
     <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
     
-    <!-- Critical script loading for fast TTI -->
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- Critical script loading with high priority for fast TTI and LCP -->
+    <script type="module" src="/src/main.tsx" fetchpriority="high"></script>
     
     <!-- Defer all analytics to improve TTI -->
     <script>
