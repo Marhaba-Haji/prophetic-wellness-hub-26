@@ -104,43 +104,6 @@
     overflow-anchor: none;
   }
 
-  /* Critical reflow optimization - prevent forced layout thrashing */
-  .animate-fade-in {
-    contain: layout;
-    transform: translateZ(0);
-    animation: fadeInOptimized 0.3s ease-out;
-  }
-
-  @keyframes fadeInOptimized {
-    from { 
-      opacity: 0; 
-      transform: translateY(10px) translateZ(0);
-    }
-    to { 
-      opacity: 1; 
-      transform: translateY(0) translateZ(0);
-    }
-  }
-
-  /* GPU acceleration for interactive elements to prevent reflows */
-  [class*="animate"], 
-  [class*="transition"],
-  .modal,
-  .dropdown,
-  .tooltip {
-    will-change: transform;
-    transform: translateZ(0);
-    contain: layout style;
-  }
-
-  /* Optimize hover effects to use transform instead of layout properties */
-  button:hover,
-  .hover\\:bg-white:hover,
-  [class*="hover"]:hover {
-    transform: translateZ(0);
-    contain: layout;
-  }
-
   /* Optimize common interactive elements to prevent layout thrashing */
   button, a, [role="button"] {
     contain: layout;

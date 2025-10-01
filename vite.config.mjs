@@ -11,7 +11,6 @@ export default defineConfig({
   plugins: [
     react({
       include: "**/*.{jsx,tsx,js,ts}",
-      jsxRuntime: 'automatic'
     })
   ],
   resolve: {
@@ -22,12 +21,8 @@ export default defineConfig({
   define: {
     global: "globalThis",
   },
-  esbuild: {
-    target: 'es2022',
-    jsx: 'automatic'
-  },
   build: {
-    target: 'es2022',
+    target: 'es2020',
     sourcemap: false,
     minify: 'terser',
     terserOptions: {
