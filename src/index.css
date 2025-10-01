@@ -110,6 +110,26 @@
     will-change: transform;
   }
 
+  /* Aggressive reflow prevention for animations and transitions */
+  [class*="animate"],
+  [class*="transition"],
+  [class*="hover"],
+  [data-state] {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    contain: layout style;
+  }
+
+  /* Prevent reflows in Radix UI components */
+  [data-radix-portal],
+  [role="dialog"],
+  [role="menu"],
+  [role="tooltip"],
+  [role="dropdown"] {
+    contain: layout style paint;
+    will-change: transform, opacity;
+  }
+
   /* Optimize card components that might cause reflows */
   [class*="card"], [class*="modal"], [class*="dialog"] {
     contain: layout style;
@@ -125,6 +145,14 @@
   [class*="scroll"], .overflow-auto, .overflow-scroll {
     contain: strict;
     overflow-anchor: auto;
+  }
+
+  /* Batch DOM reads/writes for performance */
+  input:focus,
+  textarea:focus,
+  select:focus,
+  button:active {
+    contain: layout;
   }
 }
 
