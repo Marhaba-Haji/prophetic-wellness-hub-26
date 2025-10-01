@@ -5,6 +5,24 @@ const cn = (...classes) => classes.filter(Boolean).join(' ');
 
 const YouTubeFacade = ({ videoId, title, className }) => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isWarmingConnection, setIsWarmingConnection] = useState(false);
+
+  // Preconnect to YouTube on hover to reduce load time when clicked
+  const handleMouseEnter = () => {
+    if (!isWarmingConnection && !isLoaded) {
+      setIsWarmingConnection(true);
+      // Warm up the connection
+      const linkPreconnect1 = document.createElement('link');
+      linkPreconnect1.rel = 'preconnect';
+      linkPreconnect1.href = 'https://www.youtube.com';
+      document.head.appendChild(linkPreconnect1);
+      
+      const linkPreconnect2 = document.createElement('link');
+      linkPreconnect2.rel = 'preconnect';
+      linkPreconnect2.href = 'https://www.google.com';
+      document.head.appendChild(linkPreconnect2);
+    }
+  };
 
   if (isLoaded) {
     return (
@@ -13,6 +31,7 @@ const YouTubeFacade = ({ videoId, title, className }) => {
         src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
         title={title}
         frameBorder="0"
+        loading="lazy"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
       ></iframe>
@@ -27,6 +46,7 @@ const YouTubeFacade = ({ videoId, title, className }) => {
         className
       )}
       onClick={() => setIsLoaded(true)}
+      onMouseEnter={handleMouseEnter}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
@@ -37,12 +57,13 @@ const YouTubeFacade = ({ videoId, title, className }) => {
       }}
       aria-label={`Load and play video: ${title}`}
     >
-      {/* YouTube thumbnail background */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: `url(https://img.youtube.com/vi/${videoId}/maxresdefault.jpg)`
-        }}
+      {/* YouTube thumbnail background - use loading="lazy" for performance */}
+      <img
+        src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+        alt={`${title} thumbnail`}
+        className="absolute inset-0 w-full h-full object-cover"
+        loading="lazy"
+        decoding="async"
       />
       
       {/* Dark overlay */}
