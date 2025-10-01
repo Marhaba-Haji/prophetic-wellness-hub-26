@@ -10,7 +10,7 @@ import { Calendar, User, Tag, Clock } from "lucide-react";
 import { BlogPost } from "@/types/supabase-types";
 import { toast } from "@/components/ui/sonner";
 import { useBlogPost, useRecentPosts, useRelatedPosts } from "@/hooks/useBlogData";
-// OptimizedImage removed for build compatibility
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 // Simplified interface for recent and related posts
 interface SimpleBlogPost {
@@ -486,11 +486,14 @@ const BlogDetail = () => {
                       <Link to={`/blog/${post.slug}`}>
                         {post.featured_image && (
                           <div className="h-32 sm:h-48 overflow-hidden rounded-t-lg">
-                            <img
+                            <OptimizedImage
                               src={getValidImageUrl(post.featured_image) || ""}
                               alt={post.title}
+                              width={400}
+                              height={200}
                               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                              loading="lazy"
+                              sizes="(max-width: 768px) 100vw, 50vw"
+                              quality={85}
                             />
                           </div>
                         )}
@@ -563,11 +566,14 @@ const BlogDetail = () => {
                         <div className="flex gap-2 sm:gap-3">
                           {post.featured_image && (
                             <div className="w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
-                              <img
+                              <OptimizedImage
                                 src={getValidImageUrl(post.featured_image) || ""}
                                 alt={post.title}
+                                width={64}
+                                height={64}
                                 className="w-full h-full object-cover rounded"
-                                loading="lazy"
+                                sizes="64px"
+                                quality={80}
                               />
                             </div>
                           )}

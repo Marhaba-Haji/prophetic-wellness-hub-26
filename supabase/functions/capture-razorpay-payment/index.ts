@@ -148,3 +148,84 @@ serve(async (request) => {
     });
   }
 });
+    }
+
+    // Get raw body for signature verification
+    const rawBody = await req.text();
+    const signature = req.headers.get('x-razorpay-signature');
+    
+    // Verify signature if present
+    if (signature && !verifyWebhookSignature(rawBody, signature)) {
+      await logPaymentEvent('signature_verification_failed', null, { message: 'Invalid signature' });
+      return new Response("Invalid signature", { status: 401 });
+    }
+
+    // Parse event
+    let event;
+    try {
+      event = JSON.parse(rawBody);
+    } catch (e) {
+      await logPaymentEvent('invalid_json', null, e);
+      return new Response("Invalid JSON", { status: 400 });
+    }
+
+    // Check for Razorpay payment.authorized event
+    if (event.event !== "payment.authorized" || !event.payload?.payment?.entity) {
+      await logPaymentEvent('invalid_event_type', event);
+      return new Response("Not a payment.authorized event", { status: 200 });
+    }
+
+    const payment = event.payload.payment.entity;
+    await logPaymentEvent('payment_authorized', payment);
+
+    // Validate payment status
+    if (payment.status !== "authorized") {
+      await logPaymentEvent('invalid_payment_status', payment);
+      return new Response("Payment not authorized", { status: 400 });
+    }
+
+    // Prepare capture request
+    const captureUrl = `https://api.razorpay.com/v1/payments/${payment.id}/capture`;
+    const captureBody = JSON.stringify({
+      amount: payment.amount,
+      currency: payment.currency
+    });
+
+    const basicAuth = "Basic " + btoa(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`);
+
+    // Attempt to capture payment
+    const captureRes = await fetch(captureUrl, {
+      method: "POST",
+      headers: {
+        "Authorization": basicAuth,
+        "Content-Type": "application/json",
+      },
+      body: captureBody,
+    });
+
+    const captureData = await captureRes.json();
+
+    if (!captureRes.ok) {
+      await logPaymentEvent('capture_failed', payment, captureData);
+      return new Response(
+        JSON.stringify({ error: "Failed to capture payment", details: captureData }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // Log successful capture
+    await logPaymentEvent('capture_successful', { ...payment, capture: captureData });
+
+    return new Response(
+      JSON.stringify({ success: true, capture: captureData }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
+  } catch (error) {
+    // Log any unexpected errors
+    await logPaymentEvent('unexpected_error', null, error);
+    return new Response(
+      JSON.stringify({ error: "Internal server error", message: error.message }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
+});

@@ -33,56 +33,27 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Critical vendors - keep these small for faster FID
-          'react-core': ['react', 'react-dom'],
-          'react-router': ['react-router-dom'],
-          
-          // UI libraries - split into smaller chunks
-          'radix-ui-core': [
-            '@radix-ui/react-dialog', 
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-popover'
-          ],
-          'radix-ui-forms': [
-            '@radix-ui/react-select',
-            '@radix-ui/react-checkbox',
-            '@radix-ui/react-radio-group'
-          ],
-          'radix-ui-navigation': [
-            '@radix-ui/react-tabs',
-            '@radix-ui/react-accordion',
-            '@radix-ui/react-navigation-menu'
-          ],
-          
-          // Heavy libraries - defer loading
-          'heavy-libs': ['mapbox-gl'],
-          'editor-libs': ['@tinymce/tinymce-react', 'react-quill'],
-          'data-libs': ['@supabase/supabase-js', '@tanstack/react-query'],
-          
-          // Utilities - small chunks
-          'date-utils': ['date-fns'],
-          'misc-utils': ['nanoid', 'clsx', 'tailwind-merge'],
+          // Vendor chunks for better caching
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-tabs'],
+          supabase: ['@supabase/supabase-js'],
+          query: ['@tanstack/react-query'],
         },
-        // Optimize chunk loading for better FID
-        experimentalMinChunkSize: 20000,
       },
     },
-    // Optimize chunk size for faster parsing
-    chunkSizeWarningLimit: 500,
+    // Optimize chunk size
+    chunkSizeWarningLimit: 1000,
   },
-  // Optimize dependencies for faster FID
+  // Optimize dependencies
   optimizeDeps: {
     include: [
-      // Pre-bundle critical dependencies for faster startup
       'react',
       'react-dom',
       'react-router-dom',
-    ],
-    exclude: [
-      // Exclude heavy libraries from pre-bundling to reduce initial parse time
-      'mapbox-gl',
-      '@tinymce/tinymce-react',
-      'react-quill',
+      '@supabase/supabase-js',
+      '@tanstack/react-query',
+      'lucide-react',
     ],
   },
 });

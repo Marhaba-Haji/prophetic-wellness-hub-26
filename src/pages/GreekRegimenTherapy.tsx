@@ -15,7 +15,7 @@ import { toast } from "@/components/ui/sonner";
 import { z } from "zod";
 import PaymentModal from "@/components/PaymentModal";
 import { RazorpayResponse } from "@/lib/razorpay";
-// Abandoned payments functionality removed for build compatibility
+import { captureAbandonedPayment, getUserIP, ABANDONMENT_REASONS } from "@/lib/abandonedPayments";
 
 const services = [
   "Greek Regimen Therapy",
@@ -81,8 +81,24 @@ const GreekRegimenTherapy = () => {
   const handleAbandonedPayment = async (reason) => {
     if (!appointmentData) return;
 
-    // Abandoned payment tracking removed for build compatibility
-    console.log("Payment abandoned:", reason);
+    try {
+      const ipAddress = await getUserIP();
+      
+      await captureAbandonedPayment({
+        full_name: appointmentData.full_name,
+        email: appointmentData.email,
+        phone: appointmentData.phone,
+        service: appointmentData.service,
+        date: appointmentData.date,
+        time: appointmentData.time,
+        notes: appointmentData.notes,
+        abandonment_reason: reason,
+        user_agent: navigator.userAgent,
+        ip_address: ipAddress,
+      });
+    } catch (error) {
+      console.error('Failed to capture abandoned payment:', error);
+    }
   };
 
   // Check appointment availability
@@ -210,7 +226,7 @@ const GreekRegimenTherapy = () => {
     } catch (error) {
       const errorMessage = handleSupabaseError(error);
       // Capture as abandoned payment since payment succeeded but booking failed
-      await handleAbandonedPayment("payment_failed");
+      await handleAbandonedPayment(ABANDONMENT_REASONS.PAYMENT_FAILED);
       toast.error(`Payment successful but booking failed: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);

@@ -42,7 +42,7 @@ const MainServices = () => {
           <span className="text-brand-gold uppercase tracking-wider font-medium text-sm">
             Our Expertise
           </span>
-          <h2 className="lcp-heading text-4xl md:text-5xl font-bold text-brand-green mb-6 mt-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-brand-green mb-6 mt-4">
             Comprehensive Healing Services
           </h2>
           <div className="h-1 w-32 bg-brand-gold mx-auto mb-6"></div>
