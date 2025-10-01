@@ -157,6 +157,16 @@
 }
 
 @layer components {
+  /* LCP optimization - ensure fastest possible render of critical content */
+  .lcp-optimized {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
+    will-change: auto;
+    contain: layout style paint;
+    transform: translateZ(0);
+    font-display: swap;
+  }
+  
   /* Enhanced visual components */
   .card-elegant {
     @apply rounded-lg border bg-card text-card-foreground shadow-elegant hover:shadow-glow transition-all duration-300;
