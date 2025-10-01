@@ -1,41 +1,63 @@
-# Cache static assets for 1 year
-/assets/*
-  Cache-Control: public, max-age=31536000, immutable
+# Aggressively cache all hashed static assets (1 year)
+# These files have content hashes in their names, so they're safe to cache forever
+/assets/*.js
+  Cache-Control: public, max-age=31536000, immutable, stale-while-revalidate=86400
+  
+/assets/*.css
+  Cache-Control: public, max-age=31536000, immutable, stale-while-revalidate=86400
 
-# Cache CSS and JS files for 1 year
-*.css
-  Cache-Control: public, max-age=31536000, immutable
-*.js
-  Cache-Control: public, max-age=31536000, immutable
+# Cache all JS and CSS files with long lifetime
+/*.js
+  Cache-Control: public, max-age=31536000, immutable, stale-while-revalidate=86400
+  
+/*.css
+  Cache-Control: public, max-age=31536000, immutable, stale-while-revalidate=86400
 
 # Cache images for 1 year
-*.png
+/*.png
   Cache-Control: public, max-age=31536000, immutable
-*.jpg
+/*.jpg
   Cache-Control: public, max-age=31536000, immutable
-*.jpeg
+/*.jpeg
   Cache-Control: public, max-age=31536000, immutable
-*.svg
+/*.svg
   Cache-Control: public, max-age=31536000, immutable
-*.webp
+/*.webp
   Cache-Control: public, max-age=31536000, immutable
-*.gif
+/*.gif
+  Cache-Control: public, max-age=31536000, immutable
+/*.ico
   Cache-Control: public, max-age=31536000, immutable
 
 # Cache fonts for 1 year
-*.woff
-  Cache-Control: public, max-age=31536000, immutable
-*.woff2
-  Cache-Control: public, max-age=31536000, immutable
-*.ttf
-  Cache-Control: public, max-age=31536000, immutable
-*.eot
-  Cache-Control: public, max-age=31536000, immutable
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable, crossorigin
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable, crossorigin
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable, crossorigin
+/*.eot
+  Cache-Control: public, max-age=31536000, immutable, crossorigin
 
-# Cache HTML files for 5 minutes
-*.html
-  Cache-Control: public, max-age=300
-
-# Cache root files for 5 minutes
+# Short cache for HTML (5 minutes with stale-while-revalidate)
+/*.html
+  Cache-Control: public, max-age=300, stale-while-revalidate=600
+  
+# Root index - short cache with background revalidation
 /
-  Cache-Control: public, max-age=300
+  Cache-Control: public, max-age=300, stale-while-revalidate=600
+  
+# Service worker - no cache (always fresh)
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  
+# Manifest - moderate cache (1 day)
+/manifest.json
+  Cache-Control: public, max-age=86400
+
+# Security headers for all pages
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
