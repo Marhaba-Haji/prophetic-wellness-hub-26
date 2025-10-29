@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,6 +10,19 @@ const BookingSuccess = () => {
   const location = useLocation();
   const { paymentSuccess, paymentId, appointmentData } = location.state || {};
 
+  // Generate transaction ID - use paymentId if available, otherwise generate unique ID
+  const transactionId = paymentId || `booking_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+  useEffect(() => {
+    // Fire Google Ads conversion event
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'conversion', {
+        'send_to': 'AW-17679016644/5as9CNSegbYbEMTFge5B',
+        'transaction_id': transactionId
+      });
+    }
+  }, [transactionId]);
+
   return (
     <Layout
       title="Booking Confirmed - RevivoHeal Bangalore"
@@ -17,6 +31,16 @@ const BookingSuccess = () => {
       image="https://res.cloudinary.com/doxoxzz02/image/upload/v1756287517/revivoheal_poster_qz5kom.jpg"
       keywords="appointment confirmed, booking success, revivoheal appointment, hijama booking confirmed"
     >
+      <Helmet>
+        <script>
+          {`
+            gtag('event', 'conversion', {
+              'send_to': 'AW-17679016644/5as9CNSegbYbEMTFge5B',
+              'transaction_id': '${transactionId}'
+            });
+          `}
+        </script>
+      </Helmet>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="max-w-2xl mx-auto text-center">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 mb-6">
