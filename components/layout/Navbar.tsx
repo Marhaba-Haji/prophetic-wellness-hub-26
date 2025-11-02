@@ -11,46 +11,45 @@ const Navbar = () => {
     setIsMenuOpen(false);
   };
   return <header className="border-b sticky top-0 bg-white z-50 shadow-sm">
-      <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14 sm:h-16 lg:h-18 gap-2 sm:gap-4">
-          <div className="flex items-center min-w-0 flex-shrink-0">
-            <Link to="/" className="flex items-center gap-2 sm:gap-3" onClick={closeMenu}>
-              <img alt="RevivoHeal Logo" className="h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0" src="https://i.ibb.co/zhP9ZM9z/revivo-heal-logo.png" />
-              <div className="min-w-0">
-                <span className="text-brand-green font-bold text-base sm:text-xl leading-tight block">RevivoHeal</span>
-                <span className="text-brand-gold text-[10px] sm:text-xs block leading-tight">Pain Relief &amp; Healing</span>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center" onClick={closeMenu}>
+              <img alt="RevivoHeal Logo" className="h-10 w-10 mr-3" src="https://i.ibb.co/zhP9ZM9z/revivo-heal-logo.png" />
+              <div>
+                <span className="text-brand-green font-bold text-xl">RevivoHeal</span>
+                <span className="text-brand-gold text-xs block">Pain Relief &amp; Healing</span>
               </div>
             </Link>
           </div>
-          <nav className="hidden md:flex space-x-4 lg:space-x-6 xl:space-x-8">
+          <nav className="hidden md:flex space-x-8">
             <NavLinks />
           </nav>
-          <div className="hidden md:flex items-center flex-shrink-0">
+          <div className="hidden md:flex items-center">
             <Link to="/booking">
-              <Button className="gold-gradient text-white hover:opacity-90 transition-opacity rounded-full text-sm lg:text-base px-4 lg:px-6">
-                <Heart className="h-3.5 w-3.5 lg:h-4 lg:w-4 mr-1.5 lg:mr-2" />
-                <span className="hidden lg:inline">Book Appointment</span>
-                <span className="lg:hidden">Book</span>
+              <Button className="gold-gradient text-white hover:opacity-90 transition-opacity rounded-full">
+                <Heart className="h-4 w-4 mr-2" />
+                Book Appointment
               </Button>
             </Link>
           </div>
-          <div className="md:hidden flex-shrink-0">
+          <div className="md:hidden">
             <button onClick={toggleMenu} className="inline-flex items-center justify-center p-2 rounded-md text-brand-green" aria-expanded="false">
               <span className="sr-only">Open main menu</span>
-              {isMenuOpen ? <X className="block h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" /> : <Menu className="block h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />}
+              {isMenuOpen ? <X className="block h-6 w-6" aria-hidden="true" /> : <Menu className="block h-6 w-6" aria-hidden="true" />}
             </button>
           </div>
         </div>
       </div>
 
       {/* Mobile menu */}
-      <div className={`${isMenuOpen ? "block" : "hidden"} md:hidden absolute w-full bg-white border-b z-50 shadow-lg`}>
-        <div className="px-3 pt-3 pb-4 space-y-1 sm:px-4">
-          <div className="flex flex-col space-y-2">
+      <div className={`${isMenuOpen ? "block" : "hidden"} md:hidden absolute w-full bg-white border-b z-50`}>
+        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <div className="flex flex-col space-y-3">
             <MobileNavLinks closeMenu={closeMenu} />
-            <div className="pt-3 pb-2 px-2">
+            <div className="pt-2 pb-4 px-4">
               <Link to="/booking" onClick={closeMenu}>
-                <Button className="gold-gradient w-full text-white hover:opacity-90 transition-opacity rounded-full py-2.5">
+                <Button className="gold-gradient w-full text-white hover:opacity-90 transition-opacity rounded-full">
                   <Heart className="h-4 w-4 mr-2" />
                   Book Appointment
                 </Button>
@@ -62,22 +61,22 @@ const Navbar = () => {
     </header>;
 };
 const NavLinks = () => <>
-    <Link to="/" className="text-brand-green hover:text-brand-green-light font-medium text-sm lg:text-base border-b-2 border-transparent hover:border-brand-gold transition-all duration-200 whitespace-nowrap">
+    <Link to="/" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
       Home
     </Link>
-    <Link to="/about" className="text-brand-green hover:text-brand-green-light font-medium text-sm lg:text-base border-b-2 border-transparent hover:border-brand-gold transition-all duration-200 whitespace-nowrap">
+    <Link to="/about" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
       About Us
     </Link>
-    <Link to="/services" className="text-brand-green hover:text-brand-green-light font-medium text-sm lg:text-base border-b-2 border-transparent hover:border-brand-gold transition-all duration-200 whitespace-nowrap">
+    <Link to="/services" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
       Services
     </Link>
-    <Link to="/benefits" className="text-brand-green hover:text-brand-green-light font-medium text-sm lg:text-base border-b-2 border-transparent hover:border-brand-gold transition-all duration-200 whitespace-nowrap">
+    <Link to="/benefits" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
       Benefits
     </Link>
-    <Link to="/blog" className="text-brand-green hover:text-brand-green-light font-medium text-sm lg:text-base border-b-2 border-transparent hover:border-brand-gold transition-all duration-200 whitespace-nowrap">
+    <Link to="/blog" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
       Blog
     </Link>
-    <Link to="/contact" className="text-brand-green hover:text-brand-green-light font-medium text-sm lg:text-base border-b-2 border-transparent hover:border-brand-gold transition-all duration-200 whitespace-nowrap">
+    <Link to="/contact" className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200">
       Contact
     </Link>
   </>;
@@ -86,22 +85,22 @@ const MobileNavLinks = ({
 }: {
   closeMenu: () => void;
 }) => <>
-    <Link to="/" className="text-brand-green hover:text-brand-green-light px-3 py-2.5 font-medium text-base border-l-4 border-transparent hover:border-brand-gold transition-all" onClick={closeMenu}>
+    <Link to="/" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
       Home
     </Link>
-    <Link to="/about" className="text-brand-green hover:text-brand-green-light px-3 py-2.5 font-medium text-base border-l-4 border-transparent hover:border-brand-gold transition-all" onClick={closeMenu}>
+    <Link to="/about" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
       About Us
     </Link>
-    <Link to="/services" className="text-brand-green hover:text-brand-green-light px-3 py-2.5 font-medium text-base border-l-4 border-transparent hover:border-brand-gold transition-all" onClick={closeMenu}>
+    <Link to="/services" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
       Services
     </Link>
-    <Link to="/benefits" className="text-brand-green hover:text-brand-green-light px-3 py-2.5 font-medium text-base border-l-4 border-transparent hover:border-brand-gold transition-all" onClick={closeMenu}>
+    <Link to="/benefits" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
       Benefits
     </Link>
-    <Link to="/blog" className="text-brand-green hover:text-brand-green-light px-3 py-2.5 font-medium text-base border-l-4 border-transparent hover:border-brand-gold transition-all" onClick={closeMenu}>
+    <Link to="/blog" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
       Blog
     </Link>
-    <Link to="/contact" className="text-brand-green hover:text-brand-green-light px-3 py-2.5 font-medium text-base border-l-4 border-transparent hover:border-brand-gold transition-all" onClick={closeMenu}>
+    <Link to="/contact" className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold" onClick={closeMenu}>
       Contact
     </Link>
   </>;
