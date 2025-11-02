@@ -33,6 +33,12 @@ import Refund from "./pages/Refund";
 import Products from "./pages/Products";
 import ProductCategory from "./pages/ProductCategory";
 import ProductDetail from "./pages/ProductDetail";
+import { AdminLayout } from "./components/admin/AdminLayout";
+import AdminProducts from "./pages/admin/AdminProducts";
+import AdminOrders from "./pages/admin/AdminOrders";
+import AdminInventory from "./pages/admin/AdminInventory";
+import AdminCategories from "./pages/admin/AdminCategories";
+import AdminCustomers from "./pages/admin/AdminCustomers";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -87,7 +93,14 @@ function App() {
               <Route path="/products/category/:categoryId" element={<ProductCategory />} />
               <Route path="/products/:slug" element={<ProductDetail />} />
               <Route path="/admin" element={<AdminAuth />} />
-              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="products" element={<AdminProducts />} />
+                <Route path="orders" element={<AdminOrders />} />
+                <Route path="inventory" element={<AdminInventory />} />
+                <Route path="categories" element={<AdminCategories />} />
+                <Route path="customers" element={<AdminCustomers />} />
+              </Route>
               <Route path="/admin/blog/new" element={<BlogEditor />} />
               <Route path="/admin/blog/edit/:blogId" element={<BlogEditor />} />
               <Route path="*" element={<NotFound />} />
