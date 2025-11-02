@@ -39,6 +39,10 @@ import AdminOrders from "./pages/admin/AdminOrders";
 import AdminInventory from "./pages/admin/AdminInventory";
 import AdminCategories from "./pages/admin/AdminCategories";
 import AdminCustomers from "./pages/admin/AdminCustomers";
+import AdminBlogs from "./pages/admin/AdminBlogs";
+import AdminAppointments from "./pages/admin/AdminAppointments";
+import AdminContacts from "./pages/admin/AdminContacts";
+import AdminAbandonedPayments from "./pages/admin/AdminAbandonedPayments";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -100,6 +104,10 @@ function App() {
                 <Route path="inventory" element={<AdminInventory />} />
                 <Route path="categories" element={<AdminCategories />} />
                 <Route path="customers" element={<AdminCustomers />} />
+                <Route path="blogs" element={<AdminBlogs />} />
+                <Route path="appointments" element={<AdminAppointments />} />
+                <Route path="contacts" element={<AdminContacts />} />
+                <Route path="abandoned-payments" element={<AdminAbandonedPayments />} />
               </Route>
               <Route path="/admin/blog/new" element={<BlogEditor />} />
               <Route path="/admin/blog/edit/:blogId" element={<BlogEditor />} />

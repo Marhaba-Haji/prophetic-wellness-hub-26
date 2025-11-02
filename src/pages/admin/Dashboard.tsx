@@ -1,33 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { toast } from "@/components/ui/sonner";
-import AdminAppointments from "@/components/admin/AdminAppointments";
-import AdminContacts from "@/components/admin/AdminContacts";
-import AdminBlogs from "@/components/admin/AdminBlogs";
-// AdminAbandonedPayments component not available yet
-import {
-  Users,
-  MessageSquare,
-  LogOut,
-  BookOpen,
-  Menu,
-  ChevronLeft,
-  ChevronRight,
-  AlertTriangle,
-} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Users, Calendar, MessageSquare, FileText, Package, ShoppingCart, CreditCard } from "lucide-react";
 import { Admin } from "@/types/supabase-types";
 
 const AdminDashboard = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [activeModule, setActiveModule] = useState<
-    "appointments" | "contacts" | "blogs"
-  >("appointments");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [abandonedCount, setAbandonedCount] = useState(0);
+  const [stats, setStats] = useState({
+    appointments: 0,
+    contacts: 0,
+    blogs: 0,
+    products: 0,
+    orders: 0,
+    abandonedPayments: 0,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,121 +63,116 @@ const AdminDashboard = () => {
     };
 
     checkAuth();
+    fetchStats();
   }, [navigate]);
 
-  // Abandoned payments feature temporarily disabled
-
-  const handleSignOut = async () => {
+  const fetchStats = async () => {
     try {
-      await supabase.auth.signOut();
-      toast.success("Signed out successfully");
-      navigate("/admin");
+      const [appointments, contacts, blogs, products, orders, abandonedPayments] = await Promise.all([
+        supabase.from("appointments").select("id", { count: "exact", head: true }),
+        supabase.from("contact_submissions").select("id", { count: "exact", head: true }),
+        supabase.from("blogs").select("id", { count: "exact", head: true }),
+        supabase.from("products").select("id", { count: "exact", head: true }),
+        supabase.from("orders").select("id", { count: "exact", head: true }),
+        supabase.from("abandoned_payments").select("id", { count: "exact", head: true }),
+      ]);
+
+      setStats({
+        appointments: appointments.count || 0,
+        contacts: contacts.count || 0,
+        blogs: blogs.count || 0,
+        products: products.count || 0,
+        orders: orders.count || 0,
+        abandonedPayments: abandonedPayments.count || 0,
+      });
     } catch (error) {
-      console.error("Sign out error:", error);
-      toast.error("Failed to sign out");
+      console.error("Error fetching stats:", error);
     }
   };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-green"></div>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
-      {/* Sidebar */}
-      <aside
-        className={`hidden md:flex flex-col ${sidebarOpen ? "w-64" : "w-20"} bg-white border-r shadow-sm min-h-screen transition-all duration-300 relative`}
-      >
-        {/* Always show the toggle button at the top */}
-        <div className="flex items-center h-16 border-b px-2 relative">
-          {sidebarOpen && (
-            <span className="text-xl font-bold text-brand-green transition-opacity duration-200">
-              Admin Panel
-            </span>
-          )}
-          <button
-            className={`absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded hover:bg-gray-100 transition-colors z-10`}
-            onClick={() => setSidebarOpen((open) => !open)}
-            aria-label={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-          >
-            {sidebarOpen ? <ChevronLeft /> : <ChevronRight />}
-          </button>
-        </div>
-        <nav className="flex-1 py-6 px-2 space-y-2">
-          <button
-            className={`w-full flex items-center gap-3 px-2 py-3 rounded-lg text-left transition-colors font-medium ${activeModule === "appointments" ? "bg-brand-green/10 text-brand-green" : "hover:bg-gray-100 text-gray-700"}`}
-            onClick={() => setActiveModule("appointments")}
-          >
-            <Users className="h-5 w-5 mx-auto" />
-            <span
-              className={`transition-all duration-200 ${sidebarOpen ? "inline" : "hidden"}`}
-            >
-              Appointments
-            </span>
-          </button>
-          <button
-            className={`w-full flex items-center gap-3 px-2 py-3 rounded-lg text-left transition-colors font-medium ${activeModule === "contacts" ? "bg-brand-green/10 text-brand-green" : "hover:bg-gray-100 text-gray-700"}`}
-            onClick={() => setActiveModule("contacts")}
-          >
-            <MessageSquare className="h-5 w-5 mx-auto" />
-            <span
-              className={`transition-all duration-200 ${sidebarOpen ? "inline" : "hidden"}`}
-            >
-              Contact Messages
-            </span>
-          </button>
-          <button
-            className={`w-full flex items-center gap-3 px-2 py-3 rounded-lg text-left transition-colors font-medium ${activeModule === "blogs" ? "bg-brand-green/10 text-brand-green" : "hover:bg-gray-100 text-gray-700"}`}
-            onClick={() => setActiveModule("blogs")}
-          >
-            <BookOpen className="h-5 w-5 mx-auto" />
-            <span
-              className={`transition-all duration-200 ${sidebarOpen ? "inline" : "hidden"}`}
-            >
-              Blog Management
-            </span>
-          </button>
-          {/* Abandoned payments feature coming soon */}
-        </nav>
-        <div className="mt-auto p-4 border-t">
-          <div
-            className={`flex items-center gap-2 justify-${sidebarOpen ? "between" : "center"}`}
-          >
-            {sidebarOpen && (
-              <span className="text-xs text-gray-500 truncate">
-                {user?.email}
-              </span>
-            )}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleSignOut}
-              className="flex items-center gap-1"
-            >
-              <LogOut className="h-4 w-4" />
-              {sidebarOpen && "Sign Out"}
-            </Button>
-          </div>
-        </div>
-      </aside>
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-3xl font-bold tracking-tight">Dashboard Overview</h2>
+        <p className="text-muted-foreground">
+          Welcome back, {user?.email}
+        </p>
+      </div>
 
-      {/* Main content */}
-      <div className="flex-1 flex flex-col min-h-screen">
-        {/* Header */}
-        <header className="bg-white shadow h-16 flex items-center px-6 border-b">
-          <h1 className="text-2xl font-bold text-brand-green">
-            Admin Dashboard
-          </h1>
-        </header>
-        <main className="flex-1 p-6 md:p-10 bg-gray-50 overflow-y-auto">
-          {activeModule === "appointments" && <AdminAppointments />}
-          {activeModule === "contacts" && <AdminContacts />}
-          {activeModule === "blogs" && <AdminBlogs />}
-        </main>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/admin/appointments")}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Appointments</CardTitle>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.appointments}</div>
+            <p className="text-xs text-muted-foreground">Total appointment requests</p>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/admin/contacts")}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Contact Messages</CardTitle>
+            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.contacts}</div>
+            <p className="text-xs text-muted-foreground">Total contact submissions</p>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/admin/blogs")}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Blog Posts</CardTitle>
+            <FileText className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.blogs}</div>
+            <p className="text-xs text-muted-foreground">Total blog posts</p>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/admin/products")}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Products</CardTitle>
+            <Package className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.products}</div>
+            <p className="text-xs text-muted-foreground">Total products</p>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/admin/orders")}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Orders</CardTitle>
+            <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.orders}</div>
+            <p className="text-xs text-muted-foreground">Total orders</p>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/admin/abandoned-payments")}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Abandoned Payments</CardTitle>
+            <CreditCard className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.abandonedPayments}</div>
+            <p className="text-xs text-muted-foreground">Incomplete checkouts</p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

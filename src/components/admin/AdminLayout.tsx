@@ -58,22 +58,22 @@ const adminMenuItems = [
   },
   {
     title: "Blogs",
-    url: "/admin/dashboard",
+    url: "/admin/blogs",
     icon: FileText,
   },
   {
     title: "Appointments",
-    url: "/admin/dashboard",
+    url: "/admin/appointments",
     icon: Calendar,
   },
   {
     title: "Contacts",
-    url: "/admin/dashboard",
+    url: "/admin/contacts",
     icon: MessageSquare,
   },
   {
     title: "Abandoned Payments",
-    url: "/admin/dashboard",
+    url: "/admin/abandoned-payments",
     icon: CreditCard,
   },
 ];
