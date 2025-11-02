@@ -18,36 +18,56 @@ interface Product {
   compare_at_price?: number;
   featured_image?: string;
   in_stock: boolean;
-  category: string;
+  category_id: string;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  image_url?: string;
 }
 
 const ProductCategory = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const [products, setProducts] = useState<Product[]>([]);
+  const [category, setCategory] = useState<Category | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const categoryName = categoryId
-    ? categoryId.charAt(0).toUpperCase() + categoryId.slice(1)
-    : "";
-
   useEffect(() => {
-    fetchProducts();
+    fetchCategoryAndProducts();
   }, [categoryId]);
 
-  const fetchProducts = async () => {
+  const fetchCategoryAndProducts = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("products")
+      
+      // First, fetch the category by slug
+      const { data: categoryData, error: categoryError } = await supabase
+        .from("categories")
         .select("*")
-        .eq("category", categoryId)
-        .eq("in_stock", true)
-        .order("featured", { ascending: false });
+        .eq("slug", categoryId)
+        .eq("active", true)
+        .single();
 
-      if (error) throw error;
-      setProducts(data || []);
+      if (categoryError) throw categoryError;
+      setCategory(categoryData);
+
+      // Then fetch products for this category
+      if (categoryData) {
+        const { data: productsData, error: productsError } = await supabase
+          .from("products")
+          .select("*")
+          .eq("category_id", categoryData.id)
+          .eq("in_stock", true)
+          .order("featured", { ascending: false });
+
+        if (productsError) throw productsError;
+        setProducts(productsData || []);
+      }
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching data:", error);
       toast.error("Failed to load products");
     } finally {
       setLoading(false);
@@ -56,11 +76,11 @@ const ProductCategory = () => {
 
   return (
     <Layout
-      title={`${categoryName} Products | RevivoHeal Bangalore`}
-      description={`Browse our selection of ${categoryName.toLowerCase()} products`}
+      title={`${category?.name || "Products"} | RevivoHeal Bangalore`}
+      description={category?.description || `Browse our selection of products`}
       canonical={`/products/category/${categoryId}`}
-      keywords={`${categoryName}, natural products, organic`}
-      image={undefined}
+      keywords={`${category?.name || "products"}, natural products, organic`}
+      image={category?.image_url}
     >
       <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
         {/* Header */}
@@ -72,12 +92,23 @@ const ProductCategory = () => {
                 Back to Categories
               </Button>
             </Link>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-foreground">
-              {categoryName}
-            </h1>
-            <p className="text-muted-foreground">
-              Browse our selection of {categoryName.toLowerCase()} products
-            </p>
+            {loading ? (
+              <>
+                <Skeleton className="h-12 w-64 mb-4" />
+                <Skeleton className="h-6 w-96" />
+              </>
+            ) : category ? (
+              <>
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-foreground">
+                  {category.name}
+                </h1>
+                {category.description && (
+                  <p className="text-muted-foreground">{category.description}</p>
+                )}
+              </>
+            ) : (
+              <h1 className="text-3xl font-bold text-foreground">Category Not Found</h1>
+            )}
           </div>
         </section>
 
