@@ -28,11 +28,19 @@ interface Product {
   id: string;
   name: string;
   slug: string;
+  description?: string;
+  short_description?: string;
   price: number;
+  compare_at_price?: number;
   category: string;
   in_stock: boolean;
   stock_quantity: number;
   featured_image?: string;
+  images?: string[];
+  sku?: string;
+  meta_title?: string;
+  meta_description?: string;
+  featured?: boolean;
 }
 
 export default function AdminProducts() {
@@ -45,10 +53,17 @@ export default function AdminProducts() {
   const [formData, setFormData] = useState({
     name: "",
     slug: "",
-    price: "",
-    category: "",
+    description: "",
     short_description: "",
+    price: "",
+    compare_at_price: "",
+    category: "",
     stock_quantity: "",
+    featured_image: "",
+    sku: "",
+    meta_title: "",
+    meta_description: "",
+    featured: false,
   });
 
   useEffect(() => {
@@ -79,11 +94,18 @@ export default function AdminProducts() {
       const productData = {
         name: formData.name,
         slug: formData.slug,
+        description: formData.description || null,
+        short_description: formData.short_description || null,
         price: parseFloat(formData.price),
+        compare_at_price: formData.compare_at_price ? parseFloat(formData.compare_at_price) : null,
         category: formData.category,
-        short_description: formData.short_description,
         stock_quantity: parseInt(formData.stock_quantity) || 0,
         in_stock: parseInt(formData.stock_quantity) > 0,
+        featured_image: formData.featured_image || null,
+        sku: formData.sku || null,
+        meta_title: formData.meta_title || null,
+        meta_description: formData.meta_description || null,
+        featured: formData.featured,
       };
 
       if (editingProduct) {
@@ -104,10 +126,17 @@ export default function AdminProducts() {
       setFormData({
         name: "",
         slug: "",
-        price: "",
-        category: "",
+        description: "",
         short_description: "",
+        price: "",
+        compare_at_price: "",
+        category: "",
         stock_quantity: "",
+        featured_image: "",
+        sku: "",
+        meta_title: "",
+        meta_description: "",
+        featured: false,
       });
       fetchProducts();
     } catch (error: any) {
@@ -121,10 +150,17 @@ export default function AdminProducts() {
     setFormData({
       name: product.name,
       slug: product.slug,
+      description: product.description || "",
+      short_description: product.short_description || "",
       price: product.price.toString(),
+      compare_at_price: product.compare_at_price?.toString() || "",
       category: product.category,
-      short_description: "",
       stock_quantity: product.stock_quantity.toString(),
+      featured_image: product.featured_image || "",
+      sku: product.sku || "",
+      meta_title: product.meta_title || "",
+      meta_description: product.meta_description || "",
+      featured: product.featured || false,
     });
     setIsDialogOpen(true);
   };
@@ -158,93 +194,213 @@ export default function AdminProducts() {
               setFormData({
                 name: "",
                 slug: "",
-                price: "",
-                category: "",
+                description: "",
                 short_description: "",
+                price: "",
+                compare_at_price: "",
+                category: "",
                 stock_quantity: "",
+                featured_image: "",
+                sku: "",
+                meta_title: "",
+                meta_description: "",
+                featured: false,
               });
             }}>
               <Plus className="mr-2 h-4 w-4" />
               Add Product
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingProduct ? "Edit Product" : "Add New Product"}
               </DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Product Name</Label>
-                  <Input
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    required
-                  />
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg">Basic Information</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Product Name *</Label>
+                    <Input
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label>Slug *</Label>
+                    <Input
+                      value={formData.slug}
+                      onChange={(e) =>
+                        setFormData({ ...formData, slug: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label>Category *</Label>
+                    <Input
+                      value={formData.category}
+                      onChange={(e) =>
+                        setFormData({ ...formData, category: e.target.value })
+                      }
+                      placeholder="e.g., beauty, spices, oils"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label>SKU</Label>
+                    <Input
+                      value={formData.sku}
+                      onChange={(e) =>
+                        setFormData({ ...formData, sku: e.target.value })
+                      }
+                      placeholder="Product SKU"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <Label>Slug</Label>
-                  <Input
-                    value={formData.slug}
-                    onChange={(e) =>
-                      setFormData({ ...formData, slug: e.target.value })
-                    }
-                    required
-                  />
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg">Pricing & Inventory</h3>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <Label>Price (₹) *</Label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      value={formData.price}
+                      onChange={(e) =>
+                        setFormData({ ...formData, price: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label>Compare at Price (₹)</Label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      value={formData.compare_at_price}
+                      onChange={(e) =>
+                        setFormData({ ...formData, compare_at_price: e.target.value })
+                      }
+                      placeholder="Original price"
+                    />
+                  </div>
+                  <div>
+                    <Label>Stock Quantity *</Label>
+                    <Input
+                      type="number"
+                      value={formData.stock_quantity}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          stock_quantity: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </div>
                 </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg">Product Description</h3>
                 <div>
-                  <Label>Price (₹)</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={formData.price}
-                    onChange={(e) =>
-                      setFormData({ ...formData, price: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-                <div>
-                  <Label>Category</Label>
-                  <Input
-                    value={formData.category}
-                    onChange={(e) =>
-                      setFormData({ ...formData, category: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-                <div>
-                  <Label>Stock Quantity</Label>
-                  <Input
-                    type="number"
-                    value={formData.stock_quantity}
+                  <Label>Short Description</Label>
+                  <Textarea
+                    value={formData.short_description}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        stock_quantity: e.target.value,
+                        short_description: e.target.value,
                       })
                     }
-                    required
+                    rows={2}
+                    placeholder="Brief product description"
+                  />
+                </div>
+                <div>
+                  <Label>Full Description</Label>
+                  <Textarea
+                    value={formData.description}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        description: e.target.value,
+                      })
+                    }
+                    rows={4}
+                    placeholder="Detailed product description"
                   />
                 </div>
               </div>
-              <div>
-                <Label>Short Description</Label>
-                <Textarea
-                  value={formData.short_description}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      short_description: e.target.value,
-                    })
-                  }
-                  rows={3}
-                />
+
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg">Media</h3>
+                <div>
+                  <Label>Featured Image URL</Label>
+                  <Input
+                    value={formData.featured_image}
+                    onChange={(e) =>
+                      setFormData({ ...formData, featured_image: e.target.value })
+                    }
+                    placeholder="https://example.com/image.jpg"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg">SEO & Metadata</h3>
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <Label>Meta Title</Label>
+                    <Input
+                      value={formData.meta_title}
+                      onChange={(e) =>
+                        setFormData({ ...formData, meta_title: e.target.value })
+                      }
+                      placeholder="SEO title for this product"
+                    />
+                  </div>
+                  <div>
+                    <Label>Meta Description</Label>
+                    <Textarea
+                      value={formData.meta_description}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          meta_description: e.target.value,
+                        })
+                      }
+                      rows={2}
+                      placeholder="SEO description for this product"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg">Settings</h3>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="featured"
+                    checked={formData.featured}
+                    onChange={(e) =>
+                      setFormData({ ...formData, featured: e.target.checked })
+                    }
+                    className="h-4 w-4"
+                  />
+                  <Label htmlFor="featured" className="cursor-pointer">
+                    Feature this product on homepage
+                  </Label>
+                </div>
               </div>
               <div className="flex justify-end gap-2">
                 <Button
