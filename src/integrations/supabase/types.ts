@@ -14,6 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      abandoned_payments: {
+        Row: {
+          abandonment_reason: string | null
+          consultation_fee_amount: number | null
+          created_at: string | null
+          date: string
+          email: string
+          full_name: string
+          id: string
+          ip_address: unknown
+          notes: string | null
+          payment_status: string | null
+          phone: string
+          retargeted: boolean | null
+          retargeted_at: string | null
+          retargeting_notes: string | null
+          service: string
+          session_id: string | null
+          time: string
+          updated_at: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          abandonment_reason?: string | null
+          consultation_fee_amount?: number | null
+          created_at?: string | null
+          date: string
+          email: string
+          full_name: string
+          id?: string
+          ip_address?: unknown
+          notes?: string | null
+          payment_status?: string | null
+          phone: string
+          retargeted?: boolean | null
+          retargeted_at?: string | null
+          retargeting_notes?: string | null
+          service: string
+          session_id?: string | null
+          time: string
+          updated_at?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          abandonment_reason?: string | null
+          consultation_fee_amount?: number | null
+          created_at?: string | null
+          date?: string
+          email?: string
+          full_name?: string
+          id?: string
+          ip_address?: unknown
+          notes?: string | null
+          payment_status?: string | null
+          phone?: string
+          retargeted?: boolean | null
+          retargeted_at?: string | null
+          retargeting_notes?: string | null
+          service?: string
+          session_id?: string | null
+          time?: string
+          updated_at?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       admins: {
         Row: {
           created_at: string | null
@@ -37,36 +103,72 @@ export type Database = {
       }
       appointments: {
         Row: {
+          consultation_fee_amount: number | null
+          consultation_fee_paid: boolean | null
           created_at: string | null
           date: string
           email: string
           full_name: string
           id: string
           notes: string | null
+          payment_amount: number | null
+          payment_capture_error: string | null
+          payment_captured: boolean | null
+          payment_captured_amount: number | null
+          payment_captured_at: string | null
+          payment_date: string | null
+          payment_id: string | null
+          payment_order_id: string | null
+          payment_signature: string | null
+          payment_status: string | null
           phone: string
           service: string
           status: string | null
           time: string
         }
         Insert: {
+          consultation_fee_amount?: number | null
+          consultation_fee_paid?: boolean | null
           created_at?: string | null
           date: string
           email: string
           full_name: string
           id?: string
           notes?: string | null
+          payment_amount?: number | null
+          payment_capture_error?: string | null
+          payment_captured?: boolean | null
+          payment_captured_amount?: number | null
+          payment_captured_at?: string | null
+          payment_date?: string | null
+          payment_id?: string | null
+          payment_order_id?: string | null
+          payment_signature?: string | null
+          payment_status?: string | null
           phone: string
           service: string
           status?: string | null
           time: string
         }
         Update: {
+          consultation_fee_amount?: number | null
+          consultation_fee_paid?: boolean | null
           created_at?: string | null
           date?: string
           email?: string
           full_name?: string
           id?: string
           notes?: string | null
+          payment_amount?: number | null
+          payment_capture_error?: string | null
+          payment_captured?: boolean | null
+          payment_captured_amount?: number | null
+          payment_captured_at?: string | null
+          payment_date?: string | null
+          payment_id?: string | null
+          payment_order_id?: string | null
+          payment_signature?: string | null
+          payment_status?: string | null
           phone?: string
           service?: string
           status?: string | null
@@ -218,6 +320,135 @@ export type Database = {
           message?: string
           name?: string
           subject?: string
+        }
+        Relationships: []
+      }
+      payment_attempts: {
+        Row: {
+          amount: number
+          appointment_date: string
+          appointment_time: string
+          completed_at: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          failure_reason: string | null
+          id: string
+          ip_address: string | null
+          notes: string | null
+          payment_method: string | null
+          payment_status: string
+          razorpay_order_id: string | null
+          razorpay_payment_id: string | null
+          service: string
+          updated_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          amount?: number
+          appointment_date: string
+          appointment_time: string
+          completed_at?: string | null
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          failure_reason?: string | null
+          id?: string
+          ip_address?: string | null
+          notes?: string | null
+          payment_method?: string | null
+          payment_status?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          service: string
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          amount?: number
+          appointment_date?: string
+          appointment_time?: string
+          completed_at?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string
+          failure_reason?: string | null
+          id?: string
+          ip_address?: string | null
+          notes?: string | null
+          payment_method?: string | null
+          payment_status?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          service?: string
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          category: string
+          compare_at_price: number | null
+          created_at: string | null
+          description: string | null
+          featured: boolean | null
+          featured_image: string | null
+          id: string
+          images: string[] | null
+          in_stock: boolean | null
+          meta_description: string | null
+          meta_title: string | null
+          name: string
+          price: number
+          short_description: string | null
+          sku: string | null
+          slug: string
+          stock_quantity: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          compare_at_price?: number | null
+          created_at?: string | null
+          description?: string | null
+          featured?: boolean | null
+          featured_image?: string | null
+          id?: string
+          images?: string[] | null
+          in_stock?: boolean | null
+          meta_description?: string | null
+          meta_title?: string | null
+          name: string
+          price: number
+          short_description?: string | null
+          sku?: string | null
+          slug: string
+          stock_quantity?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          compare_at_price?: number | null
+          created_at?: string | null
+          description?: string | null
+          featured?: boolean | null
+          featured_image?: string | null
+          id?: string
+          images?: string[] | null
+          in_stock?: boolean | null
+          meta_description?: string | null
+          meta_title?: string | null
+          name?: string
+          price?: number
+          short_description?: string | null
+          sku?: string | null
+          slug?: string
+          stock_quantity?: number | null
+          updated_at?: string | null
         }
         Relationships: []
       }
