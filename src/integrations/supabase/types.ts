@@ -296,6 +296,42 @@ export type Database = {
         }
         Relationships: []
       }
+      categories: {
+        Row: {
+          active: boolean | null
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          id: string
+          image_url: string | null
+          name: string
+          slug: string
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          name: string
+          slug: string
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          slug?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           created_at: string | null
@@ -541,6 +577,7 @@ export type Database = {
       products: {
         Row: {
           category: string
+          category_id: string | null
           compare_at_price: number | null
           created_at: string | null
           description: string | null
@@ -561,6 +598,7 @@ export type Database = {
         }
         Insert: {
           category: string
+          category_id?: string | null
           compare_at_price?: number | null
           created_at?: string | null
           description?: string | null
@@ -581,6 +619,7 @@ export type Database = {
         }
         Update: {
           category?: string
+          category_id?: string | null
           compare_at_price?: number | null
           created_at?: string | null
           description?: string | null
@@ -599,7 +638,15 @@ export type Database = {
           stock_quantity?: number | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

@@ -13,7 +13,14 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Plus, Edit, Trash2, Search } from "lucide-react";
+import { Plus, Edit, Trash2, Search, Upload } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -32,7 +39,8 @@ interface Product {
   short_description?: string;
   price: number;
   compare_at_price?: number;
-  category: string;
+  category?: string;
+  category_id?: string;
   in_stock: boolean;
   stock_quantity: number;
   featured_image?: string;
@@ -43,12 +51,22 @@ interface Product {
   featured?: boolean;
 }
 
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
+
 export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -57,7 +75,7 @@ export default function AdminProducts() {
     short_description: "",
     price: "",
     compare_at_price: "",
-    category: "",
+    category_id: "",
     stock_quantity: "",
     featured_image: "",
     sku: "",
@@ -68,14 +86,33 @@ export default function AdminProducts() {
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("categories")
+        .select("id, name, slug")
+        .eq("active", true)
+        .order("display_order");
+
+      if (error) throw error;
+      setCategories(data || []);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
         .from("products")
-        .select("*")
+        .select(`
+          *,
+          categories(name)
+        `)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -88,9 +125,55 @@ export default function AdminProducts() {
     }
   };
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadImage = async (file: File): Promise<string | null> => {
+    try {
+      setUploading(true);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.error('Failed to upload image');
+      return null;
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      let imageUrl = editingProduct?.featured_image || formData.featured_image || "";
+
+      if (imageFile) {
+        const uploadedUrl = await uploadImage(imageFile);
+        if (uploadedUrl) imageUrl = uploadedUrl;
+      }
+
       const productData = {
         name: formData.name,
         slug: formData.slug,
@@ -98,10 +181,11 @@ export default function AdminProducts() {
         short_description: formData.short_description || null,
         price: parseFloat(formData.price),
         compare_at_price: formData.compare_at_price ? parseFloat(formData.compare_at_price) : null,
-        category: formData.category,
+        category: "", // Legacy field - kept for backward compatibility
+        category_id: formData.category_id || null,
         stock_quantity: parseInt(formData.stock_quantity) || 0,
         in_stock: parseInt(formData.stock_quantity) > 0,
-        featured_image: formData.featured_image || null,
+        featured_image: imageUrl || null,
         sku: formData.sku || null,
         meta_title: formData.meta_title || null,
         meta_description: formData.meta_description || null,
@@ -130,7 +214,7 @@ export default function AdminProducts() {
         short_description: "",
         price: "",
         compare_at_price: "",
-        category: "",
+        category_id: "",
         stock_quantity: "",
         featured_image: "",
         sku: "",
@@ -138,6 +222,8 @@ export default function AdminProducts() {
         meta_description: "",
         featured: false,
       });
+      setImageFile(null);
+      setImagePreview("");
       fetchProducts();
     } catch (error: any) {
       console.error("Error saving product:", error);
@@ -154,7 +240,7 @@ export default function AdminProducts() {
       short_description: product.short_description || "",
       price: product.price.toString(),
       compare_at_price: product.compare_at_price?.toString() || "",
-      category: product.category,
+      category_id: product.category_id || "",
       stock_quantity: product.stock_quantity.toString(),
       featured_image: product.featured_image || "",
       sku: product.sku || "",
@@ -162,6 +248,7 @@ export default function AdminProducts() {
       meta_description: product.meta_description || "",
       featured: product.featured || false,
     });
+    setImagePreview(product.featured_image || "");
     setIsDialogOpen(true);
   };
 
@@ -198,7 +285,7 @@ export default function AdminProducts() {
                 short_description: "",
                 price: "",
                 compare_at_price: "",
-                category: "",
+                category_id: "",
                 stock_quantity: "",
                 featured_image: "",
                 sku: "",
@@ -206,6 +293,8 @@ export default function AdminProducts() {
                 meta_description: "",
                 featured: false,
               });
+              setImageFile(null);
+              setImagePreview("");
             }}>
               <Plus className="mr-2 h-4 w-4" />
               Add Product
@@ -243,14 +332,23 @@ export default function AdminProducts() {
                   </div>
                   <div>
                     <Label>Category *</Label>
-                    <Input
-                      value={formData.category}
-                      onChange={(e) =>
-                        setFormData({ ...formData, category: e.target.value })
+                    <Select
+                      value={formData.category_id}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, category_id: value })
                       }
-                      placeholder="e.g., beauty, spices, oils"
-                      required
-                    />
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map((cat) => (
+                          <SelectItem key={cat.id} value={cat.id}>
+                            {cat.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div>
                     <Label>SKU</Label>
@@ -344,14 +442,48 @@ export default function AdminProducts() {
               <div className="space-y-4">
                 <h3 className="font-semibold text-lg">Media</h3>
                 <div>
-                  <Label>Featured Image URL</Label>
-                  <Input
-                    value={formData.featured_image}
-                    onChange={(e) =>
-                      setFormData({ ...formData, featured_image: e.target.value })
-                    }
-                    placeholder="https://example.com/image.jpg"
-                  />
+                  <Label>Featured Image</Label>
+                  <div className="mt-2 space-y-3">
+                    {imagePreview && (
+                      <div className="relative w-full h-48 border rounded-lg overflow-hidden">
+                        <img
+                          src={imagePreview}
+                          alt="Preview"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="flex flex-col gap-2">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageSelect}
+                        className="hidden"
+                        id="product-image"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => document.getElementById('product-image')?.click()}
+                        disabled={uploading}
+                        className="w-full"
+                      >
+                        <Upload className="mr-2 h-4 w-4" />
+                        {uploading ? "Uploading..." : "Upload Image"}
+                      </Button>
+                      <p className="text-xs text-muted-foreground">
+                        Or enter image URL below
+                      </p>
+                      <Input
+                        value={formData.featured_image}
+                        onChange={(e) => {
+                          setFormData({ ...formData, featured_image: e.target.value });
+                          setImagePreview(e.target.value);
+                        }}
+                        placeholder="https://example.com/image.jpg"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -410,8 +542,8 @@ export default function AdminProducts() {
                 >
                   Cancel
                 </Button>
-                <Button type="submit">
-                  {editingProduct ? "Update" : "Create"} Product
+                <Button type="submit" disabled={uploading}>
+                  {uploading ? "Uploading..." : editingProduct ? "Update" : "Create"} Product
                 </Button>
               </div>
             </form>
@@ -461,7 +593,9 @@ export default function AdminProducts() {
                 filteredProducts.map((product) => (
                   <TableRow key={product.id}>
                     <TableCell className="font-medium">{product.name}</TableCell>
-                    <TableCell>{product.category}</TableCell>
+                    <TableCell>
+                      {(product as any).categories?.name || "No category"}
+                    </TableCell>
                     <TableCell>₹{product.price}</TableCell>
                     <TableCell>{product.stock_quantity}</TableCell>
                     <TableCell>
