@@ -119,6 +119,12 @@ const NavLinks = () => (
       Benefits
     </Link>
     <Link
+      to="/products"
+      className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200"
+    >
+      Products
+    </Link>
+    <Link
       to="/blog"
       className="text-brand-green hover:text-brand-green-light font-medium border-b-2 border-transparent hover:border-brand-gold transition-all duration-200"
     >
@@ -175,6 +181,13 @@ const MobileNavLinks = ({ closeMenu }) => (
       onClick={closeMenu}
     >
       Benefits
+    </Link>
+    <Link
+      to="/products"
+      className="text-brand-green hover:text-brand-green-light px-3 py-2 font-medium border-l-4 border-transparent hover:border-brand-gold"
+      onClick={closeMenu}
+    >
+      Products
     </Link>
     <Link
       to="/blog"

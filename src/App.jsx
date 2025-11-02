@@ -30,6 +30,9 @@ import FullBodyDetox from "./pages/FullBodyDetox";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Refund from "./pages/Refund";
+import Products from "./pages/Products";
+import ProductCategory from "./pages/ProductCategory";
+import ProductDetail from "./pages/ProductDetail";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -80,6 +83,9 @@ function App() {
               <Route path="/terms" element={<Terms />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/refund" element={<Refund />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/category/:categoryId" element={<ProductCategory />} />
+              <Route path="/products/:slug" element={<ProductDetail />} />
               <Route path="/admin" element={<AdminAuth />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/blog/new" element={<BlogEditor />} />
