@@ -41,6 +41,22 @@ export interface Category {
   updated_at: string;
 }
 
+export interface ProductVariant {
+  id: string;
+  product_id: string;
+  variant_name: string;
+  variant_value: string;
+  price: number;
+  compare_at_price?: number;
+  sku?: string;
+  stock_quantity: number;
+  in_stock: boolean;
+  featured_image?: string;
+  display_order: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface BlogPost {
   id: string;
   title: string;

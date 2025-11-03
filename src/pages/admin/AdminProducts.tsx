@@ -57,6 +57,20 @@ interface Category {
   slug: string;
 }
 
+interface ProductVariant {
+  id?: string;
+  product_id?: string;
+  variant_name: string;
+  variant_value: string;
+  price: number;
+  compare_at_price?: number;
+  sku?: string;
+  stock_quantity: number;
+  in_stock: boolean;
+  featured_image?: string;
+  display_order: number;
+}
+
 export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -67,6 +81,9 @@ export default function AdminProducts() {
   const [uploading, setUploading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
+  const [variants, setVariants] = useState<ProductVariant[]>([]);
+  const [isVariantDialogOpen, setIsVariantDialogOpen] = useState(false);
+  const [managingProductId, setManagingProductId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -82,6 +99,16 @@ export default function AdminProducts() {
     meta_title: "",
     meta_description: "",
     featured: false,
+  });
+
+  const [variantFormData, setVariantFormData] = useState({
+    variant_name: "",
+    variant_value: "",
+    price: "",
+    compare_at_price: "",
+    sku: "",
+    stock_quantity: "",
+    display_order: "0",
   });
 
   useEffect(() => {
@@ -263,6 +290,83 @@ export default function AdminProducts() {
     } catch (error) {
       console.error("Error deleting product:", error);
       toast.error("Failed to delete product");
+    }
+  };
+
+  const fetchVariants = async (productId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("product_variants")
+        .select("*")
+        .eq("product_id", productId)
+        .order("display_order");
+
+      if (error) throw error;
+      setVariants(data || []);
+    } catch (error) {
+      console.error("Error fetching variants:", error);
+      toast.error("Failed to load variants");
+    }
+  };
+
+  const handleManageVariants = (productId: string) => {
+    setManagingProductId(productId);
+    fetchVariants(productId);
+    setIsVariantDialogOpen(true);
+  };
+
+  const handleAddVariant = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!managingProductId) return;
+
+    try {
+      const variantData = {
+        product_id: managingProductId,
+        variant_name: variantFormData.variant_name,
+        variant_value: variantFormData.variant_value,
+        price: parseFloat(variantFormData.price),
+        compare_at_price: variantFormData.compare_at_price ? parseFloat(variantFormData.compare_at_price) : null,
+        sku: variantFormData.sku || null,
+        stock_quantity: parseInt(variantFormData.stock_quantity) || 0,
+        in_stock: parseInt(variantFormData.stock_quantity) > 0,
+        display_order: parseInt(variantFormData.display_order) || 0,
+      };
+
+      const { error } = await supabase.from("product_variants").insert([variantData]);
+      if (error) throw error;
+
+      toast.success("Variant added successfully");
+      setVariantFormData({
+        variant_name: "",
+        variant_value: "",
+        price: "",
+        compare_at_price: "",
+        sku: "",
+        stock_quantity: "",
+        display_order: "0",
+      });
+      fetchVariants(managingProductId);
+    } catch (error: any) {
+      console.error("Error adding variant:", error);
+      toast.error(error.message || "Failed to add variant");
+    }
+  };
+
+  const handleDeleteVariant = async (variantId: string) => {
+    if (!confirm("Are you sure you want to delete this variant?")) return;
+
+    try {
+      const { error } = await supabase
+        .from("product_variants")
+        .delete()
+        .eq("id", variantId);
+
+      if (error) throw error;
+      toast.success("Variant deleted successfully");
+      if (managingProductId) fetchVariants(managingProductId);
+    } catch (error) {
+      console.error("Error deleting variant:", error);
+      toast.error("Failed to delete variant");
     }
   };
 
@@ -616,6 +720,13 @@ export default function AdminProducts() {
                         </Button>
                         <Button
                           size="sm"
+                          variant="secondary"
+                          onClick={() => handleManageVariants(product.id)}
+                        >
+                          Variants
+                        </Button>
+                        <Button
+                          size="sm"
                           variant="destructive"
                           onClick={() => handleDelete(product.id)}
                         >
@@ -630,6 +741,159 @@ export default function AdminProducts() {
           </Table>
         </CardContent>
       </Card>
+
+      {/* Variants Management Dialog */}
+      <Dialog open={isVariantDialogOpen} onOpenChange={setIsVariantDialogOpen}>
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Manage Product Variants</DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-6">
+            {/* Add Variant Form */}
+            <form onSubmit={handleAddVariant} className="space-y-4 border p-4 rounded-lg">
+              <h3 className="font-semibold">Add New Variant</h3>
+              <div className="grid grid-cols-4 gap-4">
+                <div>
+                  <Label>Variant Type *</Label>
+                  <Input
+                    value={variantFormData.variant_name}
+                    onChange={(e) =>
+                      setVariantFormData({ ...variantFormData, variant_name: e.target.value })
+                    }
+                    placeholder="e.g., Size, Color"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label>Variant Value *</Label>
+                  <Input
+                    value={variantFormData.variant_value}
+                    onChange={(e) =>
+                      setVariantFormData({ ...variantFormData, variant_value: e.target.value })
+                    }
+                    placeholder="e.g., Large, Red"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label>Price (₹) *</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={variantFormData.price}
+                    onChange={(e) =>
+                      setVariantFormData({ ...variantFormData, price: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <div>
+                  <Label>Stock Quantity *</Label>
+                  <Input
+                    type="number"
+                    value={variantFormData.stock_quantity}
+                    onChange={(e) =>
+                      setVariantFormData({ ...variantFormData, stock_quantity: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <Label>Compare at Price (₹)</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={variantFormData.compare_at_price}
+                    onChange={(e) =>
+                      setVariantFormData({ ...variantFormData, compare_at_price: e.target.value })
+                    }
+                  />
+                </div>
+                <div>
+                  <Label>SKU</Label>
+                  <Input
+                    value={variantFormData.sku}
+                    onChange={(e) =>
+                      setVariantFormData({ ...variantFormData, sku: e.target.value })
+                    }
+                  />
+                </div>
+                <div>
+                  <Label>Display Order</Label>
+                  <Input
+                    type="number"
+                    value={variantFormData.display_order}
+                    onChange={(e) =>
+                      setVariantFormData({ ...variantFormData, display_order: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+              <Button type="submit">
+                <Plus className="mr-2 h-4 w-4" />
+                Add Variant
+              </Button>
+            </form>
+
+            {/* Variants List */}
+            <div className="border rounded-lg p-4">
+              <h3 className="font-semibold mb-4">Existing Variants</h3>
+              {variants.length === 0 ? (
+                <p className="text-muted-foreground text-center py-8">
+                  No variants added yet. Add your first variant above.
+                </p>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Value</TableHead>
+                      <TableHead>Price</TableHead>
+                      <TableHead>Stock</TableHead>
+                      <TableHead>SKU</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {variants.map((variant) => (
+                      <TableRow key={variant.id}>
+                        <TableCell>{variant.variant_name}</TableCell>
+                        <TableCell>{variant.variant_value}</TableCell>
+                        <TableCell>
+                          ₹{variant.price}
+                          {variant.compare_at_price && (
+                            <span className="text-xs text-muted-foreground ml-2 line-through">
+                              ₹{variant.compare_at_price}
+                            </span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={variant.in_stock ? "default" : "destructive"}>
+                            {variant.stock_quantity}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{variant.sku || "-"}</TableCell>
+                        <TableCell>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => handleDeleteVariant(variant.id!)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

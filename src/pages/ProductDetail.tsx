@@ -25,11 +25,27 @@ interface Product {
   sku?: string;
 }
 
+interface ProductVariant {
+  id: string;
+  product_id: string;
+  variant_name: string;
+  variant_value: string;
+  price: number;
+  compare_at_price?: number;
+  sku?: string;
+  stock_quantity: number;
+  in_stock: boolean;
+  featured_image?: string;
+  display_order: number;
+}
+
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string>("");
+  const [variants, setVariants] = useState<ProductVariant[]>([]);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
 
   useEffect(() => {
     fetchProduct();
@@ -47,6 +63,18 @@ const ProductDetail = () => {
       if (error) throw error;
       setProduct(data);
       setSelectedImage(data.featured_image || "");
+      
+      // Fetch variants
+      const { data: variantsData } = await supabase
+        .from("product_variants")
+        .select("*")
+        .eq("product_id", data.id)
+        .order("display_order");
+      
+      if (variantsData && variantsData.length > 0) {
+        setVariants(variantsData);
+        setSelectedVariant(variantsData[0]); // Select first variant by default
+      }
     } catch (error) {
       console.error("Error fetching product:", error);
       toast.error("Product not found");
@@ -186,27 +214,49 @@ const ProductDetail = () => {
 
               <div className="flex items-baseline gap-3">
                 <span className="text-4xl font-bold text-primary">
-                  ₹{product.price}
+                  ₹{selectedVariant?.price || product.price}
                 </span>
-                {product.compare_at_price &&
-                  product.compare_at_price > product.price && (
+                {(selectedVariant?.compare_at_price || product.compare_at_price) &&
+                  (selectedVariant?.compare_at_price || product.compare_at_price)! > (selectedVariant?.price || product.price) && (
                     <>
                       <span className="text-xl text-muted-foreground line-through">
-                        ₹{product.compare_at_price}
+                        ₹{selectedVariant?.compare_at_price || product.compare_at_price}
                       </span>
                       <Badge variant="destructive">{discount}% OFF</Badge>
                     </>
                   )}
               </div>
 
+              {/* Variant Selection */}
+              {variants.length > 0 && (
+                <div className="space-y-3 border-y py-4">
+                  <h3 className="font-semibold">Available Options</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {variants.map((variant) => (
+                      <Button
+                        key={variant.id}
+                        variant={selectedVariant?.id === variant.id ? "default" : "outline"}
+                        onClick={() => setSelectedVariant(variant)}
+                        className="justify-start"
+                      >
+                        <div className="flex flex-col items-start">
+                          <span className="text-xs text-muted-foreground">{variant.variant_name}</span>
+                          <span className="font-semibold">{variant.variant_value}</span>
+                        </div>
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <Card>
                 <CardContent className="p-6 space-y-4">
                   <div className="flex items-center gap-2">
                     <Package className="w-5 h-5 text-muted-foreground" />
                     <span className="text-sm">
-                      {product.in_stock ? (
+                      {(selectedVariant?.in_stock ?? product.in_stock) ? (
                         <span className="text-green-600 font-medium">
-                          In Stock ({product.stock_quantity} available)
+                          In Stock ({selectedVariant?.stock_quantity ?? product.stock_quantity} available)
                         </span>
                       ) : (
                         <span className="text-destructive font-medium">
@@ -221,9 +271,9 @@ const ProductDetail = () => {
                       Free delivery on orders above ₹500
                     </span>
                   </div>
-                  {product.sku && (
+                  {(selectedVariant?.sku || product.sku) && (
                     <div className="text-sm text-muted-foreground">
-                      SKU: {product.sku}
+                      SKU: {selectedVariant?.sku || product.sku}
                     </div>
                   )}
                 </CardContent>
@@ -232,10 +282,10 @@ const ProductDetail = () => {
               <Button
                 size="lg"
                 className="w-full"
-                disabled={!product.in_stock}
+                disabled={!(selectedVariant?.in_stock ?? product.in_stock)}
               >
                 <ShoppingCart className="w-5 h-5 mr-2" />
-                {product.in_stock ? "Add to Cart" : "Out of Stock"}
+                {(selectedVariant?.in_stock ?? product.in_stock) ? "Add to Cart" : "Out of Stock"}
               </Button>
 
               {product.description && (
