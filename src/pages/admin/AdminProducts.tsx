@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import {
   Table,
   TableBody,
@@ -81,6 +83,8 @@ export default function AdminProducts() {
   const [uploading, setUploading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
+  const [uploadingImages, setUploadingImages] = useState(false);
+  const [productImages, setProductImages] = useState<string[]>([]);
   const [variants, setVariants] = useState<ProductVariant[]>([]);
   const [isVariantDialogOpen, setIsVariantDialogOpen] = useState(false);
   const [managingProductId, setManagingProductId] = useState<string | null>(null);
@@ -99,6 +103,7 @@ export default function AdminProducts() {
     meta_title: "",
     meta_description: "",
     featured: false,
+    images: [] as string[],
   });
 
   const [variantFormData, setVariantFormData] = useState({
@@ -191,6 +196,58 @@ export default function AdminProducts() {
     }
   };
 
+  const handleMultipleImageUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+
+    setUploadingImages(true);
+    try {
+      const uploadedUrls: string[] = [];
+      
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('product-images')
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(filePath);
+
+        uploadedUrls.push(publicUrl);
+      }
+
+      const newImages = [...productImages, ...uploadedUrls];
+      setProductImages(newImages);
+      setFormData(prev => ({
+        ...prev,
+        images: newImages,
+        featured_image: prev.featured_image || uploadedUrls[0]
+      }));
+
+      toast.success(`${uploadedUrls.length} image(s) uploaded successfully`);
+    } catch (error: any) {
+      console.error('Error uploading images:', error);
+      toast.error(error.message);
+    } finally {
+      setUploadingImages(false);
+    }
+  };
+
+  const handleRemoveImage = (index: number) => {
+    const newImages = productImages.filter((_, i) => i !== index);
+    setProductImages(newImages);
+    setFormData(prev => ({
+      ...prev,
+      images: newImages
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -213,6 +270,7 @@ export default function AdminProducts() {
         stock_quantity: parseInt(formData.stock_quantity) || 0,
         in_stock: parseInt(formData.stock_quantity) > 0,
         featured_image: imageUrl || null,
+        images: productImages,
         sku: formData.sku || null,
         meta_title: formData.meta_title || null,
         meta_description: formData.meta_description || null,
@@ -248,9 +306,11 @@ export default function AdminProducts() {
         meta_title: "",
         meta_description: "",
         featured: false,
+        images: [],
       });
       setImageFile(null);
       setImagePreview("");
+      setProductImages([]);
       fetchProducts();
     } catch (error: any) {
       console.error("Error saving product:", error);
@@ -274,8 +334,10 @@ export default function AdminProducts() {
       meta_title: product.meta_title || "",
       meta_description: product.meta_description || "",
       featured: product.featured || false,
+      images: product.images || [],
     });
     setImagePreview(product.featured_image || "");
+    setProductImages(product.images || []);
     setIsDialogOpen(true);
   };
 
@@ -396,9 +458,11 @@ export default function AdminProducts() {
                 meta_title: "",
                 meta_description: "",
                 featured: false,
+                images: [],
               });
               setImageFile(null);
               setImagePreview("");
+              setProductImages([]);
             }}>
               <Plus className="mr-2 h-4 w-4" />
               Add Product
@@ -515,30 +579,45 @@ export default function AdminProducts() {
                 <h3 className="font-semibold text-lg">Product Description</h3>
                 <div>
                   <Label>Short Description</Label>
-                  <Textarea
+                  <ReactQuill
+                    theme="snow"
                     value={formData.short_description}
-                    onChange={(e) =>
+                    onChange={(value) =>
                       setFormData({
                         ...formData,
-                        short_description: e.target.value,
+                        short_description: value,
                       })
                     }
-                    rows={2}
-                    placeholder="Brief product description"
+                    modules={{
+                      toolbar: [
+                        ['bold', 'italic', 'underline'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['link']
+                      ]
+                    }}
                   />
                 </div>
                 <div>
                   <Label>Full Description</Label>
-                  <Textarea
+                  <ReactQuill
+                    theme="snow"
                     value={formData.description}
-                    onChange={(e) =>
+                    onChange={(value) =>
                       setFormData({
                         ...formData,
-                        description: e.target.value,
+                        description: value,
                       })
                     }
-                    rows={4}
-                    placeholder="Detailed product description"
+                    modules={{
+                      toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'color': [] }, { 'background': [] }],
+                        ['link', 'image'],
+                        ['clean']
+                      ]
+                    }}
                   />
                 </div>
               </div>
@@ -546,47 +625,45 @@ export default function AdminProducts() {
               <div className="space-y-4">
                 <h3 className="font-semibold text-lg">Media</h3>
                 <div>
-                  <Label>Featured Image</Label>
+                  <Label>Product Images (Multiple)</Label>
                   <div className="mt-2 space-y-3">
-                    {imagePreview && (
-                      <div className="relative w-full h-48 border rounded-lg overflow-hidden">
-                        <img
-                          src={imagePreview}
-                          alt="Preview"
-                          className="w-full h-full object-cover"
-                        />
+                    <Input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={(e) => handleMultipleImageUpload(e.target.files)}
+                      disabled={uploadingImages}
+                      id="product-images"
+                    />
+                    {uploadingImages && (
+                      <p className="text-sm text-muted-foreground">Uploading images...</p>
+                    )}
+                    
+                    {productImages.length > 0 && (
+                      <div className="grid grid-cols-4 gap-2 mt-3">
+                        {productImages.map((url, index) => (
+                          <div key={index} className="relative group">
+                            <img 
+                              src={url} 
+                              alt={`Product ${index + 1}`} 
+                              className="w-full h-24 object-cover rounded border"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveImage(index)}
+                              className="absolute top-1 right-1 bg-destructive text-destructive-foreground p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                            {index === 0 && (
+                              <span className="absolute bottom-1 left-1 bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded">
+                                Featured
+                              </span>
+                            )}
+                          </div>
+                        ))}
                       </div>
                     )}
-                    <div className="flex flex-col gap-2">
-                      <Input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageSelect}
-                        className="hidden"
-                        id="product-image"
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => document.getElementById('product-image')?.click()}
-                        disabled={uploading}
-                        className="w-full"
-                      >
-                        <Upload className="mr-2 h-4 w-4" />
-                        {uploading ? "Uploading..." : "Upload Image"}
-                      </Button>
-                      <p className="text-xs text-muted-foreground">
-                        Or enter image URL below
-                      </p>
-                      <Input
-                        value={formData.featured_image}
-                        onChange={(e) => {
-                          setFormData({ ...formData, featured_image: e.target.value });
-                          setImagePreview(e.target.value);
-                        }}
-                        placeholder="https://example.com/image.jpg"
-                      />
-                    </div>
                   </div>
                 </div>
               </div>

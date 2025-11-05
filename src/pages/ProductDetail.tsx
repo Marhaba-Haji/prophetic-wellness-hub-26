@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, ShoppingCart, Package, Truck } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Package, Truck, X } from "lucide-react";
 import { toast } from "sonner";
 
 interface Product {
@@ -44,6 +44,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string>("");
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [variants, setVariants] = useState<ProductVariant[]>([]);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
 
@@ -163,9 +164,9 @@ const ProductDetail = () => {
             {/* Product Images */}
             <div className="space-y-4">
               <div className="relative overflow-hidden rounded-lg border-2 border-border bg-muted">
-                {selectedImage ? (
+                {allImages.length > 0 ? (
                   <img
-                    src={selectedImage}
+                    src={allImages[selectedImageIndex]}
                     alt={product.name}
                     className="w-full h-96 object-cover"
                   />
@@ -176,15 +177,15 @@ const ProductDetail = () => {
                 )}
               </div>
               {allImages.length > 1 && (
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-5 gap-2">
                   {allImages.map((img, idx) => (
                     <button
                       key={idx}
-                      onClick={() => setSelectedImage(img)}
-                      className={`border-2 rounded-lg overflow-hidden ${
-                        selectedImage === img
-                          ? "border-primary"
-                          : "border-border"
+                      onClick={() => setSelectedImageIndex(idx)}
+                      className={`border-2 rounded-lg overflow-hidden transition-all ${
+                        selectedImageIndex === idx
+                          ? "border-primary ring-2 ring-primary"
+                          : "border-border opacity-60 hover:opacity-100"
                       }`}
                     >
                       <img
@@ -206,9 +207,10 @@ const ProductDetail = () => {
                   {product.name}
                 </h1>
                 {product.short_description && (
-                  <p className="text-lg text-muted-foreground">
-                    {product.short_description}
-                  </p>
+                  <div 
+                    className="text-lg text-muted-foreground prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: product.short_description }}
+                  />
                 )}
               </div>
 
