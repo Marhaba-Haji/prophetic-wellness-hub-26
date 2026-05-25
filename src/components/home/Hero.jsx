@@ -14,6 +14,10 @@ const Hero = () => {
                 alt="RevivoHeal Logo"
                 className="h-full w-full object-contain"
                 src="https://i.ibb.co/zhP9ZM9z/revivo-heal-logo.png"
+                width="80"
+                height="80"
+                fetchpriority="high"
+                loading="eager"
               />
             </div>
           </div>
