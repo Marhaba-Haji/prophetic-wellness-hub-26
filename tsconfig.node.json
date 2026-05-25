@@ -1,9 +1,14 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "composite": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "allowJs": true,
-    "noEmit": true
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "types": ["node"]
   },
-  "include": ["src"]
-} 
+  "include": ["vite.config.js", "vite.config.mjs", "scripts/**/*"]
+}

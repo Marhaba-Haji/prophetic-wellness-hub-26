@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
-import { serviceContent } from '../src/data/serviceContent.ts';
+import { serviceContent } from '../src/data/serviceContent';
 import dotenv from 'dotenv';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
