@@ -174,6 +174,7 @@ const ProductDetail = () => {
           })}
         </script>
       </Helmet>
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
         <div className="container mx-auto px-4 py-12 max-w-6xl">
           <Link to={`/products/category/${product.category}`}>
             <Button variant="ghost" className="mb-8">
