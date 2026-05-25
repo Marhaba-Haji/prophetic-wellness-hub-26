@@ -16,7 +16,7 @@ if (!supabaseUrl || !supabaseKey) {
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const fetchBlogSlugs = async () => {
-  const { data, error } = await supabase.from('blogs').select('slug');
+  const { data, error } = await supabase.from('blogs').select('slug').eq('published', true);
   if (error) {
     console.error('Error fetching blog slugs:', error);
     return [];
@@ -24,95 +24,59 @@ const fetchBlogSlugs = async () => {
   return data.map((blog) => blog.slug);
 };
 
+const fetchProducts = async () => {
+  const { data, error } = await supabase.from('products').select('slug');
+  if (error) return [];
+  return (data || []).map((p) => p.slug);
+};
+
+const fetchCategories = async () => {
+  const { data, error } = await supabase.from('product_categories').select('slug');
+  if (error) return [];
+  return (data || []).map((c) => c.slug);
+};
+
 const generateSitemap = async () => {
-  const baseUrl = 'https://www.revivoheal.com';
+  const baseUrl = 'https://revivoheal.com';
+  const now = new Date().toISOString();
   const blogSlugs = await fetchBlogSlugs();
+  const productSlugs = await fetchProducts();
+  const categorySlugs = await fetchCategories();
   const serviceIds = Object.keys(serviceContent);
 
-  const sitemap = `
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${baseUrl}/</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>1.00</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/about</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/services</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/contact</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/blog</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/booking-appointment</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/privacy</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/refund</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/terms</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/unani-health-care</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/acupressure-therapy</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>0.80</priority>
-  </url>
-  ${blogSlugs
-    .map(
-      (slug) => `
-  <url>
-    <loc>${baseUrl}/blog/${slug}</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>0.64</priority>
-  </url>
-`
-    )
-    .join('')}
-  ${serviceIds
-    .map(
-      (id) => `
-  <url>
-    <loc>${baseUrl}/service/${id}</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>0.64</priority>
-  </url>
-`
-    )
-    .join('')}
-</urlset>
-  `.trim();
+  const staticRoutes = [
+    { path: '/', priority: '1.00' },
+    { path: '/about', priority: '0.80' },
+    { path: '/benefits', priority: '0.70' },
+    { path: '/cupping-therapy', priority: '0.80' },
+    { path: '/greek-regimen-therapy', priority: '0.80' },
+    { path: '/full-body-detox', priority: '0.80' },
+    { path: '/unani-healthcare', priority: '0.80' },
+    { path: '/acupressure-therapy', priority: '0.80' },
+    { path: '/contact', priority: '0.80' },
+    { path: '/blog', priority: '0.80' },
+    { path: '/booking', priority: '0.70' },
+    { path: '/products', priority: '0.80' },
+    { path: '/privacy', priority: '0.40' },
+    { path: '/refund', priority: '0.40' },
+    { path: '/terms', priority: '0.40' },
+  ];
+
+  const urlEntry = (loc: string, priority = '0.64') =>
+    `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${now}</lastmod>\n    <priority>${priority}</priority>\n  </url>`;
+
+  const urls = [
+    ...staticRoutes.map((r) => urlEntry(`${baseUrl}${r.path}`, r.priority)),
+    ...blogSlugs.map((s) => urlEntry(`${baseUrl}/blog/${s}`)),
+    ...serviceIds.map((id) => urlEntry(`${baseUrl}/service/${id}`)),
+    ...categorySlugs.map((s) => urlEntry(`${baseUrl}/products/category/${s}`)),
+    ...productSlugs.map((s) => urlEntry(`${baseUrl}/products/${s}`)),
+  ];
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`;
 
   fs.writeFileSync(path.resolve(process.cwd(), 'public', 'sitemap.xml'), sitemap);
+  console.log(`sitemap.xml written (${urls.length} entries)`);
 };
 
 generateSitemap();
