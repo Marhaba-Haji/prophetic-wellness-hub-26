@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -146,12 +147,33 @@ const ProductDetail = () => {
   return (
     <Layout
       title={`${product.name} | RevivoHeal Bangalore`}
-      description={product.short_description || product.description || `Buy ${product.name}`}
-      canonical={`/products/${product.slug}`}
+      description={product.short_description?.replace(/<[^>]+>/g, '').slice(0, 160) || `Buy ${product.name} from RevivoHeal Bangalore.`}
+      canonical={`https://revivoheal.com/products/${product.slug}`}
       image={product.featured_image}
       keywords={`${product.name}, ${product.category}, natural products`}
     >
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: product.name,
+            description: (product.short_description || product.description || '').replace(/<[^>]+>/g, '').slice(0, 500),
+            image: allImages.length > 0 ? allImages : undefined,
+            sku: product.sku,
+            category: product.category,
+            offers: {
+              "@type": "Offer",
+              url: `https://revivoheal.com/products/${product.slug}`,
+              priceCurrency: "INR",
+              price: product.price,
+              availability: product.in_stock
+                ? "https://schema.org/InStock"
+                : "https://schema.org/OutOfStock",
+            },
+          })}
+        </script>
+      </Helmet>
         <div className="container mx-auto px-4 py-12 max-w-6xl">
           <Link to={`/products/category/${product.category}`}>
             <Button variant="ghost" className="mb-8">
