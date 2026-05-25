@@ -12,7 +12,7 @@ interface PerformanceMetrics {
 const PerformanceMonitor: React.FC = () => {
   useEffect(() => {
     // Only run in development
-    if (process.env.NODE_ENV !== 'development') return;
+    if (!import.meta.env.DEV) return;
 
     const measurePerformance = () => {
       const metrics: Partial<PerformanceMetrics> = {};
