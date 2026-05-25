@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "lib": ["ES2020", "DOM"],
+    "lib": [
+      "ES2020",
+      "DOM"
+    ],
     "module": "ESNext",
     "skipLibCheck": true,
     "allowJs": true,
@@ -10,11 +13,18 @@
     "jsx": "react-jsx",
     "moduleResolution": "bundler",
     "strict": false,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
-  "include": ["src"],
-  "exclude": ["**/*.d.ts", "**/*.test.*", "node_modules"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "**/*.d.ts",
+    "**/*.test.*",
+    "node_modules"
+  ]
 }
