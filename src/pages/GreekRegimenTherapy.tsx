@@ -888,7 +888,7 @@ const GreekRegimenTherapy = () => {
                             Full Name <span className="text-red-500">*</span>
                           </label>
                           <div className="relative">
-                            <span className="absolute left-3 top-3 text-gray-400">
+                            <span className="absolute left-3 top-3 text-gray-600">
                               <User className="h-4 w-4" />
                             </span>
                             <input
@@ -911,7 +911,7 @@ const GreekRegimenTherapy = () => {
                             Email Address <span className="text-red-500">*</span>
                           </label>
                           <div className="relative">
-                            <span className="absolute left-3 top-3 text-gray-400">
+                            <span className="absolute left-3 top-3 text-gray-600">
                               <Mail className="h-4 w-4" />
                             </span>
                             <input
@@ -934,7 +934,7 @@ const GreekRegimenTherapy = () => {
                             Phone Number <span className="text-red-500">*</span>
                           </label>
                           <div className="relative">
-                            <span className="absolute left-3 top-3 text-gray-400">
+                            <span className="absolute left-3 top-3 text-gray-600">
                               <Phone className="h-4 w-4" />
                             </span>
                             <input
@@ -980,7 +980,7 @@ const GreekRegimenTherapy = () => {
                             Date <span className="text-red-500">*</span>
                           </label>
                           <div className="relative">
-                            <span className="absolute left-3 top-3 text-gray-400">
+                            <span className="absolute left-3 top-3 text-gray-600">
                               <CalendarDays className="h-4 w-4" />
                             </span>
                             <input
@@ -1004,7 +1004,7 @@ const GreekRegimenTherapy = () => {
                             Time <span className="text-red-500">*</span>
                           </label>
                           <div className="relative">
-                            <span className="absolute left-3 top-3 text-gray-400">
+                            <span className="absolute left-3 top-3 text-gray-600">
                               <Clock className="h-4 w-4" />
                             </span>
                             <select
@@ -1047,7 +1047,7 @@ const GreekRegimenTherapy = () => {
                           Special Notes or Medical Conditions
                         </label>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">
+                          <span className="absolute left-3 top-3 text-gray-600">
                             <MessageSquare className="h-4 w-4" />
                           </span>
                           <textarea

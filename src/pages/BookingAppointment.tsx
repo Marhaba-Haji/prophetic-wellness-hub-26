@@ -302,7 +302,7 @@ const BookingAppointment = () => {
                         Full Name <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-3 text-gray-400">
+                        <span className="absolute left-3 top-3 text-gray-600">
                           <User className="h-4 w-4" />
                         </span>
                         <input
@@ -325,7 +325,7 @@ const BookingAppointment = () => {
                         Email Address <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-3 text-gray-400">
+                        <span className="absolute left-3 top-3 text-gray-600">
                           <Mail className="h-4 w-4" />
                         </span>
                         <input
@@ -348,7 +348,7 @@ const BookingAppointment = () => {
                         Phone Number <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-3 text-gray-400">
+                        <span className="absolute left-3 top-3 text-gray-600">
                           <Phone className="h-4 w-4" />
                         </span>
                         <input
@@ -394,7 +394,7 @@ const BookingAppointment = () => {
                         Date <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-3 text-gray-400">
+                        <span className="absolute left-3 top-3 text-gray-600">
                           <CalendarDays className="h-4 w-4" />
                         </span>
                         <input
@@ -418,7 +418,7 @@ const BookingAppointment = () => {
                         Time <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-3 text-gray-400">
+                        <span className="absolute left-3 top-3 text-gray-600">
                           <Clock className="h-4 w-4" />
                         </span>
                         <select
@@ -461,7 +461,7 @@ const BookingAppointment = () => {
                       Special Notes or Medical Conditions
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-3 text-gray-400">
+                      <span className="absolute left-3 top-3 text-gray-600">
                         <MessageSquare className="h-4 w-4" />
                       </span>
                       <textarea
