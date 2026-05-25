@@ -109,11 +109,11 @@ const AcupressureTherapy = () => {
 
   return (
     <Layout
-      title="Acupressure Therapy"
-      description="Experience the ancient healing power of acupressure therapy. Our specialized treatments use finger pressure on specific meridian points to restore energy flow, relieve pain, and promote natural healing throughout your body."
-      canonical="https://propheticwellness.in/acupressure-therapy"
-      image="/lovable-uploads/lovable-logo.png"
-      keywords="acupressure, therapy, prophetic wellness, healing, pain relief"
+      title="Acupressure Therapy in Bangalore | RevivoHeal"
+      description="Acupressure therapy in Bangalore using meridian-point techniques for sciatica, lumbar pain, varicose veins, reflexology, and facial care at RevivoHeal."
+      canonical="https://revivoheal.com/acupressure-therapy"
+      image="/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
+      keywords="acupressure therapy Bangalore, reflexology, meridian therapy, sciatica relief, RevivoHeal"
     >
 
       {/* Services Section */}

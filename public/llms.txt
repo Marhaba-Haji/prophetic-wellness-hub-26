@@ -1,0 +1,26 @@
+# RevivoHeal Bangalore
+
+> RevivoHeal is a Bangalore-based wellness centre offering Unani medicine, Hijama (cupping) therapy, acupressure, leech therapy, and traditional massage treatments for natural pain relief and detoxification.
+
+RevivoHeal (a unit of Marhaba Ventures Pvt. Ltd.) operates from Frazer Town, Bangalore. The clinic combines Greek/Arabian Unani medicine with Chinese acupressure and traditional cupping techniques, led by Dr. Arif Ali Shaik.
+
+## Pages
+
+- [Home](/): Overview of RevivoHeal services, therapies, and clinic location.
+- [About](/about): Clinic background, practitioners, and healing philosophy.
+- [Services](/cupping-therapy): Full list of cupping and complementary therapy services.
+- [Unani Healthcare](/unani-healthcare): Unani treatments for chronic conditions including hypertension, diabetes, and respiratory ailments.
+- [Acupressure Therapy](/acupressure-therapy): Reflexology and meridian-based pressure point therapies.
+- [Greek Regimen Therapy](/greek-regimen-therapy): Ilaj bil Tadbeer detox and restoration protocols.
+- [Full Body Detox](/full-body-detox): Whole-body detoxification programmes.
+- [Benefits](/benefits): Health benefits of Hijama and traditional therapies.
+- [Products](/products): Natural wellness products available for purchase.
+- [Blog](/blog): Articles on Hijama, Unani medicine, leech therapy, and natural healing.
+- [Booking](/booking): Book an appointment online.
+- [Contact](/contact): Clinic address, phone, and contact form.
+
+## Optional
+
+- [Privacy Policy](/privacy)
+- [Terms of Service](/terms)
+- [Refund Policy](/refund)
