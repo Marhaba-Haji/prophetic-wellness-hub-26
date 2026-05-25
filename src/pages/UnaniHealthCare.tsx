@@ -267,8 +267,10 @@ const UnaniHealthCare = () => {
 
   return (
     <Layout
-      canonical="/unani-healthcare"
-      image="/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
+      title="Unani Healthcare in Bangalore | RevivoHeal"
+      description="Unani treatments at RevivoHeal Bangalore for hypertension, diabetes, asthma, bronchitis, and chronic conditions using traditional herbal medicine and lifestyle therapy."
+      canonical="https://revivoheal.com/unani-healthcare"
+      image="https://revivoheal.com/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
       keywords="Unani healthcare, traditional medicine, natural healing, holistic treatment Bangalore"
     >
 

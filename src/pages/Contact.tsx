@@ -7,8 +7,10 @@ import ContactForm from "@/components/ContactForm";
 const Contact = () => {
   return (
     <Layout
-      canonical="/contact"
-      image="/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
+      title="Contact RevivoHeal Bangalore | Frazer Town Wellness Clinic"
+      description="Get in touch with RevivoHeal in Frazer Town, Bangalore. Call, email, or visit our clinic to book Hijama, Unani, and acupressure therapy appointments."
+      canonical="https://revivoheal.com/contact"
+      image="https://revivoheal.com/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
       keywords="contact RevivoHeal, appointment booking, Bangalore clinic, pain relief consultation"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">

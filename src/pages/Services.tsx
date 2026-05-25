@@ -162,8 +162,10 @@ const ServicesPage = () => {
   );
   return (
     <Layout
-      canonical="/services"
-      image="/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
+      title="Cupping Therapy & Hijama Services in Bangalore | RevivoHeal"
+      description="Professional cupping therapy, Hijama, leech therapy, sports massage, and detox treatments in Frazer Town, Bangalore by RevivoHeal's certified practitioners."
+      canonical="https://revivoheal.com/cupping-therapy"
+      image="https://revivoheal.com/lovable-uploads/47141481-b66c-419d-aadb-9fe29f691c16.png"
       keywords="cupping therapy services, Hijama Bangalore, pain relief treatments, traditional medicine"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
